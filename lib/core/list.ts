@@ -1,21 +1,23 @@
 // deno-lint-ignore-file no-explicit-any
 import iro, { gray, italic } from "@sallai/iro";
 import {
+  type Choice,
   ListItem,
   renderList,
   Separator,
-  type Choice,
 } from "../internal/list-io.ts";
 import { Prompt, type PromptOpts } from "./base.ts";
 
 export type ListOpts = PromptOpts<any> & {
   choices: Choice[];
+  defaultValues?: any[];
   multiple?: boolean;
   selectedPrefix?: string;
   unselectedPrefix?: string;
   inactiveFormatter?: (message: string) => string;
   activeFormatter?: (message: string) => string;
   disabledFormatter?: (message: string) => string;
+  useNumbers?: boolean;
 };
 
 export class ListPrompt extends Prompt<any> {
@@ -24,6 +26,7 @@ export class ListPrompt extends Prompt<any> {
   private activeFormatter?: (message: string) => string;
   private disabledFormatter?: (message: string) => string;
   private multiple?: boolean;
+  private useNumbers?: boolean;
   private selectedPrefix: string;
   private unselectedPrefix: string;
 
@@ -38,12 +41,13 @@ export class ListPrompt extends Prompt<any> {
     this.activeFormatter = opts.activeFormatter;
     this.disabledFormatter = opts.disabledFormatter;
     this.multiple = opts.multiple;
+    this.useNumbers = opts.useNumbers;
     this.selectedPrefix = opts.selectedPrefix ?? "";
     this.unselectedPrefix = opts.unselectedPrefix ?? "";
 
     if (this.default) {
       const indexOfDefault = this.choices.findIndex(
-        (choice) => choice.value === this.default
+        (choice) => choice.value === this.default,
       );
       if (indexOfDefault >= 0) {
         this._active = indexOfDefault;
@@ -55,11 +59,18 @@ export class ListPrompt extends Prompt<any> {
         return choice;
       }
 
+      let message = choice.message;
+      if (this.useNumbers && idx < 10) {
+        message = `${idx + 1}. ${message}`;
+      }
+
       return new ListItem({
-        message: choice.message,
+        message: message,
         disabled: choice.disabled ?? false,
         active: idx === this._active,
-        selected: false,
+        selected: this.multiple && opts.defaultValues?.includes(choice.value)
+          ? true
+          : false,
         selectedPrefix: this.selectedPrefix,
         unselectedPrefix: this.unselectedPrefix,
         inactiveFormatter: this.inactiveFormatter,
@@ -121,6 +132,21 @@ export class ListPrompt extends Prompt<any> {
     this._items[this._active].selected = !this._items[this._active].selected;
   }
 
+  private number(n: number) {
+    if (!this.useNumbers) {
+      return;
+    }
+
+    if (n > 0 && n <= this.choices.length) {
+      const item = this._items[n - 1];
+      if (item && !item.disabled) {
+        this._active = n - 1;
+        this._items[this._active].selected = true;
+        this.finish();
+      }
+    }
+  }
+
   private enter() {
     if (this.multiple) {
       this.finish();
@@ -150,6 +176,7 @@ export class ListPrompt extends Prompt<any> {
         onSpace: this.select.bind(this),
         onUp: () => this.up(this._active),
         onDown: () => this.down(this._active),
+        onNumber: (n: number) => this.number(n),
       });
     }
 
@@ -165,17 +192,17 @@ export class ListPrompt extends Prompt<any> {
     if (selectedItems.length === 1) {
       const selected = selectedItems[0];
       const choice = this.choices.find(
-        (choice) => choice.message === selected.message
+        (choice) => choice.message === selected.message,
       );
 
       if (choice) {
         await this.output.write(
-          new TextEncoder().encode(choice.message + "\n")
+          new TextEncoder().encode(choice.message + "\n"),
         );
       }
     } else {
       await this.output.write(
-        new TextEncoder().encode(iro("<list>", gray, italic) + "\n")
+        new TextEncoder().encode(iro("<list>", gray, italic) + "\n"),
       );
     }
 
@@ -183,10 +210,13 @@ export class ListPrompt extends Prompt<any> {
       (this.input as typeof Deno.stdin).setRaw(false);
     }
 
-    return selectedItems.map(
-      (item) =>
-        this.choices.find((choice) => choice.message === item.message)?.value
-    );
+    return selectedItems.map((item) => {
+      let message = item.message;
+      if (this.useNumbers) {
+        message = message.substring(message.indexOf(" ") + 1);
+      }
+      return this.choices.find((choice) => choice.message === message)?.value;
+    });
   }
 
   async questionSingle(): Promise<any> {

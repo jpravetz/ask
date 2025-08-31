@@ -1,8 +1,9 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
     "jsr:@sallai/iro@^1.0.3": "1.0.3",
     "jsr:@std/bytes@^1.0.2": "1.0.2",
+    "jsr:@std/fmt@^1.0.8": "1.0.8",
     "jsr:@std/io@0.225": "0.225.0"
   },
   "jsr": {
@@ -11,6 +12,9 @@
     },
     "@std/bytes@1.0.2": {
       "integrity": "fbdee322bbd8c599a6af186a1603b3355e59a5fb1baa139f8f4c3c9a1b3e3d57"
+    },
+    "@std/fmt@1.0.8": {
+      "integrity": "71e1fc498787e4434d213647a6e43e794af4fd393ef8f52062246e06f7e372b7"
     },
     "@std/io@0.225.0": {
       "integrity": "c1db7c5e5a231629b32d64b9a53139445b2ca640d828c26bf23e1c55f8c079b3",

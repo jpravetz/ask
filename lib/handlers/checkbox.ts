@@ -20,6 +20,11 @@ export type CheckboxOpts = PromptOpts<any> & {
    */
   choices: Choice[];
 
+  /**
+   * An array of values that will be pre-selected.
+   */
+  defaultValues?: any[];
+
   selectedPrefix?: string;
 
   unselectedPrefix?: string;
@@ -54,6 +59,7 @@ export class CheckboxPrompt<T extends CheckboxOpts> extends ListPrompt {
   constructor(opts: CheckboxOpts) {
     super({
       ...opts,
+      defaultValues: opts.defaultValues,
       selectedPrefix: opts.selectedPrefix ?? iro("◉ ", cyan),
       unselectedPrefix: opts.unselectedPrefix ?? "◯ ",
       multiple: true,

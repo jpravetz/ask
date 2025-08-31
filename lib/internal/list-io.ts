@@ -1,5 +1,5 @@
 import iro, { cyan, gray } from "@sallai/iro";
-import type { Reader, Closer, ReaderSync, Writer, WriterSync } from "@std/io";
+import type { Closer, Reader, ReaderSync, Writer, WriterSync } from "@std/io";
 
 /**
  * A single choice in a list.
@@ -178,6 +178,7 @@ export async function renderList({
   onSpace,
   onDown,
   onUp,
+  onNumber,
 }: {
   input: Reader & ReaderSync & Closer;
   output: Writer & WriterSync & Closer;
@@ -185,8 +186,9 @@ export async function renderList({
 
   onEnter: () => void;
   onSpace?: () => void;
-  onUp: () => void;
   onDown: () => void;
+  onUp: () => void;
+  onNumber?: (n: number) => void;
 }) {
   const lens: number[] = [];
 
@@ -212,6 +214,7 @@ export async function renderList({
   switch (str) {
     case "\u0003": // ETX
     case "\u0004": // EOT
+    case "\u001b": // ESC
       throw new Error("Terminated by user.");
 
     case "\r": // CR
@@ -231,6 +234,20 @@ export async function renderList({
 
     case "\u001b[B": // DOWN
       onDown();
+      break;
+
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+    case "8":
+    case "9":
+      if (onNumber) {
+        onNumber(parseInt(str, 10));
+      }
       break;
   }
 

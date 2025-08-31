@@ -1,4 +1,4 @@
-import type { Reader, ReaderSync, Writer, WriterSync, Closer } from "@std/io";
+import type { Closer, Reader, ReaderSync, Writer, WriterSync } from "@std/io";
 
 export async function readLine({
   input,
@@ -36,9 +36,11 @@ export async function readLine({
         // end of text control characters
         case "\u0003": // ETX
         case "\u0004": // EOT
+        case "\u001b": // ESC
           if (isRaw) {
             (input as typeof Deno.stdin).setRaw(false);
           }
+          esc = true;
           return undefined;
 
         // newline control characters
@@ -79,11 +81,6 @@ export async function readLine({
 
           break;
 
-        // escape control characters
-        case "\u001b": // ESC
-          esc = true;
-          break;
-
         case "[":
           if (esc) {
             esc = false;
@@ -121,7 +118,7 @@ export async function readLine({
 
                   if (mask) {
                     const maskStr = mask.repeat(
-                      Math.max(1, inputStr.length - pos)
+                      Math.max(1, inputStr.length - pos),
                     );
                     await output.write(new TextEncoder().encode(maskStr + " "));
                     const backStr = "\u0008".repeat(maskStr.length + 1);
@@ -149,7 +146,7 @@ export async function readLine({
               await output.write(new TextEncoder().encode(mask));
             } else {
               const maskStr = mask.repeat(
-                Math.max(1, inputStr.length - pos + 1)
+                Math.max(1, inputStr.length - pos + 1),
               );
               await output.write(new TextEncoder().encode(maskStr));
 
