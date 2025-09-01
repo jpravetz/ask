@@ -1,12 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
-import * as colors from "@std/fmt/colors";
-import {
-  type Choice,
-  ListItem,
-  renderList,
-  Separator,
-} from "../internal/list-io.ts";
-import { Prompt, type PromptOpts } from "./base.ts";
+import * as colors from '@std/fmt/colors';
+import { type Choice, ListItem, renderList, Separator } from '../internal/list-io.ts';
+import { Prompt, type PromptOpts } from './base.ts';
 
 export type ListOpts = PromptOpts<any> & {
   choices: Choice[];
@@ -18,6 +13,7 @@ export type ListOpts = PromptOpts<any> & {
   disabledFormatter?: (message: string) => string;
   useNumbers?: boolean;
   columns?: number;
+  defaultValues?: string[];
 };
 
 export class ListPrompt extends Prompt<any> {
@@ -45,8 +41,8 @@ export class ListPrompt extends Prompt<any> {
     this.multiple = opts.multiple;
     this.useNumbers = opts.useNumbers;
     this.columns = opts.columns ?? 1;
-    this.selectedPrefix = opts.selectedPrefix ?? "";
-    this.unselectedPrefix = opts.unselectedPrefix ?? "";
+    this.selectedPrefix = opts.selectedPrefix ?? '';
+    this.unselectedPrefix = opts.unselectedPrefix ?? '';
     this._originalMessage = this.message;
 
     if (this.default) {
@@ -72,13 +68,13 @@ export class ListPrompt extends Prompt<any> {
         message: message,
         disabled: choice.disabled ?? false,
         active: idx === this._active,
-        selected: this.multiple && opts.defaultValues?.includes(choice.value)
-          ? true
-          : false,
+        selected: this.multiple && opts.defaultValues?.includes(choice.value) ? true : false,
         selectedPrefix: this.selectedPrefix,
         unselectedPrefix: this.unselectedPrefix,
-        inactiveFormatter: this.inactiveFormatter ?? ((message: string) => `  ${message}`),
-        activeFormatter: this.activeFormatter ?? ((message:string) => colors.cyan(`❯ ${message}`)),
+        inactiveFormatter: this.inactiveFormatter ??
+          ((message: string) => `  ${message}`),
+        activeFormatter: this.activeFormatter ??
+          ((message: string) => colors.cyan(`❯ ${message}`)),
         disabledFormatter: this.disabledFormatter,
       });
     });
@@ -202,19 +198,19 @@ export class ListPrompt extends Prompt<any> {
     this.message = this._originalMessage;
     const prompt = new TextEncoder().encode(this.getPrompt());
     await this.output.write(prompt);
-    await this.output.write(new TextEncoder().encode("\n"));
+    await this.output.write(new TextEncoder().encode('\n'));
 
     // Hide cursor
-    await this.output.write(new TextEncoder().encode("\x1b[?25l"));
+    await this.output.write(new TextEncoder().encode('\x1b[?25l'));
 
     if (this.input === Deno.stdin) {
       (this.input as typeof Deno.stdin).setRaw(true);
     }
 
     try {
-      let rows = 0;
+      let _rows = 0;
       while (this._running) {
-        rows = await renderList({
+        _rows = await renderList({
           input: this.input,
           output: this.output,
           items: this._items,
@@ -231,36 +227,38 @@ export class ListPrompt extends Prompt<any> {
         });
       }
     } catch (err) {
-      if (err.message === "Terminated by user.") {
+      if (err instanceof Error && err.message === 'Terminated by user.') {
         return this.default;
       }
       throw err;
     } finally {
       // Show cursor
-      await this.output.write(new TextEncoder().encode("\x1b[?25h"));
+      await this.output.write(new TextEncoder().encode('\x1b[?25h'));
       if (this.input === Deno.stdin) {
         (this.input as typeof Deno.stdin).setRaw(false);
       }
     }
 
     // Clear the prompt line and redraw with the answer
-    await this.output.write(new TextEncoder().encode("\r"));
-    await this.output.write(new TextEncoder().encode("\x1b[K"));
+    await this.output.write(new TextEncoder().encode('\r'));
+    await this.output.write(new TextEncoder().encode('\x1b[K'));
 
     const selectedItems = this._items.filter((item) => item.selected);
 
-    let finalPrompt = "";
+    let finalPrompt = '';
 
     if (this.multiple) {
-      const answers = selectedItems.map((item) => {
+      const _answers = selectedItems.map((item) => {
         let message = item.message;
         if (this.useNumbers) {
-          message = message.substring(message.indexOf(" ") + 1);
+          message = message.substring(message.indexOf(' ') + 1);
         }
         return message;
       });
-            finalPrompt = this.getPrompt().replace(/\n$/, `: ${colors.gray(colors.italic("<list>"))}\n`);
-
+      finalPrompt = this.getPrompt().replace(
+        /\n$/,
+        `: ${colors.gray(colors.italic('<list>'))}\n`,
+      );
     } else if (selectedItems.length === 1) {
       const selected = selectedItems[0];
       const choice = this.choices.find(
@@ -279,7 +277,7 @@ export class ListPrompt extends Prompt<any> {
     return selectedItems.map((item) => {
       let message = item.message;
       if (this.useNumbers) {
-        message = message.substring(message.indexOf(" ") + 1);
+        message = message.substring(message.indexOf(' ') + 1);
       }
       return this.choices.find((choice) => choice.message === message)?.value;
     });

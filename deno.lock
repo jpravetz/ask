@@ -1,15 +1,11 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@sallai/iro@^1.0.3": "1.0.3",
     "jsr:@std/bytes@^1.0.2": "1.0.2",
     "jsr:@std/fmt@^1.0.8": "1.0.8",
     "jsr:@std/io@0.225": "0.225.0"
   },
   "jsr": {
-    "@sallai/iro@1.0.3": {
-      "integrity": "73d86cb7efa996a498a3946ee450ad0a33e5fa8553431533455a2d847c23fc0c"
-    },
     "@std/bytes@1.0.2": {
       "integrity": "fbdee322bbd8c599a6af186a1603b3355e59a5fb1baa139f8f4c3c9a1b3e3d57"
     },
@@ -25,7 +21,6 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@sallai/iro@^1.0.3",
       "jsr:@std/fmt@^1.0.8",
       "jsr:@std/io@0.225"
     ]

@@ -1,6 +1,6 @@
-import * as colors from "@std/fmt/colors";
-import type { Closer, Reader, ReaderSync, Writer, WriterSync } from "@std/io";
-import { stripAnsiCodes } from "./util.ts";
+import * as colors from '@std/fmt/colors';
+import type { Closer, Reader, ReaderSync, Writer, WriterSync } from '@std/io';
+import { stripAnsiCodes } from './util.ts';
 
 /**
  * A single choice in a list.
@@ -52,13 +52,13 @@ export class ListItem {
    * The prefix that will be displayed in front of the message when the item is
    * selected.
    */
-  selectedPrefix: string = "";
+  selectedPrefix: string = '';
 
   /**
    * The prefix that will be displayed in front of the message when the item is
    * not selected.
    */
-  unselectedPrefix: string = "";
+  unselectedPrefix: string = '';
 
   /**
    * A function that formats the message when the item is inactive.
@@ -164,7 +164,7 @@ export class ListItem {
 export class Separator extends ListItem {
   constructor(message?: string) {
     super({
-      message: message ?? colors.gray(" " + "-".repeat(16)),
+      message: message ?? colors.gray(' ' + '-'.repeat(16)),
       disabled: true,
       selected: false,
       active: false,
@@ -186,7 +186,7 @@ export async function renderList({
   onRight,
   onNumber,
   columns = 1,
-  indent = "",
+  indent = '',
 }: {
   input: Reader & ReaderSync & Closer;
   output: Writer & WriterSync & Closer;
@@ -211,7 +211,7 @@ export async function renderList({
   const rows = Math.ceil(items.length / columns);
 
   for (let i = 0; i < rows; i++) {
-    let rowStr = "";
+    let rowStr = '';
     for (let j = 0; j < columns; j++) {
       const itemIndex = i * columns + j;
       if (itemIndex < items.length) {
@@ -219,63 +219,63 @@ export async function renderList({
         const formattedItem = item.format();
         const formattedLength = stripAnsiCodes(formattedItem).length;
         const padding = columnWidth - formattedLength;
-        rowStr += formattedItem + " ".repeat(Math.max(0, padding));
+        rowStr += formattedItem + ' '.repeat(Math.max(0, padding));
       }
     }
-    await output.write(new TextEncoder().encode(indent + rowStr + "\n"));
+    await output.write(new TextEncoder().encode(indent + rowStr + '\n'));
   }
 
   const data = new Uint8Array(3);
   const n = await input.read(data);
 
   if (!n) {
-    return;
+    return -1;
   }
 
   const str = new TextDecoder().decode(data.slice(0, n));
 
   switch (str) {
-    case "\u0003": // ETX
-    case "\u0004": // EOT
-    case "\u001b": // ESC
-      throw new Error("Terminated by user.");
+    case '\u0003': // ETX
+    case '\u0004': // EOT
+    case '\u001b': // ESC
+      throw new Error('Terminated by user.');
 
-    case "\r": // CR
-    case "\n": // LF
+    case '\r': // CR
+    case '\n': // LF
       onEnter();
       break;
 
-    case "\u0020": // SPACE
+    case '\u0020': // SPACE
       if (onSpace) {
         onSpace();
       }
       break;
 
-    case "\u001b[A": // UP
+    case '\u001b[A': // UP
       onUp();
       break;
 
-    case "\u001b[B": // DOWN
+    case '\u001b[B': // DOWN
       onDown();
       break;
 
-    case "\u001b[D": // left
+    case '\u001b[D': // left
       onLeft();
       break;
 
-    case "\u001b[C": // right
+    case '\u001b[C': // right
       onRight();
       break;
 
-    case "1":
-    case "2":
-    case "3":
-    case "4":
-    case "5":
-    case "6":
-    case "7":
-    case "8":
-    case "9":
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
       if (onNumber) {
         onNumber(parseInt(str, 10));
       }
@@ -285,11 +285,11 @@ export async function renderList({
   // clear list to rerender it
   for (let i = 0; i < rows; i++) {
     // go to beginning of line
-    await output.write(new TextEncoder().encode("\r"));
+    await output.write(new TextEncoder().encode('\r'));
     // clear line
-    await output.write(new TextEncoder().encode("\x1b[K"));
+    await output.write(new TextEncoder().encode('\x1b[K'));
     // go up
-    await output.write(new TextEncoder().encode("\x1b[A"));
+    await output.write(new TextEncoder().encode('\x1b[A'));
   }
 
   return rows;

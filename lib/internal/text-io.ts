@@ -1,4 +1,4 @@
-import type { Closer, Reader, ReaderSync, Writer, WriterSync } from "@std/io";
+import type { Closer, Reader, ReaderSync, Writer, WriterSync } from '@std/io';
 
 export async function readLine({
   input,
@@ -17,7 +17,7 @@ export async function readLine({
     isRaw = true;
   }
 
-  let inputStr = "";
+  let inputStr = '';
   let pos = 0;
   let esc = false;
 
@@ -34,29 +34,29 @@ export async function readLine({
     for (const char of str) {
       switch (char) {
         // end of text control characters
-        case "\u0003": // ETX
-        case "\u0004": // EOT
+        case '\u0003': // ETX
+        case '\u0004': // EOT
           if (isRaw) {
             (input as typeof Deno.stdin).setRaw(false);
           }
           return undefined;
 
         // newline control characters
-        case "\r": // CR
-        case "\n": // LF
+        case '\r': // CR
+        case '\n': // LF
           if (isRaw) {
             (input as typeof Deno.stdin).setRaw(false);
           }
 
           if (hidden || mask) {
-            await output.write(new TextEncoder().encode("\n"));
+            await output.write(new TextEncoder().encode('\n'));
           }
 
           return inputStr;
 
         // delete control characters
-        case "\u0008": // BS
-        case "\u007f": // DEL
+        case '\u0008': // BS
+        case '\u007f': // DEL
           if (pos === 0) {
             break;
           }
@@ -66,12 +66,12 @@ export async function readLine({
           if (mask) {
             if (pos <= inputStr.length) {
               const maskStr = mask.repeat(Math.max(1, inputStr.length - pos));
-              await output.write(new TextEncoder().encode(maskStr + " "));
+              await output.write(new TextEncoder().encode(maskStr + ' '));
 
-              const backStr = "\u0008".repeat(maskStr.length + 2);
+              const backStr = '\u0008'.repeat(maskStr.length + 2);
               await output.write(new TextEncoder().encode(backStr));
             } else {
-              await output.write(new TextEncoder().encode("\u0008 \u0008"));
+              await output.write(new TextEncoder().encode('\u0008 \u0008'));
             }
           }
 
@@ -80,26 +80,26 @@ export async function readLine({
           break;
 
         // escape control characters
-        case "\u001b": // ESC
+        case '\u001b': // ESC
           esc = true;
           break;
 
-        case "[":
+        case '[':
           if (esc) {
             esc = false;
             const data = new Uint8Array(1);
             await input.read(data);
 
             switch (new TextDecoder().decode(data)) {
-              case "D": // left
+              case 'D': // left
                 pos = Math.max(0, pos - 1);
 
                 if (mask) {
-                  await output.write(new TextEncoder().encode("\u0008"));
+                  await output.write(new TextEncoder().encode('\u0008'));
                 }
 
                 break;
-              case "C": // right
+              case 'C': // right
                 pos = Math.min(inputStr.length, pos + 1);
 
                 if (mask) {
@@ -107,12 +107,12 @@ export async function readLine({
                 }
 
                 break;
-              case "3": {
+              case '3': {
                 // delete
                 const data = new Uint8Array(1);
                 await input.read(data);
 
-                if (new TextDecoder().decode(data) === "~") {
+                if (new TextDecoder().decode(data) === '~') {
                   if (pos === inputStr.length) {
                     break;
                   }
@@ -123,8 +123,8 @@ export async function readLine({
                     const maskStr = mask.repeat(
                       Math.max(1, inputStr.length - pos),
                     );
-                    await output.write(new TextEncoder().encode(maskStr + " "));
-                    const backStr = "\u0008".repeat(maskStr.length + 1);
+                    await output.write(new TextEncoder().encode(maskStr + ' '));
+                    const backStr = '\u0008'.repeat(maskStr.length + 1);
                     await output.write(new TextEncoder().encode(backStr));
                   }
                 }
@@ -153,7 +153,7 @@ export async function readLine({
               );
               await output.write(new TextEncoder().encode(maskStr));
 
-              const backStr = "\u0008".repeat(maskStr.length - 1);
+              const backStr = '\u0008'.repeat(maskStr.length - 1);
               await output.write(new TextEncoder().encode(backStr));
             }
           }

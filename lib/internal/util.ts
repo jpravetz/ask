@@ -1,8 +1,22 @@
-const ansiRegex = new RegExp(
-  /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/,
-  "g",
+const ANSI_REGEX = new RegExp(
+  [
+    '[\\x1B\\x9B]', // ESC and CSI
+    '[\\[\\]()#;?]*', // sequence characters
+    '(?:', // start group
+    '(?:', // sub-group
+    '(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?', // parameters
+    '\\x07', // BEL character
+    ')', // end sub-group
+    '|', // OR
+    '(?:', // sub-group
+    '(?:\\d{1,4}(?:;\\d{0,4})*)?', // numbers
+    '[\\dA-PR-TZcf-ntqry=><~]', // final character
+    ')', // end sub-group
+    ')', // end group
+  ].join(''),
+  'g',
 );
 
 export function stripAnsiCodes(str: string): string {
-  return str.replace(ansiRegex, "");
+  return str.replace(ANSI_REGEX, '');
 }

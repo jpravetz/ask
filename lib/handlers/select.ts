@@ -1,8 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
-import type { PromptOpts } from "../core/base.ts";
-import { ListPrompt } from "../core/list.ts";
-import type { Result } from "../core/result.ts";
-import type { Choice } from "../internal/list-io.ts";
+import type { PromptOpts } from '../core/base.ts';
+import { ListPrompt } from '../core/list.ts';
+import type { Result } from '../core/result.ts';
+import type { Choice } from '../internal/list-io.ts';
 
 /**
  * Options for the select prompt.
@@ -12,7 +12,7 @@ export type SelectOpts = PromptOpts<any> & {
    * The type of the prompt. This can not be changed but will be used to
    * determine the type of the question.
    */
-  type?: "select";
+  type?: 'select';
 
   /**
    * A list of choices for the user to select from.
@@ -65,10 +65,10 @@ export class SelectPrompt<T extends SelectOpts> extends ListPrompt {
       multiple: false,
       useNumbers: opts.useNumbers ?? false,
       columns: opts.columns ?? 1,
-      selectedPrefix: "",
-      unselectedPrefix: "",
+      selectedPrefix: '',
+      unselectedPrefix: '',
     });
-    this.type = "select";
+    this.type = 'select';
   }
 
   /**

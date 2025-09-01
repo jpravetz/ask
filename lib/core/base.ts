@@ -1,17 +1,17 @@
-import type { Closer, Reader, ReaderSync, Writer, WriterSync } from "@std/io";
-import * as colors from "@std/fmt/colors";
+import type { Closer, Reader, ReaderSync, Writer, WriterSync } from '@std/io';
+import * as colors from '@std/fmt/colors';
 
 /**
  * The type of prompt that will be displayed to the user.
  */
 export type PromptType =
-  | "input"
-  | "number"
-  | "confirm"
-  | "password"
-  | "editor"
-  | "select"
-  | "checkbox";
+  | 'input'
+  | 'number'
+  | 'confirm'
+  | 'password'
+  | 'editor'
+  | 'select'
+  | 'checkbox';
 
 /**
  * The global options that can be passed to an `Ask` instance.
@@ -102,7 +102,7 @@ export type PromptOpts<RetType> = {
 } & GlobalPromptOpts;
 
 function onExceededAttempts() {
-  throw new Error("Maximum attempts exceeded.");
+  throw new Error('Maximum attempts exceeded.');
 }
 
 /**
@@ -128,15 +128,15 @@ export class Prompt<T> {
 
   constructor(opts: PromptOpts<T>) {
     this.name = opts.name;
-    this.type = opts.type ?? "input";
+    this.type = opts.type ?? 'input';
     this.message = opts.message ?? opts.name;
-    this.prefix = opts.prefix ?? colors.green("?");
+    this.prefix = opts.prefix ?? colors.green('?');
     this.suffix = opts.suffix ??
-      (!opts.message && opts.suffix === null ? ":" : "");
-    if (typeof opts.indent === "number") {
-      this.indent = " ".repeat(opts.indent);
+      (!opts.message && opts.suffix === null ? ':' : '');
+    if (typeof opts.indent === 'number') {
+      this.indent = ' '.repeat(opts.indent);
     } else {
-      this.indent = opts.indent ?? "  ";
+      this.indent = opts.indent ?? '  ';
     }
     this.default = opts.default;
     this.input = opts.input ?? Deno.stdin;
@@ -148,19 +148,19 @@ export class Prompt<T> {
 
   private format(str: string): string {
     return (
-      colors.bold(str) + (this.default ? ` (${this.default})` : "") + this.suffix
+      colors.bold(str) + (this.default ? ` (${this.default})` : '') + this.suffix
     );
   }
 
   protected getPrompt(): string {
-    let prompt = "\n";
+    let prompt = '\n';
 
     if (this.indent?.length) {
       prompt += this.indent;
     }
 
     if (this.prefix?.length) {
-      prompt += this.prefix + " ";
+      prompt += this.prefix + ' ';
     }
 
     prompt += this.format(this.message);

@@ -1,6 +1,6 @@
-import type { PromptOpts } from "../core/base.ts";
-import type { Result } from "../core/result.ts";
-import { TextPrompt } from "../core/text.ts";
+import type { PromptOpts } from '../core/base.ts';
+import type { Result } from '../core/result.ts';
+import { TextPrompt } from '../core/text.ts';
 
 /**
  * The options for a confirm (yes/no) prompt.
@@ -10,7 +10,7 @@ export type ConfirmOpts = PromptOpts<boolean> & {
    * The type of the prompt. This can not be changed but will be used to
    * determine the type of the question.
    */
-  type?: "confirm";
+  type?: 'confirm';
 
   /**
    * The text to display and accept as a positive answer. Defaults to "y".
@@ -34,10 +34,10 @@ export class ConfirmPrompt<T extends ConfirmOpts> extends TextPrompt<boolean> {
 
   constructor(opts: T) {
     super(opts);
-    this.type = "confirm";
+    this.type = 'confirm';
 
-    this.accept = opts.accept ?? "y";
-    this.deny = opts.deny ?? "n";
+    this.accept = opts.accept ?? 'y';
+    this.deny = opts.deny ?? 'n';
 
     this.message = `${this.message} [${this.accept}/${this.deny}]`;
   }
@@ -47,7 +47,7 @@ export class ConfirmPrompt<T extends ConfirmOpts> extends TextPrompt<boolean> {
    */
   async run(): Promise<Result<T, boolean | undefined>> {
     const answer = await this.askUntilValid<boolean>((val) => {
-      if (typeof val === "undefined") {
+      if (typeof val === 'undefined') {
         return false;
       }
 

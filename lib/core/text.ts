@@ -1,7 +1,6 @@
-import iro, { red } from "@sallai/iro";
-
-import { Prompt, type PromptOpts } from "./base.ts";
-import { readLine } from "../internal/text-io.ts";
+import * as colors from '@std/fmt/colors';
+import { readLine } from '../internal/text-io.ts';
+import { Prompt, type PromptOpts } from './base.ts';
 
 /**
  * Common options for text prompts.
@@ -28,13 +27,13 @@ export class TextPrompt<T = string> extends Prompt<T> {
 
   protected async printError(message: string) {
     await this.output.write(
-      new TextEncoder().encode(`${iro(">>", red)} ${message}\n`),
+      new TextEncoder().encode(`${colors.red('>>')} ${message}\n`),
     );
   }
 
   protected printErrorSync(message: string) {
     this.output.writeSync(
-      new TextEncoder().encode(`${iro(">>", red)} ${message}\n`),
+      new TextEncoder().encode(`${colors.red('>>')} ${message}\n`),
     );
   }
 
@@ -82,11 +81,11 @@ export class TextPrompt<T = string> extends Prompt<T> {
       // deno-lint-ignore no-explicit-any
     } catch (err: any) {
       pass = false;
-      await this.printError(typeof err === "string" ? err : err.message);
+      await this.printError(typeof err === 'string' ? err : err.message);
     }
 
     if (!pass) {
-      if (typeof this.maxAttempts === "number") {
+      if (typeof this.maxAttempts === 'number') {
         this._attempts++;
 
         if (this._attempts >= this.maxAttempts) {

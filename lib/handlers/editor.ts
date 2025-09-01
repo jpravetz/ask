@@ -1,7 +1,7 @@
-import iro, { blue, gray } from "@sallai/iro";
-import { Prompt, type PromptOpts } from "../core/base.ts";
-import type { Result } from "../core/result.ts";
-import { getPreferredEditor, unIro } from "../core/utils.ts";
+import * as colors from '@std/fmt/colors';
+import { Prompt, type PromptOpts } from '../core/base.ts';
+import type { Result } from '../core/result.ts';
+import { getPreferredEditor, unIro } from '../core/utils.ts';
 
 /**
  * Options for the editor prompt.
@@ -11,7 +11,7 @@ export type EditorOpts = PromptOpts<string> & {
    * The type of the prompt. This can not be changed but will be used to
    * determine the type of the question.
    */
-  type?: "editor";
+  type?: 'editor';
 
   /**
    * A path override or executable name for the editor to use. If not provided,
@@ -32,15 +32,13 @@ export type EditorOpts = PromptOpts<string> & {
  * A prompt that will open a temporary file in the user's preferred editor and
  * will return the contents of the file when the editor is closed.
  */
-export class EditorPrompt<T extends EditorOpts> extends Prompt<
-  string | undefined
-> {
+export class EditorPrompt<T extends EditorOpts> extends Prompt<string | undefined> {
   private editorPathOverride?: string;
   private editorPromptMessage?: string;
 
   constructor(opts: T) {
     super(opts);
-    this.type = "editor";
+    this.type = 'editor';
 
     this.editorPathOverride = opts.editorPath;
     this.editorPromptMessage = opts.editorPromptMessage;
@@ -51,10 +49,7 @@ export class EditorPrompt<T extends EditorOpts> extends Prompt<
       return this.editorPromptMessage;
     }
 
-    return iro(
-      `Press ${iro("<enter>", blue)} to launch your preferred editor.`,
-      gray,
-    );
+    return colors.gray(`Press ${colors.blue('<enter>')} to launch your preferred editor.`);
   }
 
   private async launch(): Promise<string | undefined> {
@@ -67,7 +62,7 @@ export class EditorPrompt<T extends EditorOpts> extends Prompt<
       await this.input.read(buffer);
 
       if (buffer[0] === 3) {
-        throw new Error("Editor prompt was canceled.");
+        throw new Error('Editor prompt was canceled.');
       }
 
       if (buffer[0] === 13) {
@@ -83,11 +78,11 @@ export class EditorPrompt<T extends EditorOpts> extends Prompt<
 
     if (!editorPath) {
       throw new Error(
-        "No preferred editor found. Set the VISUAL or EDITOR environment variable.",
+        'No preferred editor found. Set the VISUAL or EDITOR environment variable.',
       );
     }
 
-    const tempFile = await Deno.makeTempFile({ prefix: "ask_" });
+    const tempFile = await Deno.makeTempFile({ prefix: 'ask_' });
 
     const process = new Deno.Command(editorPath, {
       args: [tempFile],
@@ -119,9 +114,9 @@ export class EditorPrompt<T extends EditorOpts> extends Prompt<
 
     await this.output.write(prompt);
     await this.output.write(
-      new TextEncoder().encode(" ".repeat(editorPromptLen)),
+      new TextEncoder().encode(' '.repeat(editorPromptLen)),
     );
-    await this.output.write(new TextEncoder().encode("\n"));
+    await this.output.write(new TextEncoder().encode('\n'));
 
     const result = {
       [this.name]: data,
