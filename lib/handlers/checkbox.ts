@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import iro, { cyan } from "@sallai/iro";
+import * as colors from "@std/fmt/colors";
 import type { PromptOpts } from "../core/base.ts";
 import { ListPrompt } from "../core/list.ts";
 import type { Choice } from "../internal/list-io.ts";
@@ -54,9 +54,9 @@ export class CheckboxPrompt<T extends CheckboxOpts> extends ListPrompt {
   constructor(opts: CheckboxOpts) {
     super({
       ...opts,
-      selectedPrefix: opts.selectedPrefix ?? iro("◉ ", cyan),
-      unselectedPrefix: opts.unselectedPrefix ?? "◯ ",
       multiple: true,
+      selectedPrefix: opts.selectedPrefix ?? colors.cyan("● "),
+      unselectedPrefix: opts.unselectedPrefix ?? "○ ",
     });
     this.type = "checkbox";
   }

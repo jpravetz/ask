@@ -53,7 +53,7 @@ export class EditorPrompt<T extends EditorOpts> extends Prompt<
 
     return iro(
       `Press ${iro("<enter>", blue)} to launch your preferred editor.`,
-      gray
+      gray,
     );
   }
 
@@ -83,7 +83,7 @@ export class EditorPrompt<T extends EditorOpts> extends Prompt<
 
     if (!editorPath) {
       throw new Error(
-        "No preferred editor found. Set the VISUAL or EDITOR environment variable."
+        "No preferred editor found. Set the VISUAL or EDITOR environment variable.",
       );
     }
 
@@ -119,7 +119,7 @@ export class EditorPrompt<T extends EditorOpts> extends Prompt<
 
     await this.output.write(prompt);
     await this.output.write(
-      new TextEncoder().encode(" ".repeat(editorPromptLen))
+      new TextEncoder().encode(" ".repeat(editorPromptLen)),
     );
     await this.output.write(new TextEncoder().encode("\n"));
 

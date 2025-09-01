@@ -1,13 +1,13 @@
 import type { GlobalPromptOpts } from "./core/base.ts";
 import type { Result } from "./core/result.ts";
 
-import { InputPrompt, type InputOpts } from "./handlers/input.ts";
-import { NumberPrompt, type NumberOpts } from "./handlers/number.ts";
-import { ConfirmPrompt, type ConfirmOpts } from "./handlers/confirm.ts";
-import { PasswordPrompt, type PasswordOpts } from "./handlers/password.ts";
-import { EditorPrompt, type EditorOpts } from "./handlers/editor.ts";
-import { SelectPrompt, type SelectOpts } from "./handlers/select.ts";
-import { CheckboxPrompt, type CheckboxOpts } from "./handlers/checkbox.ts";
+import { type InputOpts, InputPrompt } from "./handlers/input.ts";
+import { type NumberOpts, NumberPrompt } from "./handlers/number.ts";
+import { type ConfirmOpts, ConfirmPrompt } from "./handlers/confirm.ts";
+import { type PasswordOpts, PasswordPrompt } from "./handlers/password.ts";
+import { type EditorOpts, EditorPrompt } from "./handlers/editor.ts";
+import { type SelectOpts, SelectPrompt } from "./handlers/select.ts";
+import { type CheckboxOpts, CheckboxPrompt } from "./handlers/checkbox.ts";
 
 type SupportedOpts =
   | InputOpts
@@ -21,26 +21,25 @@ type SupportedOpts =
 type PromptResult<O extends SupportedOpts> = O["type"] extends "input"
   ? Result<O extends InputOpts ? O : never, string>
   : O["type"] extends "number"
-  ? Result<O extends NumberOpts ? O : never, number>
+    ? Result<O extends NumberOpts ? O : never, number>
   : O["type"] extends "confirm"
-  ? Result<O extends ConfirmOpts ? O : never, boolean>
+    ? Result<O extends ConfirmOpts ? O : never, boolean>
   : O["type"] extends "password"
-  ? Result<O extends PasswordOpts ? O : never, string>
+    ? Result<O extends PasswordOpts ? O : never, string>
   : O["type"] extends "editor"
-  ? Result<O extends EditorOpts ? O : never, string>
+    ? Result<O extends EditorOpts ? O : never, string>
   : O["type"] extends "select"
-  ? // deno-lint-ignore no-explicit-any
-    Result<O extends SelectOpts ? O : never, any>
+  // deno-lint-ignore no-explicit-any
+    ? Result<O extends SelectOpts ? O : never, any>
   : O["type"] extends "checkbox"
-  ? // deno-lint-ignore no-explicit-any
-    Result<O extends CheckboxOpts ? O : never, any[]>
+  // deno-lint-ignore no-explicit-any
+    ? Result<O extends CheckboxOpts ? O : never, any[]>
   : never;
 
 type PromptResultMap<T extends Array<SupportedOpts>> = {
   [K in T[number] as K["name"]]: PromptResult<K> extends infer R
-    ? R extends Record<string, unknown>
-      ? R[K["name"]]
-      : never
+    ? R extends Record<string, unknown> ? R[K["name"]]
+    : never
     : never;
 };
 
@@ -111,7 +110,7 @@ export class Ask {
    * console.log(age);
    */
   number<T extends NumberOpts>(
-    opts: T
+    opts: T,
   ): Promise<Result<T, number | undefined>> {
     return new NumberPrompt(this.mergeOptions(opts) as T).run();
   }
@@ -138,7 +137,7 @@ export class Ask {
    * console.log(canDrive);
    */
   confirm<T extends ConfirmOpts>(
-    opts: T
+    opts: T,
   ): Promise<Result<T, boolean | undefined>> {
     return new ConfirmPrompt(this.mergeOptions(opts) as T).run();
   }
@@ -166,7 +165,7 @@ export class Ask {
    * console.log(password);
    */
   password<T extends PasswordOpts>(
-    opts: T
+    opts: T,
   ): Promise<Result<T, string | undefined>> {
     return new PasswordPrompt(this.mergeOptions(opts) as T).run();
   }
@@ -196,7 +195,7 @@ export class Ask {
    * console.log(content);
    */
   editor<T extends EditorOpts>(
-    opts: T
+    opts: T,
   ): Promise<Result<T, string | undefined>> {
     return new EditorPrompt(this.mergeOptions(opts) as T).run();
   }
@@ -307,7 +306,7 @@ export class Ask {
    * console.log(answers.canDrive); // will be a boolean
    */
   async prompt<T extends Array<SupportedOpts>>(
-    questions: T
+    questions: T,
   ): Promise<PromptResultMap<T>> {
     // deno-lint-ignore no-explicit-any
     const answers: PromptResultMap<any> = {};

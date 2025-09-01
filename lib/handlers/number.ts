@@ -55,8 +55,9 @@ export class NumberPrompt<T extends NumberOpts> extends TextPrompt<number> {
 
     this.validate = async (val) => {
       const withinRange = this.isWithinRange(val);
-      const validInput =
-        typeof opts.validate !== "undefined" ? await opts.validate(val) : true;
+      const validInput = typeof opts.validate !== "undefined"
+        ? await opts.validate(val)
+        : true;
 
       return withinRange && validInput;
     };

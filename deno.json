@@ -1,6 +1,6 @@
 {
-  "name": "@sallai/ask",
-  "version": "2.0.2",
+  "name": "@jpravetz/ask",
+  "version": "2.0.3-beta.3",
   "exports": {
     ".": "./mod.ts"
   },
@@ -8,7 +8,7 @@
     "dev": "deno run --watch main.ts"
   },
   "imports": {
-    "@sallai/iro": "jsr:@sallai/iro@^1.0.3",
+    "@std/fmt": "jsr:@std/fmt@^1.0.8",
     "@std/io": "jsr:@std/io@^0.225.0"
   }
 }

@@ -1,5 +1,6 @@
-import iro, { cyan, gray } from "@sallai/iro";
-import type { Reader, Closer, ReaderSync, Writer, WriterSync } from "@std/io";
+import * as colors from "@std/fmt/colors";
+import type { Closer, Reader, ReaderSync, Writer, WriterSync } from "@std/io";
+import { stripAnsiCodes } from "./util.ts";
 
 /**
  * A single choice in a list.
@@ -117,8 +118,11 @@ export class ListItem {
    * beginning of the string.
    */
   get fullMessage(): string {
-    const prefix = this.selected ? this.selectedPrefix : this.unselectedPrefix;
-    return prefix + this.message;
+    return this.getPrefix() + this.message;
+  }
+
+  getPrefix(): string {
+    return this.selected ? this.selectedPrefix : this.unselectedPrefix;
   }
 
   protected defaultInactiveFormatter(message: string): string {
@@ -126,11 +130,11 @@ export class ListItem {
   }
 
   protected defaultActiveFormatter(message: string): string {
-    return iro(`❯ ${message}`, cyan);
+    return colors.cyan(`❯ ${message}`);
   }
 
   protected defaultDisabledFormatter(message: string): string {
-    return iro(`- ${message} (disabled)`, gray);
+    return colors.gray(`- ${message} (disabled)`);
   }
 
   /**
@@ -160,7 +164,7 @@ export class ListItem {
 export class Separator extends ListItem {
   constructor(message?: string) {
     super({
-      message: message ?? iro(" " + "-".repeat(16), gray),
+      message: message ?? colors.gray(" " + "-".repeat(16)),
       disabled: true,
       selected: false,
       active: false,
@@ -178,26 +182,47 @@ export async function renderList({
   onSpace,
   onDown,
   onUp,
+  onLeft,
+  onRight,
+  onNumber,
+  columns = 1,
+  indent = "",
 }: {
   input: Reader & ReaderSync & Closer;
   output: Writer & WriterSync & Closer;
   items: ListItem[];
+  columns?: number;
 
   onEnter: () => void;
   onSpace?: () => void;
   onUp: () => void;
   onDown: () => void;
-}) {
-  const lens: number[] = [];
+  onLeft: () => void;
+  onRight: () => void;
+  onNumber?: (n: number) => void;
+  indent?: string;
+}): Promise<number> {
+  const longestItem = items.reduce((longest, item) => {
+    const len = stripAnsiCodes(item.message).length;
+    return len > longest ? len : longest;
+  }, 0);
+  const columnWidth = longestItem + 4; // 4 spaces for padding
 
-  for (const item of items) {
-    const formattedItem = item.format();
-    lens.push(formattedItem.length + 1);
-    await output.write(new TextEncoder().encode(formattedItem));
+  const rows = Math.ceil(items.length / columns);
 
-    if (item !== items[items.length - 1]) {
-      await output.write(new TextEncoder().encode("\n"));
+  for (let i = 0; i < rows; i++) {
+    let rowStr = "";
+    for (let j = 0; j < columns; j++) {
+      const itemIndex = i * columns + j;
+      if (itemIndex < items.length) {
+        const item = items[itemIndex];
+        const formattedItem = item.format();
+        const formattedLength = stripAnsiCodes(formattedItem).length;
+        const padding = columnWidth - formattedLength;
+        rowStr += formattedItem + " ".repeat(Math.max(0, padding));
+      }
     }
+    await output.write(new TextEncoder().encode(indent + rowStr + "\n"));
   }
 
   const data = new Uint8Array(3);
@@ -212,6 +237,7 @@ export async function renderList({
   switch (str) {
     case "\u0003": // ETX
     case "\u0004": // EOT
+    case "\u001b": // ESC
       throw new Error("Terminated by user.");
 
     case "\r": // CR
@@ -232,10 +258,32 @@ export async function renderList({
     case "\u001b[B": // DOWN
       onDown();
       break;
+
+    case "\u001b[D": // left
+      onLeft();
+      break;
+
+    case "\u001b[C": // right
+      onRight();
+      break;
+
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+    case "8":
+    case "9":
+      if (onNumber) {
+        onNumber(parseInt(str, 10));
+      }
+      break;
   }
 
   // clear list to rerender it
-  for (let i = lens.length - 1; i > 0; --i) {
+  for (let i = 0; i < rows; i++) {
     // go to beginning of line
     await output.write(new TextEncoder().encode("\r"));
     // clear line
@@ -243,4 +291,6 @@ export async function renderList({
     // go up
     await output.write(new TextEncoder().encode("\x1b[A"));
   }
+
+  return rows;
 }

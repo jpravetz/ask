@@ -1,5 +1,5 @@
-import type { Reader, ReaderSync, Writer, WriterSync, Closer } from "@std/io";
-import iro, { bold, green } from "@sallai/iro";
+import type { Closer, Reader, ReaderSync, Writer, WriterSync } from "@std/io";
+import * as colors from "@std/fmt/colors";
 
 /**
  * The type of prompt that will be displayed to the user.
@@ -28,6 +28,12 @@ export type GlobalPromptOpts = {
    * overridden by specifying the `suffix` option in a specific question.
    */
   suffix?: string;
+
+  /**
+   * The string that will be used to indent the prompt. Can be overridden by
+   * specifying the `indent` option in a specific question.
+   */
+  indent?: string | number;
 
   /**
    * The reader interface that will be used to read user input. Please note that
@@ -91,7 +97,7 @@ export type PromptOpts<RetType> = {
    */
   onExceededAttempts?: <U extends RetType>(
     lastInput?: U,
-    retryFn?: () => Promise<U | undefined>
+    retryFn?: () => Promise<U | undefined>,
   ) => void | Promise<void>;
 } & GlobalPromptOpts;
 
@@ -109,6 +115,7 @@ export class Prompt<T> {
   protected message: string;
   protected prefix?: string;
   protected suffix?: string;
+  protected indent?: string;
   protected default?: T;
   protected input: Reader & ReaderSync & Closer;
   protected output: Writer & WriterSync & Closer;
@@ -116,16 +123,21 @@ export class Prompt<T> {
   protected maxAttempts?: number;
   protected onExceededAttempts?: (
     lastInput?: T,
-    retryFn?: () => Promise<T | undefined>
+    retryFn?: () => Promise<T | undefined>,
   ) => void | Promise<void>;
 
   constructor(opts: PromptOpts<T>) {
     this.name = opts.name;
     this.type = opts.type ?? "input";
     this.message = opts.message ?? opts.name;
-    this.prefix = opts.prefix ?? iro("?", green);
-    this.suffix =
-      opts.suffix ?? (!opts.message && opts.suffix === null ? ":" : "");
+    this.prefix = opts.prefix ?? colors.green("?");
+    this.suffix = opts.suffix ??
+      (!opts.message && opts.suffix === null ? ":" : "");
+    if (typeof opts.indent === "number") {
+      this.indent = " ".repeat(opts.indent);
+    } else {
+      this.indent = opts.indent ?? "  ";
+    }
     this.default = opts.default;
     this.input = opts.input ?? Deno.stdin;
     this.output = opts.output ?? Deno.stdout;
@@ -136,20 +148,23 @@ export class Prompt<T> {
 
   private format(str: string): string {
     return (
-      iro(str, bold) + (this.default ? ` (${this.default})` : "") + this.suffix
+      colors.bold(str) + (this.default ? ` (${this.default})` : "") + this.suffix
     );
   }
 
   protected getPrompt(): string {
-    const components: string[] = [];
+    let prompt = "\n";
 
-    if (this.prefix?.length) {
-      components.push(this.prefix);
+    if (this.indent?.length) {
+      prompt += this.indent;
     }
 
-    components.push(this.format(this.message));
-    components.push("");
+    if (this.prefix?.length) {
+      prompt += this.prefix + " ";
+    }
 
-    return components.join(" ");
+    prompt += this.format(this.message);
+
+    return prompt;
   }
 }

@@ -28,13 +28,13 @@ export class TextPrompt<T = string> extends Prompt<T> {
 
   protected async printError(message: string) {
     await this.output.write(
-      new TextEncoder().encode(`${iro(">>", red)} ${message}\n`)
+      new TextEncoder().encode(`${iro(">>", red)} ${message}\n`),
     );
   }
 
   protected printErrorSync(message: string) {
     this.output.writeSync(
-      new TextEncoder().encode(`${iro(">>", red)} ${message}\n`)
+      new TextEncoder().encode(`${iro(">>", red)} ${message}\n`),
     );
   }
 
@@ -58,7 +58,7 @@ export class TextPrompt<T = string> extends Prompt<T> {
   }
 
   protected async askUntilValid<T>(
-    preprocess?: (val: string | undefined) => T
+    preprocess?: (val: string | undefined) => T,
   ): Promise<T | undefined> {
     let answer = await this.question();
     let pass = true;

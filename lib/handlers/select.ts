@@ -41,6 +41,17 @@ export type SelectOpts = PromptOpts<any> & {
    * @param message The message of the choice.
    */
   disabledFormatter?: (message: string) => string;
+
+  /**
+   * If true, a number will be shown in front of each choice. If the user
+   * enters that number, the choice will be selected.
+   */
+  useNumbers?: boolean;
+
+  /**
+   * The number of columns to display.
+   */
+  columns?: number;
 };
 
 /**
@@ -49,7 +60,14 @@ export type SelectOpts = PromptOpts<any> & {
  */
 export class SelectPrompt<T extends SelectOpts> extends ListPrompt {
   constructor(opts: SelectOpts) {
-    super(opts);
+    super({
+      ...opts,
+      multiple: false,
+      useNumbers: opts.useNumbers ?? false,
+      columns: opts.columns ?? 1,
+      selectedPrefix: "",
+      unselectedPrefix: "",
+    });
     this.type = "select";
   }
 

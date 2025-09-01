@@ -1,4 +1,4 @@
-import type { Reader, ReaderSync, Writer, WriterSync, Closer } from "@std/io";
+import type { Closer, Reader, ReaderSync, Writer, WriterSync } from "@std/io";
 
 export async function readLine({
   input,
@@ -121,7 +121,7 @@ export async function readLine({
 
                   if (mask) {
                     const maskStr = mask.repeat(
-                      Math.max(1, inputStr.length - pos)
+                      Math.max(1, inputStr.length - pos),
                     );
                     await output.write(new TextEncoder().encode(maskStr + " "));
                     const backStr = "\u0008".repeat(maskStr.length + 1);
@@ -149,7 +149,7 @@ export async function readLine({
               await output.write(new TextEncoder().encode(mask));
             } else {
               const maskStr = mask.repeat(
-                Math.max(1, inputStr.length - pos + 1)
+                Math.max(1, inputStr.length - pos + 1),
               );
               await output.write(new TextEncoder().encode(maskStr));
 
