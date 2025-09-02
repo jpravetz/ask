@@ -81,6 +81,94 @@ console.log(name); // Joe
 Please visit the [JSR documentation page][docs] for more information on how to
 use the library.
 
+## Object Relationships
+
+```mermaid
+classDiagram
+  class Ask {
+    +constructor(opts: GlobalPromptOpts)
+    +prompt(prompts: PromptOpts[]): Promise<any>
+  }
+
+  class Prompt {
+    <<abstract>>
+    #name: string
+    #type: PromptType
+    #message: string
+    #default: any
+    #input: Reader & ReaderSync & Closer
+    #output: Writer & WriterSync & Closer
+    +constructor(opts: PromptOpts)
+    +run(): Promise<any>
+  }
+
+  class TextPrompt {
+    <<abstract>>
+    #hidden: boolean
+    #mask: string
+    +constructor(opts: TextOpts)
+  }
+
+  class ListPrompt {
+    <<abstract>>
+    #choices: Choice[]
+    #multiple: boolean
+    +constructor(opts: ListOpts)
+  }
+
+  class InputPrompt {
+    +constructor(opts: InputOpts)
+  }
+
+  class NumberPrompt {
+    +constructor(opts: NumberOpts)
+  }
+
+  class ConfirmPrompt {
+    +constructor(opts: ConfirmOpts)
+  }
+
+  class PasswordPrompt {
+    +constructor(opts: PasswordOpts)
+  }
+
+  class EditorPrompt {
+    +constructor(opts: EditorOpts)
+  }
+
+  class SelectPrompt {
+    +constructor(opts: SelectOpts)
+  }
+
+  class CheckboxPrompt {
+    +constructor(opts: CheckboxOpts)
+  }
+
+  class ListItem {
+    +message: string
+    +disabled: boolean
+    +selected: boolean
+    +active: boolean
+  }
+
+  class Separator {
+    +constructor(message?: string)
+  }
+
+  Ask --> Prompt
+  Prompt <|-- TextPrompt
+  Prompt <|-- ListPrompt
+  TextPrompt <|-- InputPrompt
+  TextPrompt <|-- NumberPrompt
+  TextPrompt <|-- ConfirmPrompt
+  TextPrompt <|-- PasswordPrompt
+  TextPrompt <|-- EditorPrompt
+  ListPrompt <|-- SelectPrompt
+  ListPrompt <|-- CheckboxPrompt
+  ListPrompt o-- ListItem
+  ListItem <|-- Separator
+```
+
 ## License
 
 MIT.

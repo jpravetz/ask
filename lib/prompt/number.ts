@@ -1,44 +1,11 @@
-import type { PromptOpts } from '../core/base.ts';
-import type { Result } from '../core/result.ts';
-import { TextPrompt } from '../core/text.ts';
-
-/**
- * The type of number that can be entered. This will determine if the input will
- * be parsed as an integer or as a float.
- */
-export type NumberType = 'integer' | 'float';
-
-/**
- * Options for the number prompt.
- */
-export type NumberOpts = PromptOpts<number> & {
-  /**
-   * The type of the prompt. This can not be changed but will be used to
-   * determine the type of the question.
-   */
-  type?: 'number';
-
-  /**
-   * The minimum value that can be entered. Defaults to negative infinity.
-   */
-  min?: number;
-
-  /**
-   * The maximum value that can be entered. Defaults to positive infinity.
-   */
-  max?: number;
-
-  /**
-   * The type of number that can be entered. This will determine if the input
-   * will be parsed as an integer or as a float. Defaults to "integer".
-   */
-  numberType?: NumberType;
-};
+import type * as Opts from '$opts';
+import type { NumberType, Result } from '$types';
+import { TextPrompt } from './text.ts';
 
 /**
  * A prompt for a number input.
  */
-export class NumberPrompt<T extends NumberOpts> extends TextPrompt<number> {
+export class NumberPrompt<T extends Opts.Number> extends TextPrompt<number> {
   private min: number;
   private max: number;
   private numberType: NumberType;
@@ -89,7 +56,7 @@ export class NumberPrompt<T extends NumberOpts> extends TextPrompt<number> {
    * Asks the user for a number input and returns the result as an object.
    */
   async run(): Promise<Result<T, number | undefined>> {
-    const answer = await this.askUntilValid<number>((val) => {
+    const answer = await this.askUntilValid((val) => {
       switch (this.numberType) {
         case 'integer':
           return parseInt(val ?? '', 10);

@@ -1,38 +1,14 @@
+import { getPreferredEditor, unIro } from '$io';
+import type * as Opts from '$opts';
+import type { Result } from '$types';
 import * as colors from '@std/fmt/colors';
-import { Prompt, type PromptOpts } from '../core/base.ts';
-import type { Result } from '../core/result.ts';
-import { getPreferredEditor, unIro } from '../core/utils.ts';
-
-/**
- * Options for the editor prompt.
- */
-export type EditorOpts = PromptOpts<string> & {
-  /**
-   * The type of the prompt. This can not be changed but will be used to
-   * determine the type of the question.
-   */
-  type?: 'editor';
-
-  /**
-   * A path override or executable name for the editor to use. If not provided,
-   * the `VISUAL` or `EDITOR` environment variables will be used, and if those
-   * aren't present either, a series of common editors will be searched for in
-   * the system `PATH`.
-   */
-  editorPath?: string;
-
-  /**
-   * A custom message to tell the user to press enter to launch their preferred
-   * editor. If not provided, a default message will be used.
-   */
-  editorPromptMessage?: string;
-};
+import { Prompt } from './base.ts';
 
 /**
  * A prompt that will open a temporary file in the user's preferred editor and
  * will return the contents of the file when the editor is closed.
  */
-export class EditorPrompt<T extends EditorOpts> extends Prompt<string | undefined> {
+export class EditorPrompt<T extends Opts.Editor> extends Prompt<string | undefined> {
   private editorPathOverride?: string;
   private editorPromptMessage?: string;
 

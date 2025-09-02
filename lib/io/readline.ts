@@ -5,11 +5,13 @@ export async function readLine({
   output,
   hidden,
   mask,
+  defaultValue,
 }: {
   input: Reader & ReaderSync & Closer;
   output: Writer & WriterSync & Closer;
   hidden?: boolean;
   mask?: string;
+  defaultValue?: string;
 }): Promise<string | undefined> {
   let isRaw = false;
   if ((hidden || mask) && input === Deno.stdin) {
@@ -17,8 +19,11 @@ export async function readLine({
     isRaw = true;
   }
 
-  let inputStr = '';
-  let pos = 0;
+  let inputStr = defaultValue ?? '';
+  if (inputStr.length > 0) {
+    await output.write(new TextEncoder().encode(inputStr));
+  }
+  let pos = inputStr.length;
   let esc = false;
 
   while (true) {
@@ -86,6 +91,12 @@ export async function readLine({
 
         case '[':
           if (esc) {
+            if (char !== '[') {
+              if (isRaw) {
+                (input as typeof Deno.stdin).setRaw(false);
+              }
+              return undefined;
+            }
             esc = false;
             const data = new Uint8Array(1);
             await input.read(data);

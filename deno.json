@@ -25,6 +25,13 @@
     ]
   },
   "imports": {
+    "$types": "./lib/types.ts",
+    "$item": "./lib/item/mod.ts",
+    "$opts": "./lib/opts/mod.ts",
+    "$io": "./lib/io/mod.ts",
+    "$prompt": "./lib/prompt/mod.ts",
+    "$internal": "./lib/internal/mod.ts",
+
     "@std/fmt": "jsr:@std/fmt@^1.0.8",
     "@std/io": "jsr:@std/io@^0.225.0"
   }

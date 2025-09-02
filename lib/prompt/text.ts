@@ -1,14 +1,7 @@
+import { readLine } from '$io';
+import type * as Opts from '$opts';
 import * as colors from '@std/fmt/colors';
-import { readLine } from '../internal/text-io.ts';
-import { Prompt, type PromptOpts } from './base.ts';
-
-/**
- * Common options for text prompts.
- */
-export type TextOpts<T = string> = {
-  hidden?: boolean;
-  mask?: string;
-} & PromptOpts<T>;
+import { Prompt } from './base.ts';
 
 /**
  * A text prompt.
@@ -19,7 +12,7 @@ export class TextPrompt<T = string> extends Prompt<T> {
 
   private _attempts: number = 0;
 
-  constructor(opts: TextOpts<T>) {
+  constructor(opts: Opts.Text<T>) {
     super(opts);
     this.hidden = opts.hidden;
     this.mask = opts.mask;
@@ -51,12 +44,13 @@ export class TextPrompt<T = string> extends Prompt<T> {
       output: this.output,
       mask: this.mask,
       hidden: this.hidden,
+      defaultValue: this.default as string,
     });
 
     return input;
   }
 
-  protected async askUntilValid<T>(
+  protected async askUntilValid(
     preprocess?: (val: string | undefined) => T,
   ): Promise<T | undefined> {
     let answer = await this.question();
@@ -72,16 +66,13 @@ export class TextPrompt<T = string> extends Prompt<T> {
       if (preprocess) {
         preprocessedAnswer = preprocess(answer);
       } else {
-        // deno-lint-ignore no-explicit-any
-        preprocessedAnswer = answer as any;
+        preprocessedAnswer = answer as T | undefined;
       }
 
-      // deno-lint-ignore no-explicit-any
-      pass = await Promise.resolve(this.validate(preprocessedAnswer as any));
-      // deno-lint-ignore no-explicit-any
-    } catch (err: any) {
+      pass = await Promise.resolve(this.validate(preprocessedAnswer));
+    } catch (err: unknown) {
       pass = false;
-      await this.printError(typeof err === 'string' ? err : err.message);
+      await this.printError(String(err));
     }
 
     if (!pass) {
@@ -89,10 +80,8 @@ export class TextPrompt<T = string> extends Prompt<T> {
         this._attempts++;
 
         if (this._attempts >= this.maxAttempts) {
-          // deno-lint-ignore no-explicit-any
-          await this.onExceededAttempts?.(preprocessedAnswer as any, () => {
-            // deno-lint-ignore no-explicit-any
-            return this.askUntilValid(preprocess) as any;
+          await this.onExceededAttempts?.(preprocessedAnswer, () => {
+            return this.askUntilValid(preprocess) as unknown;
           });
 
           return;

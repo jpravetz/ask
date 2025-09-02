@@ -1,13 +1,10 @@
-// deno-lint-ignore-file no-explicit-any
-import type { PromptOpts } from '../core/base.ts';
-import { ListPrompt } from '../core/list.ts';
-import type { Result } from '../core/result.ts';
-import type { Choice } from '../internal/list-io.ts';
+import type { Choice } from '$types';
+import type { PromptOpts } from './prompt.ts';
 
 /**
  * Options for the select prompt.
  */
-export type SelectOpts = PromptOpts<any> & {
+export type SelectOpts = PromptOpts<unknown> & {
   /**
    * The type of the prompt. This can not be changed but will be used to
    * determine the type of the question.
@@ -53,37 +50,3 @@ export type SelectOpts = PromptOpts<any> & {
    */
   columns?: number;
 };
-
-/**
- * A prompt for a select list which allows users to select one of the provided
- * choices.
- */
-export class SelectPrompt<T extends SelectOpts> extends ListPrompt {
-  constructor(opts: SelectOpts) {
-    super({
-      ...opts,
-      multiple: false,
-      useNumbers: opts.useNumbers ?? false,
-      columns: opts.columns ?? 1,
-      selectedPrefix: '',
-      unselectedPrefix: '',
-    });
-    this.type = 'select';
-  }
-
-  /**
-   * Displays a list of choices to the user. The user can select one of the
-   * choices by using the `up` and `down` arrow keys. The user can confirm their
-   * selection by pressing the `enter` key. The selected choice will be returned
-   * as an object.
-   */
-  async run(): Promise<Result<T, any>> {
-    const answer = await this.questionSingle();
-
-    const result = {
-      [this.name]: answer,
-    } as Result<T, any>;
-
-    return result;
-  }
-}

@@ -1,14 +1,10 @@
-// deno-lint-ignore-file no-explicit-any
-import * as colors from '@std/fmt/colors';
-import type { PromptOpts } from '../core/base.ts';
-import { ListPrompt } from '../core/list.ts';
-import type { Choice } from '../internal/list-io.ts';
-import type { Result } from '../core/result.ts';
+import type { Choice } from '$types';
+import type { PromptOpts } from './prompt.ts';
 
 /**
  * Options for the checkbox prompt.
  */
-export type CheckboxOpts = PromptOpts<any> & {
+export type CheckboxOpts = PromptOpts<unknown> & {
   /**
    * The type of the prompt. This can not be changed but will be used to
    * determine the type of the question.
@@ -45,29 +41,3 @@ export type CheckboxOpts = PromptOpts<any> & {
    */
   disabledFormatter?: (message: string) => string;
 };
-
-/**
- * A prompt for a checkbox list which allows users to select multiple values
- * from the provided choices.
- */
-export class CheckboxPrompt<T extends CheckboxOpts> extends ListPrompt {
-  constructor(opts: CheckboxOpts) {
-    super({
-      ...opts,
-      multiple: true,
-      selectedPrefix: opts.selectedPrefix ?? colors.cyan('● '),
-      unselectedPrefix: opts.unselectedPrefix ?? '○ ',
-    });
-    this.type = 'checkbox';
-  }
-
-  async run(): Promise<Result<T, any[]>> {
-    const answer = await this.questionMultiple();
-
-    const result = {
-      [this.name]: answer,
-    } as Result<T, any[]>;
-
-    return result;
-  }
-}

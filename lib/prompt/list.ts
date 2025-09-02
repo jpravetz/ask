@@ -1,22 +1,12 @@
-// deno-lint-ignore-file no-explicit-any
+// deno-lint-ignore-file no-explicit-unknown
+import { renderList } from '$io';
+import * as Item from '$item';
+import type * as Opts from '$opts';
+import type { Choice } from '$types';
 import * as colors from '@std/fmt/colors';
-import { type Choice, ListItem, renderList, Separator } from '../internal/list-io.ts';
-import { Prompt, type PromptOpts } from './base.ts';
+import { Prompt } from './base.ts';
 
-export type ListOpts = PromptOpts<any> & {
-  choices: Choice[];
-  multiple?: boolean;
-  selectedPrefix?: string;
-  unselectedPrefix?: string;
-  inactiveFormatter?: (message: string) => string;
-  activeFormatter?: (message: string) => string;
-  disabledFormatter?: (message: string) => string;
-  useNumbers?: boolean;
-  columns?: number;
-  defaultValues?: string[];
-};
-
-export class ListPrompt extends Prompt<any> {
+export class ListPrompt extends Prompt<unknown> {
   private choices: Choice[];
   private inactiveFormatter?: (message: string) => string;
   private activeFormatter?: (message: string) => string;
@@ -28,11 +18,11 @@ export class ListPrompt extends Prompt<any> {
   private unselectedPrefix: string;
 
   private _active: number = 0;
-  private _items: ListItem[];
+  private _items: Item.List[];
   private _running: boolean = true;
   private _originalMessage: string;
 
-  constructor(opts: ListOpts) {
+  constructor(opts: Opts.List) {
     super(opts);
     this.choices = opts.choices;
     this.inactiveFormatter = opts.inactiveFormatter;
@@ -55,7 +45,7 @@ export class ListPrompt extends Prompt<any> {
     }
 
     this._items = this.choices.map((choice, idx) => {
-      if (choice instanceof Separator) {
+      if (choice instanceof Item.Separator) {
         return choice;
       }
 
@@ -64,7 +54,7 @@ export class ListPrompt extends Prompt<any> {
         message = `${idx + 1}. ${message}`;
       }
 
-      return new ListItem({
+      return new Item.List({
         message: message,
         disabled: choice.disabled ?? false,
         active: idx === this._active,
@@ -78,6 +68,17 @@ export class ListPrompt extends Prompt<any> {
         disabledFormatter: this.disabledFormatter,
       });
     });
+  }
+
+  protected override getPrompt(): string {
+    let prompt = super.getPrompt();
+    if (this.default) {
+      const choice = this.choices.find((choice) => choice.value === this.default);
+      if (choice) {
+        prompt += ` (${choice.message})`;
+      }
+    }
+    return prompt;
   }
 
   private up(startIndex: number) {
@@ -194,7 +195,7 @@ export class ListPrompt extends Prompt<any> {
     this.finish();
   }
 
-  protected async questionMultiple(): Promise<any[] | undefined> {
+  protected async questionMultiple(): Promise<unknown[] | undefined> {
     this.message = this._originalMessage;
     const prompt = new TextEncoder().encode(this.getPrompt());
     await this.output.write(prompt);
@@ -226,6 +227,18 @@ export class ListPrompt extends Prompt<any> {
           onNumber: (n: number) => this.number(n),
         });
       }
+      // Clear the list
+      for (let i = 0; i < _rows; i++) {
+        // go to beginning of line
+        await this.output.write(new TextEncoder().encode('\r'));
+        // clear line
+        await this.output.write(new TextEncoder().encode('\x1b[K'));
+        // go up
+        await this.output.write(new TextEncoder().encode('\x1b[A'));
+      }
+      // Clear the prompt line and redraw with the answer
+      await this.output.write(new TextEncoder().encode('\r'));
+      await this.output.write(new TextEncoder().encode('\x1b[K'));
     } catch (err) {
       if (err instanceof Error && err.message === 'Terminated by user.') {
         return this.default;
@@ -245,7 +258,7 @@ export class ListPrompt extends Prompt<any> {
 
     const selectedItems = this._items.filter((item) => item.selected);
 
-    let finalPrompt = '';
+    let finalPrompt = this.getPrompt();
 
     if (this.multiple) {
       const _answers = selectedItems.map((item) => {
@@ -255,10 +268,7 @@ export class ListPrompt extends Prompt<any> {
         }
         return message;
       });
-      finalPrompt = this.getPrompt().replace(
-        /\n$/,
-        `: ${colors.gray(colors.italic('<list>'))}\n`,
-      );
+      finalPrompt += `: ${colors.gray(colors.italic(_answers.join(', ')))}`;
     } else if (selectedItems.length === 1) {
       const selected = selectedItems[0];
       const choice = this.choices.find(
@@ -266,7 +276,7 @@ export class ListPrompt extends Prompt<any> {
       );
 
       if (choice) {
-        finalPrompt = this.getPrompt().replace(/\n$/, `: ${choice.message}\n`);
+        finalPrompt += `: ${choice.message}`;
       }
     }
 
@@ -283,10 +293,8 @@ export class ListPrompt extends Prompt<any> {
     });
   }
 
-  async questionSingle(): Promise<any> {
+  async questionSingle(): Promise<unknown> {
     const result = await this.questionMultiple();
     return result?.[0];
   }
 }
-
-export { type Choice, Separator };
