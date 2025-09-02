@@ -1,6 +1,8 @@
-# ask
+# @jpravetz/ask
 
 Interactive command-line prompts for Deno.
+
+This module is not maintained for others to use. It is a fork of [@sallai/ask](https://github.com/jozsefsallai/ask) and I suggest you use that repo. See [Changelog](./CHANGELOG.md) for differences.
 
 ![Demo](.github/assets/demo.gif)
 
@@ -30,16 +32,16 @@ applications, similar to what you'd achieve with
 First, install the package from JSR:
 
 ```sh
-deno add jsr:@sallai/ask
+deno add jsr:@jpravetz/ask
 ```
 
 Then just create an `Ask` instance and use the `prompt()` method to enumerate
 your questions.
 
 ```ts
-import { Ask } from "@sallai/ask";
+import * as Ask from "@jpravetz/ask";
 
-const ask = new Ask(); // global options are also supported!
+const ask = new Ask.Main({ prefix: '', indent: 8 }); // global options are also supported!
 
 const answers = await ask.prompt(
   [
