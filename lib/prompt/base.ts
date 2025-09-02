@@ -69,4 +69,10 @@ export class Prompt<T> {
 
     return prompt;
   }
+
+  protected async redraw(message: string): Promise<void> {
+    await this.output.write(new TextEncoder().encode('\r\x1b[K')); // Clear line
+    await this.output.write(new TextEncoder().encode(message));
+    await this.output.write(new TextEncoder().encode('\n'));
+  }
 }

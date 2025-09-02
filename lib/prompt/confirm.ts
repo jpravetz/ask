@@ -1,5 +1,6 @@
 import type * as Opts from '$opts';
 import type { Result } from '$types';
+import { readLine } from '$io';
 import { TextPrompt } from './text.ts';
 
 /**
@@ -16,7 +17,11 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
     this.accept = opts.accept ?? 'y';
     this.deny = opts.deny ?? 'n';
 
-    this.message = `${this.message} [${this.accept}/${this.deny}]`;
+    const defaultIsTrue = this.default ?? true;
+    const y = defaultIsTrue ? this.accept.toUpperCase() : this.accept;
+    const n = !defaultIsTrue ? this.deny.toUpperCase() : this.deny;
+
+    this.message = `${this.message} [${y}/${n}]`;
   }
 
   /**
@@ -25,20 +30,37 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
   async run(): Promise<Result<T, boolean | undefined>> {
     const answer = await this.askUntilValid((val) => {
       if (typeof val === 'undefined') {
-        return this.default ?? false;
+        // ESC
+        return false;
       }
       if (val === '') {
+        // RETURN
         return this.default ?? true;
       }
 
       val = val.toLowerCase();
-      return val === this.accept;
+      return val === this.accept.toLowerCase();
     });
+
+    const finalPrompt = `${this.getPrompt()}: ${answer ? 'Yes' : 'No'}`;
+    await this.redraw(finalPrompt);
 
     const result = {
       [this.name]: answer,
     } as Result<T, boolean | undefined>;
 
     return result;
+  }
+
+  protected override async question(): Promise<string | undefined> {
+    const prompt = new TextEncoder().encode(this.getPrompt());
+    await this.output.write(prompt);
+
+    const input = await readLine({
+      input: this.input,
+      output: this.output,
+    });
+
+    return input;
   }
 }

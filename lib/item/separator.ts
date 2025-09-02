@@ -13,6 +13,7 @@ export class SeparatorItem extends ListItem {
   constructor(message?: string) {
     super({
       message: message ?? colors.gray(' ' + '-'.repeat(16)),
+      value: undefined,
       disabled: true,
       selected: false,
       active: false,

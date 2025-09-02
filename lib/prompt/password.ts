@@ -21,6 +21,8 @@ export class PasswordPrompt<T extends Opts.Password> extends TextPrompt {
   async run(): Promise<Result<T, string | undefined>> {
     const answer = await this.askUntilValid();
 
+    await this.redraw(this.getPrompt());
+
     const result = {
       [this.name]: answer,
     } as Result<T, string | undefined>;

@@ -17,6 +17,9 @@ export class InputPrompt<T extends Opts.Input> extends TextPrompt {
   async run(): Promise<Result<T, string | undefined>> {
     const answer = await this.askUntilValid();
 
+    const finalPrompt = `${this.getPrompt()}: ${answer}`;
+    await this.redraw(finalPrompt);
+
     const result = {
       [this.name]: answer,
     } as Result<T, string | undefined>;

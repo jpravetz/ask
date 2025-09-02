@@ -1,4 +1,5 @@
 import type { Closer, Reader, ReaderSync, Writer, WriterSync } from '@std/io';
+import { InterruptedError, EndOfFileError } from '../errors.ts';
 
 export async function readLine({
   input,
@@ -14,165 +15,111 @@ export async function readLine({
   defaultValue?: string;
 }): Promise<string | undefined> {
   let isRaw = false;
-  if ((hidden || mask) && input === Deno.stdin) {
-    (input as typeof Deno.stdin).setRaw(true);
+  if (input === Deno.stdin) {
     isRaw = true;
+    try {
+      (input as typeof Deno.stdin).setRaw(true);
+    } catch {
+      // setRaw will fail if not a TTY
+      isRaw = false;
+    }
   }
 
   let inputStr = defaultValue ?? '';
-  if (inputStr.length > 0) {
+  if (inputStr.length > 0 && !hidden) {
     await output.write(new TextEncoder().encode(inputStr));
   }
   let pos = inputStr.length;
-  let esc = false;
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
 
-  while (true) {
-    const data = new Uint8Array(1);
-    const n = await input.read(data);
+  try {
+    while (true) {
+      const data = new Uint8Array(1);
+      const n = await input.read(data);
 
-    if (!n) {
-      break;
-    }
+      if (!n) {
+        throw new EndOfFileError('Input stream closed unexpectedly.');
+      }
 
-    const str = new TextDecoder().decode(data.slice(0, n));
+      const char = decoder.decode(data.slice(0, n));
 
-    for (const char of str) {
       switch (char) {
-        // end of text control characters
-        case '\u0003': // ETX
-        case '\u0004': // EOT
-          if (isRaw) {
-            (input as typeof Deno.stdin).setRaw(false);
-          }
-          return undefined;
+        case '\u0001': // Ctrl+A (start of line)
+          pos = 0;
+          // No visual update for Ctrl-A in this version
+          break;
 
-        // newline control characters
-        case '\r': // CR
-        case '\n': // LF
-          if (isRaw) {
-            (input as typeof Deno.stdin).setRaw(false);
-          }
+        case '\u0005': // Ctrl+E (end of line)
+          pos = inputStr.length;
+          // No visual update for Ctrl-E in this version
+          break;
 
-          if (hidden || mask) {
-            await output.write(new TextEncoder().encode('\n'));
-          }
+        case '\u0003': // ETX - ctrl+c
+          throw new InterruptedError();
 
+        case '\u0004': // EOT - ctrl+d
+          throw new EndOfFileError();
+
+        case '\r': // CR - return
+        case '\n': // LF - return
           return inputStr;
 
-        // delete control characters
-        case '\u0008': // BS
-        case '\u007f': // DEL
-          if (pos === 0) {
-            break;
-          }
-
-          inputStr = inputStr.slice(0, pos - 1) + inputStr.slice(pos);
-
-          if (mask) {
-            if (pos <= inputStr.length) {
-              const maskStr = mask.repeat(Math.max(1, inputStr.length - pos));
-              await output.write(new TextEncoder().encode(maskStr + ' '));
-
-              const backStr = '\u0008'.repeat(maskStr.length + 2);
-              await output.write(new TextEncoder().encode(backStr));
-            } else {
-              await output.write(new TextEncoder().encode('\u0008 \u0008'));
+        case '\u0008': // BS - backspace
+        case '\u007f': // DEL - backspace
+          if (pos > 0) {
+            inputStr = inputStr.slice(0, pos - 1) + inputStr.slice(pos);
+            pos--;
+            if (!hidden) {
+              const rest = inputStr.slice(pos);
+              await output.write(encoder.encode('\b' + rest + ' ' + '\b'.repeat(rest.length + 1)));
             }
           }
-
-          pos = Math.max(0, pos - 1);
-
           break;
 
-        // escape control characters
-        case '\u001b': // ESC
-          esc = true;
-          break;
-
-        case '[':
-          if (esc) {
-            if (char !== '[') {
-              if (isRaw) {
-                (input as typeof Deno.stdin).setRaw(false);
-              }
-              return undefined;
+        case '\u001b': { // ESC
+          // check for arrow keys
+          const arrow = new Uint8Array(2);
+          const arrowN = await input.read(arrow);
+          if (arrowN === 2 && decoder.decode(arrow) === '[C') { // right
+            if (pos < inputStr.length) {
+              pos++;
+              // No visual update for arrow keys in this version
             }
-            esc = false;
-            const data = new Uint8Array(1);
-            await input.read(data);
-
-            switch (new TextDecoder().decode(data)) {
-              case 'D': // left
-                pos = Math.max(0, pos - 1);
-
-                if (mask) {
-                  await output.write(new TextEncoder().encode('\u0008'));
-                }
-
-                break;
-              case 'C': // right
-                pos = Math.min(inputStr.length, pos + 1);
-
-                if (mask) {
-                  await output.write(new TextEncoder().encode(mask));
-                }
-
-                break;
-              case '3': {
-                // delete
-                const data = new Uint8Array(1);
-                await input.read(data);
-
-                if (new TextDecoder().decode(data) === '~') {
-                  if (pos === inputStr.length) {
-                    break;
-                  }
-
-                  inputStr = inputStr.slice(0, pos) + inputStr.slice(pos + 1);
-
-                  if (mask) {
-                    const maskStr = mask.repeat(
-                      Math.max(1, inputStr.length - pos),
-                    );
-                    await output.write(new TextEncoder().encode(maskStr + ' '));
-                    const backStr = '\u0008'.repeat(maskStr.length + 1);
-                    await output.write(new TextEncoder().encode(backStr));
-                  }
-                }
-
-                break;
-              }
-              default:
-                break;
+          } else if (arrowN === 2 && decoder.decode(arrow) === '[D') { // left
+            if (pos > 0) {
+              pos--;
+              // No visual update for arrow keys in this version
             }
-
-            break;
           }
-
-        // falls through
+          // Other escape sequences are ignored
+          break;
+        }
 
         default:
-          inputStr = inputStr.slice(0, pos) + char + inputStr.slice(pos);
-          pos += 1;
-
-          if (mask) {
-            if (pos === inputStr.length) {
-              await output.write(new TextEncoder().encode(mask));
-            } else {
-              const maskStr = mask.repeat(
-                Math.max(1, inputStr.length - pos + 1),
-              );
-              await output.write(new TextEncoder().encode(maskStr));
-
-              const backStr = '\u0008'.repeat(maskStr.length - 1);
-              await output.write(new TextEncoder().encode(backStr));
+          // Ignore other control characters
+          if (char.charCodeAt(0) >= 32) {
+            inputStr = inputStr.slice(0, pos) + char + inputStr.slice(pos);
+            pos++;
+            if (!hidden) {
+              if (mask) {
+                await output.write(encoder.encode(mask));
+              } else {
+                const rest = inputStr.slice(pos);
+                await output.write(encoder.encode(char + rest + '\b'.repeat(rest.length)));
+              }
             }
           }
-
           break;
       }
     }
+  } finally {
+    if (isRaw) {
+      (input as typeof Deno.stdin).setRaw(false);
+      if (hidden || mask) {
+         await output.write(new TextEncoder().encode('\n'));
+      }
+    }
   }
-
-  return undefined;
+  return inputStr;
 }

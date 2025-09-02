@@ -76,8 +76,8 @@ export class Ask {
    *
    * console.log(name);
    */
-  input<T extends InputOpts>(opts: T): Promise<Result<T, string | undefined>> {
-    return new InputPrompt(this.mergeOptions(opts) as T).run();
+  input<T extends Opts.Input>(opts: T): Promise<Result<T, string | undefined>> {
+    return new Prompt.Input(this.mergeOptions(opts) as T).run();
   }
 
   /**
@@ -157,10 +157,10 @@ export class Ask {
    *
    * console.log(password);
    */
-  password<T extends PasswordOpts>(
+  password<T extends Opts.Password>(
     opts: T,
   ): Promise<Result<T, string | undefined>> {
-    return new PasswordPrompt(this.mergeOptions(opts) as T).run();
+    return new Prompt.Password(this.mergeOptions(opts) as T).run();
   }
 
   /**
@@ -187,7 +187,7 @@ export class Ask {
    *
    * console.log(content);
    */
-  editor<T extends EditorOpts>(
+  editor<T extends Opts.Editor>(
     opts: T,
   ): Promise<Result<T, string | undefined>> {
     return new Prompt.Editor(this.mergeOptions(opts) as T).run();
@@ -256,7 +256,6 @@ export class Ask {
    * console.log(toppings);
    * ```
    */
-  // deno-lint-ignore no-explicit-unknown
   checkbox<T extends Opts.Checkbox>(opts: T): Promise<Result<T, unknown[]>> {
     return new Prompt.Checkbox(this.mergeOptions(opts) as Opts.Checkbox).run();
   }
@@ -301,7 +300,7 @@ export class Ask {
   async prompt<T extends Array<SupportedOpts>>(
     questions: T,
   ): Promise<PromptResultMap<T>> {
-    const answers: PromptResultMap<unknown> = {};
+    const answers: Record<string, unknown> = {};
 
     for (let i = 0; i < questions.length; ++i) {
       const question = questions[i];

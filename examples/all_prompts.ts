@@ -1,6 +1,6 @@
 import * as Ask from '../mod.ts';
 
-const ask = new Ask.Ask({ prefix: '', indent: 15 });
+const ask = new Ask.Main({ prefix: '', indent: 8 });
 
 // Select prompt example
 const letterResult = await ask.select(
@@ -53,7 +53,7 @@ const ageResult = await ask.number({
   name: 'age',
   message: 'How old are you?',
   default: 30,
-  validate: (value) => value > 0,
+  validate: (value) => typeof value === 'number' && value > 0,
 });
 
 // Password prompt example

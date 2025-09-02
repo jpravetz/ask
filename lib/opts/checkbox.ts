@@ -4,7 +4,7 @@ import type { PromptOpts } from './prompt.ts';
 /**
  * Options for the checkbox prompt.
  */
-export type CheckboxOpts = PromptOpts<unknown> & {
+export type CheckboxOpts = PromptOpts<unknown[]> & {
   /**
    * The type of the prompt. This can not be changed but will be used to
    * determine the type of the question.

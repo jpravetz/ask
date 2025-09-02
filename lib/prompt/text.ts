@@ -1,3 +1,4 @@
+import { InterruptedError, EndOfFileError } from '../errors.ts';
 import { readLine } from '$io';
 import type * as Opts from '$opts';
 import * as colors from '@std/fmt/colors';
@@ -35,16 +36,12 @@ export class TextPrompt<T = string> extends Prompt<T> {
 
     await this.output.write(prompt);
 
-    if ((this.hidden || this.mask) && this.input === Deno.stdin) {
-      (this.input as typeof Deno.stdin).setRaw(true);
-    }
-
     const input = await readLine({
       input: this.input,
       output: this.output,
       mask: this.mask,
       hidden: this.hidden,
-      defaultValue: this.default as string,
+      defaultValue: typeof this.default === 'undefined' ? undefined : String(this.default),
     });
 
     return input;
@@ -56,21 +53,25 @@ export class TextPrompt<T = string> extends Prompt<T> {
     let answer = await this.question();
     let pass = true;
 
-    if (!answer && this.default) {
-      answer = String(this.default);
-    }
-
     let preprocessedAnswer: T | undefined;
 
     try {
       if (preprocess) {
         preprocessedAnswer = preprocess(answer);
       } else {
+        if (!answer && typeof this.default !== 'undefined') {
+          answer = String(this.default);
+        }
         preprocessedAnswer = answer as T | undefined;
       }
 
       pass = await Promise.resolve(this.validate(preprocessedAnswer));
     } catch (err: unknown) {
+      if (err instanceof InterruptedError) {
+        return undefined; // Ctrl+C, return undefined
+      } else if (err instanceof EndOfFileError) {
+        return undefined; // Ctrl+D, return undefined
+      }
       pass = false;
       await this.printError(String(err));
     }
@@ -81,7 +82,7 @@ export class TextPrompt<T = string> extends Prompt<T> {
 
         if (this._attempts >= this.maxAttempts) {
           await this.onExceededAttempts?.(preprocessedAnswer, () => {
-            return this.askUntilValid(preprocess) as unknown;
+            return this.askUntilValid(preprocess);
           });
 
           return;

@@ -1,6 +1,7 @@
 export { Prompt as Base } from './base.ts';
 export { CheckboxPrompt as Checkbox } from './checkbox.ts';
 export { ConfirmPrompt as Confirm } from './confirm.ts';
+export { EditorPrompt as Editor } from './editor.ts';
 export { InputPrompt as Input } from './input.ts';
 export { ListPrompt as List } from './list.ts';
 export { NumberPrompt as Number } from './number.ts';

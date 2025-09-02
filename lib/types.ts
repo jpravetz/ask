@@ -15,7 +15,7 @@ export type Choice = {
   value?: unknown;
 
   /**
-   * Whether the choice is disabled. A disabled choice can never be selected.
+   * Whether the choice is disabled or not.
    */
   disabled?: boolean;
 };

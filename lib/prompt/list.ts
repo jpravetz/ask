@@ -56,9 +56,10 @@ export class ListPrompt extends Prompt<unknown> {
 
       return new Item.List({
         message: message,
+        value: choice.value,
         disabled: choice.disabled ?? false,
         active: idx === this._active,
-        selected: this.multiple && opts.defaultValues?.includes(choice.value) ? true : false,
+        selected: this.multiple && opts.defaultValues?.includes(choice.value as string) ? true : false,
         selectedPrefix: this.selectedPrefix,
         unselectedPrefix: this.unselectedPrefix,
         inactiveFormatter: this.inactiveFormatter ??
@@ -241,7 +242,7 @@ export class ListPrompt extends Prompt<unknown> {
       await this.output.write(new TextEncoder().encode('\x1b[K'));
     } catch (err) {
       if (err instanceof Error && err.message === 'Terminated by user.') {
-        return this.default;
+        return this.default as unknown[] | undefined;
       }
       throw err;
     } finally {
@@ -272,11 +273,11 @@ export class ListPrompt extends Prompt<unknown> {
     } else if (selectedItems.length === 1) {
       const selected = selectedItems[0];
       const choice = this.choices.find(
-        (choice) => choice.message === selected.message,
+        (choice) => choice.value === selected.value,
       );
 
       if (choice) {
-        finalPrompt += `: ${choice.message}`;
+        finalPrompt += ` ${choice.message}`;
       }
     }
 

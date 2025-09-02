@@ -65,6 +65,9 @@ export class NumberPrompt<T extends Opts.Number> extends TextPrompt<number> {
       }
     });
 
+    const finalPrompt = `${this.getPrompt()}: ${answer}`;
+    await this.redraw(finalPrompt);
+
     const result = {
       [this.name]: answer,
     } as Result<T, number | undefined>;

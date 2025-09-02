@@ -10,6 +10,11 @@ export class ListItem {
   message: string;
 
   /**
+   * The value of the item.
+   */
+  value: unknown;
+
+  /**
    * Whether the item is disabled.
    */
   disabled: boolean;
@@ -54,6 +59,7 @@ export class ListItem {
 
   constructor({
     message,
+    value,
     disabled,
     selected,
     active,
@@ -64,6 +70,7 @@ export class ListItem {
     disabledFormatter,
   }: {
     message: string;
+    value: unknown;
     disabled: boolean;
     selected: boolean;
     active: boolean;
@@ -74,6 +81,7 @@ export class ListItem {
     disabledFormatter?: (message: string) => string;
   }) {
     this.message = message;
+    this.value = value;
     this.disabled = disabled;
     this.selected = selected;
     this.active = active;

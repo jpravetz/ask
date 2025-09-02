@@ -5,17 +5,9 @@
  * creating prompts and validating user input.
  */
 
-export * from './lib/ask.ts';
-
-export * from './lib/core/result.ts';
-export * from './lib/prompt/base.ts';
-export * from './lib/prompt/list.ts';
-export * from './lib/prompt/text.ts';
-
-export * from './lib/prompt/checkbox.ts';
-export * from './lib/prompt/confirm.ts';
-export * from './lib/prompt/editor.ts';
-export * from './lib/prompt/input.ts';
-export * from './lib/prompt/number.ts';
-export * from './lib/prompt/password.ts';
-export * from './lib/prompt/select.ts';
+export * as Io from '$io';
+export * as Item from '$item';
+export * as Opts from '$opts';
+export * as Prompt from '$prompt';
+export { Ask as Main } from './lib/ask.ts';
+export type * from './lib/types.ts';
