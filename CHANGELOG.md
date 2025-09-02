@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.6] - 2025-09-02
+
+- Fixed export bug
+
 ## [2.0.3-beta.5] - 2025-09-02
 
 - Reorganized code into namespaces, including for Opts and Prompts.
