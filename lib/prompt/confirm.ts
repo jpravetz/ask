@@ -1,3 +1,4 @@
+import { InterruptedError } from '../errors.ts';
 import type * as Opts from '$opts';
 import type { Result } from '$types';
 import { readLine } from '$io';
@@ -27,29 +28,38 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
   /**
    * Asks the user for a confirmation and returns the result as an object.
    */
-  async run(): Promise<Result<T, boolean | undefined>> {
-    const answer = await this.askUntilValid((val) => {
-      if (typeof val === 'undefined') {
-        // ESC
-        return false;
+  async run(): Promise<Result<T, boolean | undefined> | undefined> {
+    try {
+      const answer = await this.askUntilValid((val) => {
+        if (typeof val === 'undefined') {
+          // ESC
+          return false;
+        }
+        if (val === '') {
+          // RETURN
+          return this.default ?? true;
+        }
+
+        val = val.toLowerCase();
+        return val === this.accept.toLowerCase();
+      });
+
+      await this.output.write(new TextEncoder().encode('\r\x1b[K'));
+      const finalPrompt = `${this.getPrompt().substring(1)}: ${answer ? 'Yes' : 'No'}`;
+      await this.output.write(new TextEncoder().encode(finalPrompt));
+      await this.output.write(new TextEncoder().encode('\n'));
+
+      const result = {
+        [this.name]: answer,
+      } as Result<T, boolean | undefined>;
+
+      return result;
+    } catch (err) {
+      if (err instanceof InterruptedError) {
+        return undefined;
       }
-      if (val === '') {
-        // RETURN
-        return this.default ?? true;
-      }
-
-      val = val.toLowerCase();
-      return val === this.accept.toLowerCase();
-    });
-
-    const finalPrompt = `${this.getPrompt()}: ${answer ? 'Yes' : 'No'}`;
-    await this.redraw(finalPrompt);
-
-    const result = {
-      [this.name]: answer,
-    } as Result<T, boolean | undefined>;
-
-    return result;
+      throw err;
+    }
   }
 
   protected override async question(): Promise<string | undefined> {

@@ -1,0 +1,15 @@
+{
+  "tests": {
+    "runtimeArgs": ["--unstable-kv"]
+  },
+  "groups": [
+    {
+      "program": "examples/all_prompts.ts",
+      "runtimeArgs": ["run", "--inspect-wait", "-A"],
+      "scriptArgs": "-nA",
+      "scripts": [
+        ""
+      ]
+    }
+  ]
+}

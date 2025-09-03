@@ -1,4 +1,4 @@
-import { InterruptedError, EndOfFileError } from '../errors.ts';
+import { EndOfFileError, InterruptedError } from '../errors.ts';
 import { readLine } from '$io';
 import type * as Opts from '$opts';
 import * as colors from '@std/fmt/colors';
@@ -68,7 +68,7 @@ export class TextPrompt<T = string> extends Prompt<T> {
       pass = await Promise.resolve(this.validate(preprocessedAnswer));
     } catch (err: unknown) {
       if (err instanceof InterruptedError) {
-        return undefined; // Ctrl+C, return undefined
+        throw err;
       } else if (err instanceof EndOfFileError) {
         return undefined; // Ctrl+D, return undefined
       }

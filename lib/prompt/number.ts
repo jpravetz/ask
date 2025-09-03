@@ -1,3 +1,4 @@
+import { InterruptedError } from '../errors.ts';
 import type * as Opts from '$opts';
 import type { NumberType, Result } from '$types';
 import { TextPrompt } from './text.ts';
@@ -55,23 +56,32 @@ export class NumberPrompt<T extends Opts.Number> extends TextPrompt<number> {
   /**
    * Asks the user for a number input and returns the result as an object.
    */
-  async run(): Promise<Result<T, number | undefined>> {
-    const answer = await this.askUntilValid((val) => {
-      switch (this.numberType) {
-        case 'integer':
-          return parseInt(val ?? '', 10);
-        case 'float':
-          return parseFloat(val ?? '');
+  async run(): Promise<Result<T, number | undefined> | undefined> {
+    try {
+      const answer = await this.askUntilValid((val) => {
+        switch (this.numberType) {
+          case 'integer':
+            return parseInt(val ?? '', 10);
+          case 'float':
+            return parseFloat(val ?? '');
+        }
+      });
+
+      await this.output.write(new TextEncoder().encode('\r\x1b[K'));
+      const finalPrompt = `${this.getPrompt().substring(1)}: ${answer}`;
+      await this.output.write(new TextEncoder().encode(finalPrompt));
+      await this.output.write(new TextEncoder().encode('\n'));
+
+      const result = {
+        [this.name]: answer,
+      } as Result<T, number | undefined>;
+
+      return result;
+    } catch (err) {
+      if (err instanceof InterruptedError) {
+        return undefined;
       }
-    });
-
-    const finalPrompt = `${this.getPrompt()}: ${answer}`;
-    await this.redraw(finalPrompt);
-
-    const result = {
-      [this.name]: answer,
-    } as Result<T, number | undefined>;
-
-    return result;
+      throw err;
+    }
   }
 }

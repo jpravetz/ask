@@ -16,6 +16,8 @@ export type CheckboxOpts = PromptOpts<unknown[]> & {
    */
   choices: Choice[];
 
+  columns?: number;
+
   selectedPrefix?: string;
 
   unselectedPrefix?: string;

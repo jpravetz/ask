@@ -1,4 +1,4 @@
-// deno-lint-ignore-file no-explicit-unknown
+
 import type * as Opts from '$opts';
 import type { Result } from '$types';
 import { ListPrompt } from './list.ts';

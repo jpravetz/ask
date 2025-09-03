@@ -1,6 +1,7 @@
+import * as IO from '$io';
 import type * as Opts from '$opts';
 import * as colors from '@std/fmt/colors';
-import type { Closer, Reader, ReaderSync, Writer, WriterSync } from '@std/io';
+import type { Closer, Reader, ReaderSync } from '@std/io';
 import type { PromptType } from './types.ts';
 
 function onExceededAttempts() {
@@ -20,7 +21,7 @@ export class Prompt<T> {
   protected indent?: string;
   protected default?: T;
   protected input: Reader & ReaderSync & Closer;
-  protected output: Writer & WriterSync & Closer;
+  protected output: IO.Writer;
   protected validate: (val?: T | undefined) => boolean | Promise<boolean>;
   protected maxAttempts?: number;
   protected onExceededAttempts?: (
@@ -32,7 +33,7 @@ export class Prompt<T> {
     this.name = opts.name;
     this.type = opts.type ?? 'input';
     this.message = opts.message ?? opts.name;
-    this.prefix = opts.prefix ?? colors.green('?');
+    this.prefix = opts.prefix === undefined ? colors.green('?') : opts.prefix;
     this.suffix = opts.suffix ??
       (!opts.message && opts.suffix === null ? ':' : '');
     if (typeof opts.indent === 'number') {
@@ -42,7 +43,7 @@ export class Prompt<T> {
     }
     this.default = opts.default;
     this.input = opts.input ?? Deno.stdin;
-    this.output = opts.output ?? Deno.stdout;
+    this.output = new IO.Writer(opts.output);
     this.validate = opts.validate ?? (() => true);
     this.maxAttempts = opts.maxAttempts;
     this.onExceededAttempts = opts.onExceededAttempts ?? onExceededAttempts;
@@ -55,7 +56,7 @@ export class Prompt<T> {
   }
 
   protected getPrompt(): string {
-    let prompt = '\n';
+    let prompt = '';
 
     if (this.indent?.length) {
       prompt += this.indent;
@@ -65,14 +66,12 @@ export class Prompt<T> {
       prompt += this.prefix + ' ';
     }
 
-    prompt += this.format(this.message) + ': ';
+    prompt += this.format(this.message);
 
     return prompt;
   }
 
   protected async redraw(message: string): Promise<void> {
-    await this.output.write(new TextEncoder().encode('\r\x1b[K')); // Clear line
-    await this.output.write(new TextEncoder().encode(message));
-    await this.output.write(new TextEncoder().encode('\n'));
+    return await this.output.redraw(message);
   }
 }

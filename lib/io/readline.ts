@@ -1,5 +1,5 @@
 import type { Closer, Reader, ReaderSync, Writer, WriterSync } from '@std/io';
-import { InterruptedError, EndOfFileError } from '../errors.ts';
+import { EndOfFileError, InterruptedError } from '../errors.ts';
 
 export async function readLine({
   input,
@@ -117,9 +117,8 @@ export async function readLine({
     if (isRaw) {
       (input as typeof Deno.stdin).setRaw(false);
       if (hidden || mask) {
-         await output.write(new TextEncoder().encode('\n'));
+        await output.write(new TextEncoder().encode('\n'));
       }
     }
   }
-  return inputStr;
 }

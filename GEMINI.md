@@ -1,6 +1,7 @@
 ## Gemini bugs to fix:
 
 - typing ESC key while on an input prompt should behave the same as it does for other prompts (and not be written to the console, as it is now)
+  - If in a prompt array, it should break out of the array and the return result should be undefined.
 - For lists, insert a blank line between a prompt heading and it's list items.
 
 ### Example 1
@@ -79,6 +80,8 @@ But it should be as follows. Note that 'John Doe' is the defaultValue that is pr
 ```
 
 Number and password prompts should also show a colon, followed by a space. Numbers would then show the defaultValue. Passwords cannot have a defaultValue. Confirm prompt behaviour is ESC is false, RETURN is true.
+
+When there is an array of prompts, the global indent and other rules should be applied to that series as well.
 
 
 

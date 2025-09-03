@@ -1,4 +1,3 @@
-// deno-lint-ignore-file no-explicit-unknown
 import { renderList } from '$io';
 import * as Item from '$item';
 import type * as Opts from '$opts';
@@ -59,7 +58,9 @@ export class ListPrompt extends Prompt<unknown> {
         value: choice.value,
         disabled: choice.disabled ?? false,
         active: idx === this._active,
-        selected: this.multiple && opts.defaultValues?.includes(choice.value as string) ? true : false,
+        selected: this.multiple && (opts.default as string[])?.includes(choice.value as string)
+          ? true
+          : false,
         selectedPrefix: this.selectedPrefix,
         unselectedPrefix: this.unselectedPrefix,
         inactiveFormatter: this.inactiveFormatter ??
@@ -73,12 +74,12 @@ export class ListPrompt extends Prompt<unknown> {
 
   protected override getPrompt(): string {
     let prompt = super.getPrompt();
-    if (this.default) {
-      const choice = this.choices.find((choice) => choice.value === this.default);
-      if (choice) {
-        prompt += ` (${choice.message})`;
-      }
-    }
+    // if (this.default) {
+    //   const choice = this.choices.find((choice) => choice.value === this.default);
+    //   if (choice) {
+    //     prompt += ` (${choice.message})`;
+    //   }
+    // }
     return prompt;
   }
 
@@ -198,12 +199,12 @@ export class ListPrompt extends Prompt<unknown> {
 
   protected async questionMultiple(): Promise<unknown[] | undefined> {
     this.message = this._originalMessage;
-    const prompt = new TextEncoder().encode(this.getPrompt());
-    await this.output.write(prompt);
-    await this.output.write(new TextEncoder().encode('\n'));
+    await this.output.newLine();
+    await this.output.write(this.getPrompt());
+    await this.output.newLine(2);
 
     // Hide cursor
-    await this.output.write(new TextEncoder().encode('\x1b[?25l'));
+    await this.output.hideCursor();
 
     if (this.input === Deno.stdin) {
       (this.input as typeof Deno.stdin).setRaw(true);
@@ -230,16 +231,10 @@ export class ListPrompt extends Prompt<unknown> {
       }
       // Clear the list
       for (let i = 0; i < _rows; i++) {
-        // go to beginning of line
-        await this.output.write(new TextEncoder().encode('\r'));
-        // clear line
-        await this.output.write(new TextEncoder().encode('\x1b[K'));
-        // go up
-        await this.output.write(new TextEncoder().encode('\x1b[A'));
+        await this.output.deleteLine();
       }
       // Clear the prompt line and redraw with the answer
-      await this.output.write(new TextEncoder().encode('\r'));
-      await this.output.write(new TextEncoder().encode('\x1b[K'));
+      await this.output.clearPromptLine();
     } catch (err) {
       if (err instanceof Error && err.message === 'Terminated by user.') {
         return this.default as unknown[] | undefined;
@@ -247,19 +242,18 @@ export class ListPrompt extends Prompt<unknown> {
       throw err;
     } finally {
       // Show cursor
-      await this.output.write(new TextEncoder().encode('\x1b[?25h'));
+      await this.output.showCursor();
       if (this.input === Deno.stdin) {
         (this.input as typeof Deno.stdin).setRaw(false);
       }
     }
 
     // Clear the prompt line and redraw with the answer
-    await this.output.write(new TextEncoder().encode('\r'));
-    await this.output.write(new TextEncoder().encode('\x1b[K'));
+    await this.output.clearPromptLine();
 
     const selectedItems = this._items.filter((item) => item.selected);
 
-    let finalPrompt = this.getPrompt();
+    let finalPrompt = this.getPrompt().substring(1);
 
     if (this.multiple) {
       const _answers = selectedItems.map((item) => {
@@ -269,7 +263,7 @@ export class ListPrompt extends Prompt<unknown> {
         }
         return message;
       });
-      finalPrompt += `: ${colors.gray(colors.italic(_answers.join(', ')))}`;
+      finalPrompt += ` ${colors.gray(colors.italic(_answers.join(', ')))}`;
     } else if (selectedItems.length === 1) {
       const selected = selectedItems[0];
       const choice = this.choices.find(
@@ -277,11 +271,13 @@ export class ListPrompt extends Prompt<unknown> {
       );
 
       if (choice) {
-        finalPrompt += ` ${choice.message}`;
+        finalPrompt = `${finalPrompt.substring(0, finalPrompt.lastIndexOf(':') + 1)} ${choice.message}`;
       }
     }
 
-    await this.output.write(new TextEncoder().encode(finalPrompt));
+    await this.output.newLine();
+    await this.output.write(finalPrompt);
+    await this.output.newLine();
 
     this.message = this._originalMessage;
 

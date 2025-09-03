@@ -76,7 +76,7 @@ export class Ask {
    *
    * console.log(name);
    */
-  input<T extends Opts.Input>(opts: T): Promise<Result<T, string | undefined>> {
+  input<T extends Opts.Input>(opts: T): Promise<Result<T, string | undefined> | undefined> {
     return new Prompt.Input(this.mergeOptions(opts) as T).run();
   }
 
@@ -104,7 +104,7 @@ export class Ask {
    */
   number<T extends Opts.Number>(
     opts: T,
-  ): Promise<Result<T, number | undefined>> {
+  ): Promise<Result<T, number | undefined> | undefined> {
     return new Prompt.Number(this.mergeOptions(opts) as T).run();
   }
 
@@ -131,7 +131,7 @@ export class Ask {
    */
   confirm<T extends Opts.Confirm>(
     opts: T,
-  ): Promise<Result<T, boolean | undefined>> {
+  ): Promise<Result<T, boolean | undefined> | undefined> {
     return new Prompt.Confirm(this.mergeOptions(opts) as T).run();
   }
 
@@ -159,7 +159,7 @@ export class Ask {
    */
   password<T extends Opts.Password>(
     opts: T,
-  ): Promise<Result<T, string | undefined>> {
+  ): Promise<Result<T, string | undefined> | undefined> {
     return new Prompt.Password(this.mergeOptions(opts) as T).run();
   }
 
@@ -189,7 +189,7 @@ export class Ask {
    */
   editor<T extends Opts.Editor>(
     opts: T,
-  ): Promise<Result<T, string | undefined>> {
+  ): Promise<Result<T, string | undefined> | undefined> {
     return new Prompt.Editor(this.mergeOptions(opts) as T).run();
   }
 
@@ -221,8 +221,7 @@ export class Ask {
    * console.log(topping);
    * ```
    */
-  // deno-lint-ignore no-explicit-unknown
-  select<T extends Opts.Select>(opts: T): Promise<Result<T, unknown>> {
+  select<T extends Opts.Select>(opts: T): Promise<Result<T, unknown> | undefined> {
     return new Prompt.Select(this.mergeOptions(opts) as T).run();
   }
 
@@ -256,7 +255,7 @@ export class Ask {
    * console.log(toppings);
    * ```
    */
-  checkbox<T extends Opts.Checkbox>(opts: T): Promise<Result<T, unknown[]>> {
+  checkbox<T extends Opts.Checkbox>(opts: T): Promise<Result<T, unknown[]> | undefined> {
     return new Prompt.Checkbox(this.mergeOptions(opts) as Opts.Checkbox).run();
   }
 
@@ -299,49 +298,48 @@ export class Ask {
    */
   async prompt<T extends Array<SupportedOpts>>(
     questions: T,
-  ): Promise<PromptResultMap<T>> {
+  ): Promise<PromptResultMap<T> | undefined> {
     const answers: Record<string, unknown> = {};
 
     for (let i = 0; i < questions.length; ++i) {
       const question = questions[i];
+      let answer: Result<SupportedOpts, unknown> | undefined;
 
       switch (question.type) {
         case 'input': {
-          const input = new Prompt.Input(question);
-          Object.assign(answers, await input.run());
+          answer = await new Prompt.Input(question).run();
           break;
         }
         case 'number': {
-          const number = new Prompt.Number(question as Opts.Number);
-          Object.assign(answers, await number.run());
+          answer = await new Prompt.Number(question as Opts.Number).run();
           break;
         }
         case 'confirm': {
-          const confirm = new Prompt.Confirm(question as Opts.Confirm);
-          Object.assign(answers, await confirm.run());
+          answer = await new Prompt.Confirm(question as Opts.Confirm).run();
           break;
         }
         case 'password': {
-          const password = new Prompt.Password(question);
-          Object.assign(answers, await password.run());
+          answer = await new Prompt.Password(question).run();
           break;
         }
         case 'editor': {
-          const editor = new Prompt.Editor(question as Opts.Editor);
-          Object.assign(answers, await editor.run());
+          answer = await new Prompt.Editor(question as Opts.Editor).run();
           break;
         }
         case 'select': {
-          const select = new Prompt.Select(question as Opts.Select);
-          Object.assign(answers, await select.run());
+          answer = await new Prompt.Select(question as Opts.Select).run();
           break;
         }
         case 'checkbox': {
-          const checkbox = new Prompt.Checkbox(question as Opts.Checkbox);
-          Object.assign(answers, await checkbox.run());
+          answer = await new Prompt.Checkbox(question as Opts.Checkbox).run();
           break;
         }
       }
+
+      if (typeof answer === 'undefined') {
+        return undefined;
+      }
+      Object.assign(answers, answer);
     }
 
     return answers as PromptResultMap<T>;

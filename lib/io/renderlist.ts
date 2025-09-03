@@ -1,12 +1,11 @@
 import { stripAnsiCodes } from '$io';
-import type * as Item from '$item';
-import type { Closer, Reader, ReaderSync, Writer, WriterSync } from '@std/io';
+import { InterruptedError } from '../errors.ts';
+import type * as IO from './types.ts';
 
 export async function renderList({
   input,
   output,
   items,
-
   onEnter,
   onSpace,
   onDown,
@@ -16,21 +15,7 @@ export async function renderList({
   onNumber,
   columns = 1,
   indent = '',
-}: {
-  input: Reader & ReaderSync & Closer;
-  output: Writer & WriterSync & Closer;
-  items: Item.List[];
-  columns?: number;
-
-  onEnter: () => void;
-  onSpace?: () => void;
-  onUp: () => void;
-  onDown: () => void;
-  onLeft: () => void;
-  onRight: () => void;
-  onNumber?: (n: number) => void;
-  indent?: string;
-}): Promise<number> {
+}: IO.RenderListOpts): Promise<number> {
   const longestItem = items.reduce((longest, item) => {
     const len = stripAnsiCodes(item.message).length;
     return len > longest ? len : longest;
@@ -51,7 +36,7 @@ export async function renderList({
         rowStr += formattedItem + ' '.repeat(Math.max(0, padding));
       }
     }
-    await output.write(new TextEncoder().encode(indent + rowStr + '\n'));
+    await output.write(indent + rowStr + '\n');
   }
 
   const data = new Uint8Array(3);
@@ -67,7 +52,7 @@ export async function renderList({
     case '\u0003': // ETX
     case '\u0004': // EOT
     case '\u001b': // ESC
-      throw new Error('Terminated by user.');
+      throw new InterruptedError();
 
     case '\r': // CR
     case '\n': // LF
@@ -114,11 +99,7 @@ export async function renderList({
   // clear list to rerender it
   for (let i = 0; i < rows; i++) {
     // go to beginning of line
-    await output.write(new TextEncoder().encode('\r'));
-    // clear line
-    await output.write(new TextEncoder().encode('\x1b[K'));
-    // go up
-    await output.write(new TextEncoder().encode('\x1b[A'));
+    await output.deleteLine();
   }
 
   return rows;
