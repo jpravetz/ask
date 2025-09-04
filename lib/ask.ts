@@ -307,31 +307,31 @@ export class Ask {
 
       switch (question.type) {
         case 'input': {
-          answer = await new Prompt.Input(question).run();
+          answer = await new Prompt.Input(this.mergeOptions(question)).run();
           break;
         }
         case 'number': {
-          answer = await new Prompt.Number(question as Opts.Number).run();
+          answer = await new Prompt.Number(this.mergeOptions(question as Opts.Number)).run();
           break;
         }
         case 'confirm': {
-          answer = await new Prompt.Confirm(question as Opts.Confirm).run();
+          answer = await new Prompt.Confirm(this.mergeOptions(question as Opts.Confirm)).run();
           break;
         }
         case 'password': {
-          answer = await new Prompt.Password(question).run();
+          answer = await new Prompt.Password(this.mergeOptions(question)).run();
           break;
         }
         case 'editor': {
-          answer = await new Prompt.Editor(question as Opts.Editor).run();
+          answer = await new Prompt.Editor(this.mergeOptions(question as Opts.Editor)).run();
           break;
         }
         case 'select': {
-          answer = await new Prompt.Select(question as Opts.Select).run();
+          answer = await new Prompt.Select(this.mergeOptions(question as Opts.Select)).run();
           break;
         }
         case 'checkbox': {
-          answer = await new Prompt.Checkbox(question as Opts.Checkbox).run();
+          answer = await new Prompt.Checkbox(this.mergeOptions(question as Opts.Checkbox)).run();
           break;
         }
       }

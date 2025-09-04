@@ -68,7 +68,7 @@ export class NumberPrompt<T extends Opts.Number> extends TextPrompt<number> {
       });
 
       await this.output.write(new TextEncoder().encode('\r\x1b[K'));
-      const finalPrompt = `${this.getPrompt().substring(1)}: ${answer}`;
+      const finalPrompt = `${this.getPrompt()}: ${answer}`;
       await this.output.write(new TextEncoder().encode(finalPrompt));
       await this.output.write(new TextEncoder().encode('\n'));
 

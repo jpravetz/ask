@@ -24,7 +24,7 @@ export class PasswordPrompt<T extends Opts.Password> extends TextPrompt {
       const answer = await this.askUntilValid();
 
       await this.output.write(new TextEncoder().encode('\r\x1b[K'));
-      const finalPrompt = `${this.getPrompt().substring(1)}`;
+      const finalPrompt = `${this.getPrompt()}`;
       await this.output.write(new TextEncoder().encode(finalPrompt));
       await this.output.write(new TextEncoder().encode('\n'));
 

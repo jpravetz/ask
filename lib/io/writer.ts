@@ -23,8 +23,20 @@ export class Writer {
     await this.newLine();
   }
 
-  async write(s: string): Promise<void> {
-    await this.output.write(this.#textEncoder.encode(s));
+  async write(s: string | Uint8Array): Promise<void> {
+    if (typeof s === 'string') {
+      await this.output.write(this.#textEncoder.encode(s));
+    } else {
+      await this.output.write(s);
+    }
+  }
+
+  writeSync(s: string | Uint8Array) {
+    if (typeof s === 'string') {
+      this.output.writeSync(this.#textEncoder.encode(s));
+    } else {
+      this.output.writeSync(s);
+    }
   }
 
   async newLine(repeat = 1): Promise<void> {

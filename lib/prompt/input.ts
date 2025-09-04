@@ -20,7 +20,7 @@ export class InputPrompt<T extends Opts.Input> extends TextPrompt {
       const answer = await this.askUntilValid();
 
       await this.output.write(new TextEncoder().encode('\r\x1b[K'));
-      const finalPrompt = `${this.getPrompt().substring(1)}: ${answer}`;
+      const finalPrompt = `${this.getPrompt()}: ${answer}`;
       await this.output.write(new TextEncoder().encode(finalPrompt));
       await this.output.write(new TextEncoder().encode('\n'));
 

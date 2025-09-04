@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.9] - 2025-09-03
+
+- Fix to Uint8array problem, with more consolidation on io/writer
+
 ## [2.0.3-beta.8] - 2025-09-03
 
 - Improve prompt functionality, underlying I/O and rendering logic.

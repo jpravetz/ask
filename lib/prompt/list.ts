@@ -253,7 +253,7 @@ export class ListPrompt extends Prompt<unknown> {
 
     const selectedItems = this._items.filter((item) => item.selected);
 
-    let finalPrompt = this.getPrompt().substring(1);
+    let finalPrompt = this.getPrompt();
 
     if (this.multiple) {
       const _answers = selectedItems.map((item) => {

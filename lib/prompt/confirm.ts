@@ -45,7 +45,7 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
       });
 
       await this.output.write(new TextEncoder().encode('\r\x1b[K'));
-      const finalPrompt = `${this.getPrompt().substring(1)}: ${answer ? 'Yes' : 'No'}`;
+      const finalPrompt = `${this.getPrompt()}: ${answer ? 'Yes' : 'No'}`;
       await this.output.write(new TextEncoder().encode(finalPrompt));
       await this.output.write(new TextEncoder().encode('\n'));
 
