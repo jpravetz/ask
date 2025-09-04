@@ -1,6 +1,6 @@
-import { InterruptedError } from '../errors.ts';
 import type * as Opts from '$opts';
 import type { NumberType, Result } from '$types';
+import { InterruptedError } from '../errors.ts';
 import { TextPrompt } from './text.ts';
 
 /**
@@ -67,10 +67,8 @@ export class NumberPrompt<T extends Opts.Number> extends TextPrompt<number> {
         }
       });
 
-      await this.output.write(new TextEncoder().encode('\r\x1b[K'));
       const finalPrompt = `${this.getPrompt()}: ${answer}`;
-      await this.output.write(new TextEncoder().encode(finalPrompt));
-      await this.output.write(new TextEncoder().encode('\n'));
+      await this.output.redraw(finalPrompt);
 
       const result = {
         [this.name]: answer,

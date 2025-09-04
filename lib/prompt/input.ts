@@ -19,10 +19,8 @@ export class InputPrompt<T extends Opts.Input> extends TextPrompt {
     try {
       const answer = await this.askUntilValid();
 
-      await this.output.write(new TextEncoder().encode('\r\x1b[K'));
       const finalPrompt = `${this.getPrompt()}: ${answer}`;
-      await this.output.write(new TextEncoder().encode(finalPrompt));
-      await this.output.write(new TextEncoder().encode('\n'));
+      await this.output.redraw(finalPrompt);
 
       const result = {
         [this.name]: answer,

@@ -1,6 +1,5 @@
-import type * as StdIo from '@std/io';
 import { EndOfFileError, InterruptedError } from '../errors.ts';
-import type { Writer } from './writer.ts';
+import type * as IO from './types.ts';
 
 export async function readLine({
   input,
@@ -8,13 +7,7 @@ export async function readLine({
   hidden,
   mask,
   defaultValue,
-}: {
-  input: StdIo.Reader & StdIo.ReaderSync & StdIo.Closer;
-  output: Writer;
-  hidden?: boolean;
-  mask?: string;
-  defaultValue?: string;
-}): Promise<string | undefined> {
+}: IO.ReadlineOpts): Promise<string | undefined> {
   let isRaw = false;
   if (input === Deno.stdin) {
     isRaw = true;
@@ -27,39 +20,34 @@ export async function readLine({
   }
 
   let inputStr = defaultValue ?? '';
-  let currentCursorPos = inputStr.length;
-  const encoder = new TextEncoder();
-  const decoder = new TextDecoder();
-
-  // Initial display of the default value
-  if (!hidden) {
-    await output.write(encoder.encode(inputStr));
-    // await output.write(inputStr);
+  if (inputStr.length > 0 && !hidden) {
+    await output.write(inputStr);
   }
+  let pos = inputStr.length;
+  const decoder = new TextDecoder();
 
   try {
     while (true) {
-      const buffer = new Uint8Array(100); // Read a larger buffer
-      const n = await input.read(buffer);
+      const data = new Uint8Array(1);
+      const n = await input.read(data);
 
       if (!n) {
         throw new EndOfFileError('Input stream closed unexpectedly.');
       }
 
-      const char = decoder.decode(buffer.slice(0, n));
-
-      // Clear current line and redraw
-      const redraw = async () => {
-        if (hidden) return;
-        // Move cursor to beginning of line, clear from cursor to end, then write input string
-        await output.write(
-          encoder.encode('\x1b[1G\x1b[0K' + (mask ? mask.repeat(inputStr.length) : inputStr)),
-        );
-        // Move cursor to current position
-        await output.write(encoder.encode(`\x1b[${currentCursorPos + 1}G`));
-      };
+      const char = decoder.decode(data.slice(0, n));
 
       switch (char) {
+        case '\u0001': // Ctrl+A (start of line)
+          pos = 0;
+          // No visual update for Ctrl-A in this version
+          break;
+
+        case '\u0005': // Ctrl+E (end of line)
+          pos = inputStr.length;
+          // No visual update for Ctrl-E in this version
+          break;
+
         case '\u0003': // ETX - ctrl+c
           throw new InterruptedError();
 
@@ -70,45 +58,50 @@ export async function readLine({
         case '\n': // LF - return
           return inputStr;
 
-        case '\u001b': { // ESC or Arrow Keys
-          if (n > 1) { // Likely an escape sequence (e.g., arrow keys)
-            const sequence = decoder.decode(buffer.slice(1, n));
-            if (sequence === '[A') { // Up arrow
-              // Do nothing for now, or implement history
-            } else if (sequence === '[B') { // Down arrow
-              // Do nothing for now, or implement history
-            } else if (sequence === '[C') { // Right arrow
-              if (currentCursorPos < inputStr.length) {
-                currentCursorPos++;
-                await output.write(encoder.encode('\x1b[1C')); // Move cursor right
-              }
-            } else if (sequence === '[D') { // Left arrow
-              if (currentCursorPos > 0) {
-                currentCursorPos--;
-                await output.write(encoder.encode('\x1b[1D')); // Move cursor left
-              }
+        case '\u0008': // BS - backspace
+        case '\u007f': // DEL - backspace
+          if (pos > 0) {
+            inputStr = inputStr.slice(0, pos - 1) + inputStr.slice(pos);
+            pos--;
+            if (!hidden) {
+              const rest = inputStr.slice(pos);
+              await output.write('\b' + rest + ' ' + '\b'.repeat(rest.length + 1));
             }
-          } else { // Just ESC key
-            return undefined; // As per GEMINI.md
           }
+          break;
+
+        case '\u001b': { // ESC
+          // check for arrow keys
+          const arrow = new Uint8Array(2);
+          const arrowN = await input.read(arrow);
+          if (arrowN === 2 && decoder.decode(arrow) === '[C') { // right
+            if (pos < inputStr.length) {
+              pos++;
+              // No visual update for arrow keys in this version
+            }
+          } else if (arrowN === 2 && decoder.decode(arrow) === '[D') { // left
+            if (pos > 0) {
+              pos--;
+              // No visual update for arrow keys in this version
+            }
+          }
+          // Other escape sequences are ignored
           break;
         }
 
-        case '\u007f': // DEL - backspace
-        case '\u0008': // BS - backspace
-          if (currentCursorPos > 0) {
-            inputStr = inputStr.slice(0, currentCursorPos - 1) + inputStr.slice(currentCursorPos);
-            currentCursorPos--;
-            await redraw();
-          }
-          break;
-
         default:
-          // Only process printable characters
-          if (char.length === 1 && char.charCodeAt(0) >= 32) {
-            inputStr = inputStr.slice(0, currentCursorPos) + char + inputStr.slice(currentCursorPos);
-            currentCursorPos++;
-            await redraw();
+          // Ignore other control characters
+          if (char.charCodeAt(0) >= 32) {
+            inputStr = inputStr.slice(0, pos) + char + inputStr.slice(pos);
+            pos++;
+            if (!hidden) {
+              if (mask) {
+                await output.write(mask);
+              } else {
+                const rest = inputStr.slice(pos);
+                await output.write(char + rest + '\b'.repeat(rest.length));
+              }
+            }
           }
           break;
       }
@@ -116,8 +109,9 @@ export async function readLine({
   } finally {
     if (isRaw) {
       (input as typeof Deno.stdin).setRaw(false);
-      // Ensure cursor is at the end of the line after input
-      await output.write(encoder.encode('\n'));
+      if (hidden || mask) {
+        await output.write(new TextEncoder().encode('\n'));
+      }
     }
   }
 }

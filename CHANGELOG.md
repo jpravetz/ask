@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.10] - 2025-09-03
+
+- Reverted some dumb gemini changes to readline
+
 ## [2.0.3-beta.9] - 2025-09-03
 
 - Fix to Uint8array problem, with more consolidation on io/writer

@@ -1,7 +1,7 @@
-import { InterruptedError } from '../errors.ts';
+import { readLine } from '$io';
 import type * as Opts from '$opts';
 import type { Result } from '$types';
-import { readLine } from '$io';
+import { InterruptedError } from '../errors.ts';
 import { TextPrompt } from './text.ts';
 
 /**
@@ -44,10 +44,8 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
         return val === this.accept.toLowerCase();
       });
 
-      await this.output.write(new TextEncoder().encode('\r\x1b[K'));
       const finalPrompt = `${this.getPrompt()}: ${answer ? 'Yes' : 'No'}`;
-      await this.output.write(new TextEncoder().encode(finalPrompt));
-      await this.output.write(new TextEncoder().encode('\n'));
+      this.output.redraw(finalPrompt);
 
       const result = {
         [this.name]: answer,

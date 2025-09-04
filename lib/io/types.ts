@@ -17,3 +17,11 @@ export type RenderListOpts = {
   onNumber?: (n: number) => void;
   indent?: string;
 };
+
+export type ReadlineOpts = {
+  input: StdIo.Reader & StdIo.ReaderSync & StdIo.Closer;
+  output: Writer;
+  hidden?: boolean;
+  mask?: string;
+  defaultValue?: string;
+};
