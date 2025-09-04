@@ -1,7 +1,6 @@
-
+import { Fmt } from '$fmt';
 import type * as Opts from '$opts';
 import type { Result } from '$types';
-import * as colors from '@std/fmt/colors';
 import { ListPrompt } from './list.ts';
 
 /**
@@ -13,8 +12,8 @@ export class CheckboxPrompt<T extends Opts.Checkbox> extends ListPrompt {
     super({
       ...opts,
       multiple: true,
-      selectedPrefix: opts.selectedPrefix ?? colors.cyan('● '),
-      unselectedPrefix: opts.unselectedPrefix ?? '○ ',
+      selectedPrefix: opts.selectedPrefix ?? Fmt.checkbox.selected,
+      unselectedPrefix: opts.unselectedPrefix ?? Fmt.checkbox.unselected,
     });
     this.type = 'checkbox';
   }

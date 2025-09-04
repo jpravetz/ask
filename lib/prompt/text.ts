@@ -1,6 +1,6 @@
+import { Fmt } from '$fmt';
 import { readLine } from '$io';
 import type * as Opts from '$opts';
-import * as colors from '@std/fmt/colors';
 import { EndOfFileError, InterruptedError } from '../errors.ts';
 import { Prompt } from './base.ts';
 
@@ -20,17 +20,18 @@ export class TextPrompt<T = string> extends Prompt<T> {
   }
 
   protected async printError(message: string) {
-    await this.output.write(`${colors.red('>>')} ${message}\n`);
+    await this.output.write(`${Fmt.errorPrefix} ${message}\n`);
   }
 
   protected printErrorSync(message: string) {
-    this.output.writeSync(`${colors.red('>>')} ${message}\n`);
+    this.output.writeSync(`${Fmt.errorPrefix} ${message}\n`);
   }
 
   protected async question(): Promise<string | undefined> {
-    const prompt = new TextEncoder().encode(this.getPrompt());
+    // const prompt = new TextEncoder().encode(this.getPrompt());
 
-    await this.output.write(prompt);
+    await this.output.newLine();
+    await this.output.write(this.getPrompt());
 
     const input = await readLine({
       input: this.input,

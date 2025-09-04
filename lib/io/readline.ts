@@ -25,6 +25,16 @@ export async function readLine({
   }
   let pos = inputStr.length;
   const decoder = new TextDecoder();
+  let error: Error | undefined;
+
+  const onEnd = async (): Promise<void> => {
+    if (isRaw) {
+      (input as typeof Deno.stdin).setRaw(false);
+      if (hidden || mask) {
+        await output.newLine();
+      }
+    }
+  };
 
   try {
     while (true) {
@@ -49,10 +59,12 @@ export async function readLine({
           break;
 
         case '\u0003': // ETX - ctrl+c
-          throw new InterruptedError();
+          error = new InterruptedError();
+          throw error;
 
         case '\u0004': // EOT - ctrl+d
-          throw new EndOfFileError();
+          error = new EndOfFileError();
+          throw error;
 
         case '\r': // CR - return
         case '\n': // LF - return
@@ -106,12 +118,10 @@ export async function readLine({
           break;
       }
     }
+  } catch (error) {
+    await onEnd();
+    throw error;
   } finally {
-    if (isRaw) {
-      (input as typeof Deno.stdin).setRaw(false);
-      if (hidden || mask) {
-        await output.write(new TextEncoder().encode('\n'));
-      }
-    }
+    await onEnd();
   }
 }

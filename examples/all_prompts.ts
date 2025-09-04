@@ -3,7 +3,6 @@ import * as Ask from '../mod.ts';
 const ask = new Ask.Main({ prefix: '', suffix: ':', indent: 8 });
 
 try {
-  // Select prompt example
   const letterResult = await ask.select(
     {
       name: 'letter',

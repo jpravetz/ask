@@ -10,6 +10,22 @@
       "scripts": [
         ""
       ]
+    },
+    {
+      "program": "./test/input.ts",
+      "runtimeArgs": ["run", "--inspect-wait", "-A"],
+      "scriptArgs": "-nA",
+      "scripts": [
+        ""
+      ]
+    },
+    {
+      "program": "./test/confirm.ts",
+      "runtimeArgs": ["run", "--inspect-wait", "-A"],
+      "scriptArgs": "-nA",
+      "scripts": [
+        ""
+      ]
     }
   ]
 }

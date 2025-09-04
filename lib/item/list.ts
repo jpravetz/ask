@@ -1,4 +1,4 @@
-import * as colors from '@std/fmt/colors';
+import { Fmt } from '$fmt';
 
 /**
  * A single item in a list.
@@ -111,15 +111,15 @@ export class ListItem {
   }
 
   protected defaultInactiveFormatter(message: string): string {
-    return `  ${message}`;
+    return Fmt.inactive(message);
   }
 
   protected defaultActiveFormatter(message: string): string {
-    return colors.cyan(`❯ ${message}`);
+    return Fmt.active(message);
   }
 
   protected defaultDisabledFormatter(message: string): string {
-    return colors.gray(`- ${message} (disabled)`);
+    return Fmt.disabled(message);
   }
 
   /**

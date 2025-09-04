@@ -1,8 +1,8 @@
+import { Fmt } from '$fmt';
 import { renderList } from '$io';
 import * as Item from '$item';
 import type * as Opts from '$opts';
 import type { Choice } from '$types';
-import * as colors from '@std/fmt/colors';
 import { Prompt } from './base.ts';
 
 export class ListPrompt extends Prompt<unknown> {
@@ -63,17 +63,15 @@ export class ListPrompt extends Prompt<unknown> {
           : false,
         selectedPrefix: this.selectedPrefix,
         unselectedPrefix: this.unselectedPrefix,
-        inactiveFormatter: this.inactiveFormatter ??
-          ((message: string) => `  ${message}`),
-        activeFormatter: this.activeFormatter ??
-          ((message: string) => colors.cyan(`❯ ${message}`)),
-        disabledFormatter: this.disabledFormatter,
+        inactiveFormatter: this.inactiveFormatter ?? Fmt.inactive,
+        activeFormatter: this.activeFormatter ?? Fmt.active,
+        disabledFormatter: this.disabledFormatter ?? Fmt.disabled,
       });
     });
   }
 
-  protected override getPrompt(): string {
-    let prompt = super.getPrompt();
+  protected override getPrompt(final = false): string {
+    let prompt = super.getPrompt(final);
     // if (this.default) {
     //   const choice = this.choices.find((choice) => choice.value === this.default);
     //   if (choice) {
@@ -253,7 +251,7 @@ export class ListPrompt extends Prompt<unknown> {
 
     const selectedItems = this._items.filter((item) => item.selected);
 
-    let finalPrompt = this.getPrompt();
+    let finalPrompt = this.getPrompt(true);
 
     if (this.multiple) {
       const _answers = selectedItems.map((item) => {
@@ -263,7 +261,7 @@ export class ListPrompt extends Prompt<unknown> {
         }
         return message;
       });
-      finalPrompt += ` ${colors.gray(colors.italic(_answers.join(', ')))}`;
+      finalPrompt += ` ${Fmt.answer(_answers.join(', '))}`;
     } else if (selectedItems.length === 1) {
       const selected = selectedItems[0];
       const choice = this.choices.find(
@@ -271,7 +269,9 @@ export class ListPrompt extends Prompt<unknown> {
       );
 
       if (choice) {
-        finalPrompt = `${finalPrompt.substring(0, finalPrompt.lastIndexOf(':') + 1)} ${choice.message}`;
+        finalPrompt = `${finalPrompt.substring(0, finalPrompt.lastIndexOf(':') + 1)} ${
+          Fmt.answer(choice.message)
+        }`;
       }
     }
 

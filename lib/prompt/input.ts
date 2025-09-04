@@ -1,7 +1,8 @@
-import { InterruptedError } from '../errors.ts';
-import type { Result } from '$types';
-import { TextPrompt } from './text.ts';
+import { Fmt } from '$fmt';
 import type * as Opts from '$opts';
+import type { Result } from '$types';
+import { InterruptedError } from '../errors.ts';
+import { TextPrompt } from './text.ts';
 
 /**
  * A prompt for a simple text input.
@@ -19,7 +20,7 @@ export class InputPrompt<T extends Opts.Input> extends TextPrompt {
     try {
       const answer = await this.askUntilValid();
 
-      const finalPrompt = `${this.getPrompt()}: ${answer}`;
+      const finalPrompt = `${this.getPrompt(true)}: ${Fmt.answer(answer ?? '')}`;
       await this.output.redraw(finalPrompt);
 
       const result = {

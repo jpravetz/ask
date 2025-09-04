@@ -1,3 +1,4 @@
+import { Fmt } from '$fmt';
 import { readLine } from '$io';
 import type * as Opts from '$opts';
 import type { Result } from '$types';
@@ -44,8 +45,9 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
         return val === this.accept.toLowerCase();
       });
 
-      const finalPrompt = `${this.getPrompt()}: ${answer ? 'Yes' : 'No'}`;
-      this.output.redraw(finalPrompt);
+      const finalPrompt = `${this.getPrompt(true)}: ${answer ? Fmt.yes : Fmt.no}`;
+      await this.output.clearLine();
+      await this.output.redraw(finalPrompt);
 
       const result = {
         [this.name]: answer,
@@ -61,8 +63,8 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
   }
 
   protected override async question(): Promise<string | undefined> {
-    const prompt = new TextEncoder().encode(this.getPrompt());
-    await this.output.write(prompt);
+    await this.output.newLine();
+    await this.output.write(this.getPrompt());
 
     const input = await readLine({
       input: this.input,

@@ -1,6 +1,6 @@
+import { Fmt } from '$fmt';
 import * as IO from '$io';
 import type * as Opts from '$opts';
-import * as colors from '@std/fmt/colors';
 import type { Closer, Reader, ReaderSync } from '@std/io';
 import type { PromptType } from './types.ts';
 
@@ -33,7 +33,7 @@ export class Prompt<T> {
     this.name = opts.name;
     this.type = opts.type ?? 'input';
     this.message = opts.message ?? opts.name;
-    this.prefix = opts.prefix === undefined ? colors.green('?') : opts.prefix;
+    this.prefix = opts.prefix === undefined ? Fmt.questionPrefix : opts.prefix;
     this.suffix = opts.suffix ??
       (!opts.message && opts.suffix === null ? ':' : '');
     if (typeof opts.indent === 'number') {
@@ -49,13 +49,13 @@ export class Prompt<T> {
     this.onExceededAttempts = opts.onExceededAttempts ?? onExceededAttempts;
   }
 
-  private format(str: string): string {
+  private format(str: string, final = false): string {
     return (
-      colors.bold(str) + this.suffix
+      Fmt.question(str, final) + this.suffix
     );
   }
 
-  protected getPrompt(): string {
+  protected getPrompt(final = false): string {
     let prompt = '';
 
     if (this.indent?.length) {
@@ -66,7 +66,7 @@ export class Prompt<T> {
       prompt += this.prefix + ' ';
     }
 
-    prompt += this.format(this.message);
+    prompt += this.format(this.message, final) + ' ';
 
     return prompt;
   }

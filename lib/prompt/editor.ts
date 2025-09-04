@@ -78,8 +78,7 @@ export class EditorPrompt<T extends Opts.Editor> extends Prompt<string | undefin
    * contents of the file when the editor is closed.
    */
   async run(): Promise<Result<T, string | undefined>> {
-    const prompt = new TextEncoder().encode(this.getPrompt());
-    await this.output.write(prompt);
+    await this.output.write(this.getPrompt());
 
     const editorPromptStr = this.getEditorPrompt();
     const editorPrompt = new TextEncoder().encode(editorPromptStr);
@@ -88,11 +87,9 @@ export class EditorPrompt<T extends Opts.Editor> extends Prompt<string | undefin
 
     const data = await this.launch();
 
-    await this.output.write(prompt);
-    await this.output.write(
-      new TextEncoder().encode(' '.repeat(editorPromptLen)),
-    );
-    await this.output.write(new TextEncoder().encode('\n'));
+    await this.output.write(this.getPrompt(true));
+    await this.output.write(' '.repeat(editorPromptLen));
+    await this.output.newLine();
 
     const result = {
       [this.name]: data,
