@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.12] - 2025-09-04
+
+- Fix lint and check bugs
+
 ## [2.0.3-beta.11] - 2025-09-04
 
 - Completed fixes for display of checkbox, select, confirm, input and number.

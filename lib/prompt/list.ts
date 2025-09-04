@@ -71,14 +71,7 @@ export class ListPrompt extends Prompt<unknown> {
   }
 
   protected override getPrompt(final = false): string {
-    let prompt = super.getPrompt(final);
-    // if (this.default) {
-    //   const choice = this.choices.find((choice) => choice.value === this.default);
-    //   if (choice) {
-    //     prompt += ` (${choice.message})`;
-    //   }
-    // }
-    return prompt;
+    return super.getPrompt(final);
   }
 
   private up(startIndex: number) {

@@ -8,9 +8,7 @@ This module is not maintained for others to use. It is a fork of [@sallai/ask](h
 
 ## Description
 
-`ask` is a slick Deno module that allows you to create interactive command-line
-applications, similar to what you'd achieve with
-[inquirer](https://www.npmjs.com/package/inquirer) in Node.js.
+`ask` is a slick Deno module that allows you to create interactive command-line applications, similar to what you'd achieve with [inquirer](https://www.npmjs.com/package/inquirer) in Node.js.
 
 ## Overview
 
