@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.13] - 2025-09-05
+
+- Bug fixes with final prompt output
+
 ## [2.0.3-beta.12] - 2025-09-04
 
 - Fix lint and check bugs

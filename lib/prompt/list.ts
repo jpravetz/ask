@@ -254,7 +254,7 @@ export class ListPrompt extends Prompt<unknown> {
         }
         return message;
       });
-      finalPrompt += ` ${Fmt.answer(_answers.join(', '))}`;
+      finalPrompt += Fmt.answer(_answers.join(', '));
     } else if (selectedItems.length === 1) {
       const selected = selectedItems[0];
       const choice = this.choices.find(
@@ -262,9 +262,10 @@ export class ListPrompt extends Prompt<unknown> {
       );
 
       if (choice) {
-        finalPrompt = `${finalPrompt.substring(0, finalPrompt.lastIndexOf(':') + 1)} ${
-          Fmt.answer(choice.message)
-        }`;
+        finalPrompt += Fmt.answer(choice.message);
+        // finalPrompt = `${finalPrompt.substring(0, finalPrompt.lastIndexOf(':') + 1)} ${
+        //   Fmt.answer(choice.message)
+        // }`;
       }
     }
 

@@ -39,7 +39,7 @@ try {
     {
       name: 'name',
       type: 'input',
-      message: 'What is your name?',
+      message: 'What is your name',
       default: 'John Doe',
     },
 

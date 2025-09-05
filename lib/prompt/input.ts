@@ -20,7 +20,7 @@ export class InputPrompt<T extends Opts.Input> extends TextPrompt {
     try {
       const answer = await this.askUntilValid();
 
-      const finalPrompt = `${this.getPrompt(true)}: ${Fmt.answer(answer ?? '')}`;
+      const finalPrompt = `${this.getPrompt(true)}${Fmt.answer(answer ?? '')}`;
       await this.output.redraw(finalPrompt);
 
       const result = {

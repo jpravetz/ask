@@ -45,7 +45,7 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
         return val === this.accept.toLowerCase();
       });
 
-      const finalPrompt = `${this.getPrompt(true)}: ${answer ? Fmt.yes : Fmt.no}`;
+      const finalPrompt = `${this.getPrompt(true)}${answer ? Fmt.yes : Fmt.no}`;
       await this.output.clearLine();
       await this.output.redraw(finalPrompt);
 
