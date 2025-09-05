@@ -59,6 +59,19 @@ try {
       default: 30,
       validate: (value) => typeof value === 'number' && value > 0,
     },
+
+    // Inline checkbox prompt example
+    {
+      name: 'days',
+      type: 'inline-checkbox',
+      message: 'Do you want me to come on',
+      suffix: 'to water the plants?',
+      choices: [
+        { message: 'Mondays', value: 'mon' },
+        { message: 'Tuesdays', value: 'tue' },
+        { message: 'Wednesdays', value: 'wed' },
+      ],
+    },
   ]);
 
   // Password prompt example

@@ -3,6 +3,7 @@ import type { PromptOpts } from './prompt.ts';
 export type { CheckboxOpts as Checkbox } from './checkbox.ts';
 export type { ConfirmOpts as Confirm } from './confirm.ts';
 export type { EditorOpts as Editor } from './editor.ts';
+export type { InlineCheckboxOpts as InlineCheckbox } from './inlineCheckbox.ts';
 export type { GlobalPromptOpts as GlobalPrompt } from './global.ts';
 export type { InputOpts as Input } from './input.ts';
 export type { ListOpts as List } from './list.ts';

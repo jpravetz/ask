@@ -7,9 +7,9 @@ import { Prompt } from './base.ts';
 
 export class ListPrompt extends Prompt<unknown> {
   private choices: Choice[];
-  private inactiveFormatter?: (message: string) => string;
-  private activeFormatter?: (message: string) => string;
-  private disabledFormatter?: (message: string) => string;
+  private inactiveFormatter?: (message: string, selected: boolean) => string;
+  private activeFormatter?: (message: string, selected: boolean) => string;
+  private disabledFormatter?: (message: string, selected: boolean) => string;
   private multiple?: boolean;
   private useNumbers?: boolean;
   private columns?: number;
@@ -190,7 +190,7 @@ export class ListPrompt extends Prompt<unknown> {
 
   protected async questionMultiple(): Promise<unknown[] | undefined> {
     this.message = this._originalMessage;
-    await this.output.newLine();
+    await this.start();
     await this.output.write(this.getPrompt());
     await this.output.newLine(2);
 

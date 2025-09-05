@@ -8,4 +8,5 @@ export type PromptType =
   | 'password'
   | 'editor'
   | 'select'
-  | 'checkbox';
+  | 'checkbox'
+  | 'inlineCheckbox';

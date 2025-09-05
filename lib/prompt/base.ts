@@ -28,6 +28,7 @@ export class Prompt<T> {
     lastInput?: T,
     retryFn?: () => Promise<T | undefined>,
   ) => void | Promise<void>;
+  protected preNewLine: number;
 
   constructor(opts: Opts.Prompt<T>) {
     this.name = opts.name;
@@ -47,6 +48,13 @@ export class Prompt<T> {
     this.validate = opts.validate ?? (() => true);
     this.maxAttempts = opts.maxAttempts;
     this.onExceededAttempts = opts.onExceededAttempts ?? onExceededAttempts;
+    this.preNewLine = opts.preNewLine ?? 1;
+  }
+
+  protected async start(): Promise<void> {
+    if (this.preNewLine > 0) {
+      await this.output.newLine(this.preNewLine);
+    }
   }
 
   private format(str: string, final = false): string {

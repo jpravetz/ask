@@ -17,7 +17,8 @@ type SupportedOpts =
   | Opts.Password
   | Opts.Editor
   | Opts.Select
-  | Opts.Checkbox;
+  | Opts.Checkbox
+  | Opts.InlineCheckbox;
 
 type PromptResult<O extends SupportedOpts> = O['type'] extends 'input'
   ? Result<O extends Opts.Input ? O : never, string>
@@ -27,6 +28,7 @@ type PromptResult<O extends SupportedOpts> = O['type'] extends 'input'
   : O['type'] extends 'editor' ? Result<O extends Opts.Editor ? O : never, string>
   : O['type'] extends 'select' ? Result<O extends Opts.Select ? O : never, unknown>
   : O['type'] extends 'checkbox' ? Result<O extends Opts.Checkbox ? O : never, unknown[]>
+  : O['type'] extends 'inline-checkbox' ? Result<O extends Opts.InlineCheckbox ? O : never, unknown[]>
   : never;
 
 type PromptResultMap<T extends Array<SupportedOpts>> = {
@@ -259,6 +261,10 @@ export class Ask {
     return new Prompt.Checkbox(this.mergeOptions(opts) as Opts.Checkbox).run();
   }
 
+  inlineCheckbox<T extends Opts.InlineCheckbox>(opts: T): Promise<Result<T, unknown[]> | undefined> {
+    return new Prompt.InlineCheckbox(this.mergeOptions(opts) as Opts.InlineCheckbox).run();
+  }
+
   /**
    * Will ask a series of questions based on an array of prompt options and
    * return a type-safe object where each key is the name of a question and the
@@ -332,6 +338,10 @@ export class Ask {
         }
         case 'checkbox': {
           answer = await new Prompt.Checkbox(this.mergeOptions<Opts.Checkbox>(question)).run();
+          break;
+        }
+        case 'inline-checkbox': {
+          answer = await new Prompt.InlineCheckbox(this.mergeOptions<Opts.InlineCheckbox>(question)).run();
           break;
         }
       }

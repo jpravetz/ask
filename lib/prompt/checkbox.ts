@@ -12,8 +12,8 @@ export class CheckboxPrompt<T extends Opts.Checkbox> extends ListPrompt {
     super({
       ...opts,
       multiple: true,
-      selectedPrefix: opts.selectedPrefix ?? Fmt.checkbox.selected,
-      unselectedPrefix: opts.unselectedPrefix ?? Fmt.checkbox.unselected,
+      selectedPrefix: opts.selectedPrefix ?? Fmt.checkbox.prefix.selected,
+      unselectedPrefix: opts.unselectedPrefix ?? Fmt.checkbox.prefix.unselected,
     });
     this.type = 'checkbox';
   }

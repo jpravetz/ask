@@ -63,7 +63,7 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
   }
 
   protected override async question(): Promise<string | undefined> {
-    await this.output.newLine();
+    await this.start();
     await this.output.write(this.getPrompt());
 
     const input = await readLine({

@@ -32,4 +32,9 @@ export type GlobalPromptOpts = {
    * The writer interface that will be used to write output to the user.
    */
   output?: Writer & WriterSync & Closer;
+
+  /**
+   * The number of blank lines to display before the prompt. Defaults to 1.
+   */
+  preNewLine?: number;
 };

@@ -6,9 +6,9 @@ export type ListOpts = PromptOpts<unknown> & {
   multiple?: boolean;
   selectedPrefix?: string;
   unselectedPrefix?: string;
-  inactiveFormatter?: (message: string) => string;
-  activeFormatter?: (message: string) => string;
-  disabledFormatter?: (message: string) => string;
+  inactiveFormatter?: (message: string, selected: boolean) => string;
+  activeFormatter?: (message: string, selected: boolean) => string;
+  disabledFormatter?: (message: string, selected: boolean) => string;
   useNumbers?: boolean;
   columns?: number;
   defaultValues?: string[];

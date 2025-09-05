@@ -45,17 +45,17 @@ export class ListItem {
   /**
    * A function that formats the message when the item is inactive.
    */
-  inactiveFormatter: (message: string) => string;
+  inactiveFormatter: (message: string, selected: boolean) => string;
 
   /**
    * A function that formats the message when the item is active.
    */
-  activeFormatter: (message: string) => string;
+  activeFormatter: (message: string, selected: boolean) => string;
 
   /**
    * A function that formats the message when the item is disabled.
    */
-  disabledFormatter: (message: string) => string;
+  disabledFormatter: (message: string, selected: boolean) => string;
 
   constructor({
     message,
@@ -76,9 +76,9 @@ export class ListItem {
     active: boolean;
     selectedPrefix?: string;
     unselectedPrefix?: string;
-    inactiveFormatter?: (message: string) => string;
-    activeFormatter?: (message: string) => string;
-    disabledFormatter?: (message: string) => string;
+    inactiveFormatter?: (message: string, selected: boolean) => string;
+    activeFormatter?: (message: string, selected: boolean) => string;
+    disabledFormatter?: (message: string, selected: boolean) => string;
   }) {
     this.message = message;
     this.value = value;
@@ -127,13 +127,13 @@ export class ListItem {
    */
   format(): string {
     if (this.disabled) {
-      return this.disabledFormatter(this.fullMessage);
+      return this.disabledFormatter(this.fullMessage, this.selected);
     }
 
     if (this.active) {
-      return this.activeFormatter(this.fullMessage);
+      return this.activeFormatter(this.fullMessage, this.selected);
     }
 
-    return this.inactiveFormatter(this.fullMessage);
+    return this.inactiveFormatter(this.fullMessage, this.selected);
   }
 }

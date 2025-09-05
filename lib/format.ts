@@ -2,8 +2,21 @@ import * as colors from '@std/fmt/colors';
 
 export class Fmt {
   static checkbox = {
-    selected: colors.cyan('● '),
-    unselected: '○ ',
+    prefix: { selected: colors.cyan('● '), unselected: '○ ' },
+  };
+  static inlineCheckbox = {
+    prefix: {
+      selected: colors.green('● '),
+      unselected: colors.gray('○ '),
+      finalSelected: colors.green('● '),
+      finalUnselected: colors.gray('○ '),
+    },
+    active: (message: string) => colors.underline(message),
+    inactive: (message: string) => message,
+    selected: (message: string) => colors.green(message),
+    unselected: (message: string) => colors.gray(message),
+    finalSelected: (message: string) => colors.green(message),
+    finalUnselected: (message: string) => colors.strikethrough(colors.gray(message)),
   };
   static questionPrefix = colors.green('?');
   static errorPrefix = colors.red('>>');

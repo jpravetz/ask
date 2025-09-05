@@ -30,7 +30,7 @@ export class TextPrompt<T = string> extends Prompt<T> {
   protected async question(): Promise<string | undefined> {
     // const prompt = new TextEncoder().encode(this.getPrompt());
 
-    await this.output.newLine();
+    await this.start();
     await this.output.write(this.getPrompt());
 
     const input = await readLine({
