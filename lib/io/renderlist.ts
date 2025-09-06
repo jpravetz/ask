@@ -1,5 +1,5 @@
+import { InterruptedError } from '$errors';
 import { stripAnsiCodes } from '$io';
-import { InterruptedError } from '../errors.ts';
 import type * as IO from './types.ts';
 
 export async function renderList({

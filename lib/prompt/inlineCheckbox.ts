@@ -1,9 +1,9 @@
+import { InterruptedError } from '$errors';
+import { Fmt } from '$fmt';
 import * as Item from '$item';
 import type * as Opts from '$opts';
 import type { Choice, Result } from '$types';
 import * as colors from '@std/fmt/colors';
-import { InterruptedError } from '../errors.ts';
-import { Fmt } from '../format.ts';
 import { Prompt } from './base.ts';
 
 export class InlineCheckboxPrompt<T extends Opts.InlineCheckbox> extends Prompt<unknown> {
@@ -58,7 +58,7 @@ export class InlineCheckboxPrompt<T extends Opts.InlineCheckbox> extends Prompt<
             : Fmt.inlineCheckbox.unselected(message);
           return Fmt.inlineCheckbox.active(formatted);
         },
-        disabledFormatter: (message: string, selected: boolean) => {
+        disabledFormatter: (message: string, _selected: boolean) => {
           return colors.gray(message);
         },
       });

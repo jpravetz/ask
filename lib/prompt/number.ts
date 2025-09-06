@@ -1,6 +1,6 @@
+import { InterruptedError } from '$errors';
 import type * as Opts from '$opts';
 import type { NumberType, Result } from '$types';
-import { InterruptedError } from '../errors.ts';
 import { TextPrompt } from './text.ts';
 
 /**

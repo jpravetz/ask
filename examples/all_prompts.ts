@@ -63,7 +63,7 @@ try {
     // Inline checkbox prompt example
     {
       name: 'days',
-      type: 'inline-checkbox',
+      type: 'inlineCheckbox',
       message: 'Do you want me to come on',
       suffix: 'to water the plants?',
       choices: [

@@ -1,7 +1,7 @@
+import { InterruptedError } from '$errors';
 import { Fmt } from '$fmt';
 import type * as Opts from '$opts';
 import type { Result } from '$types';
-import { InterruptedError } from '../errors.ts';
 import { TextPrompt } from './text.ts';
 
 /**

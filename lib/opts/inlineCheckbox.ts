@@ -9,7 +9,7 @@ export type InlineCheckboxOpts = PromptOpts<unknown[]> & {
    * The type of the prompt. This can not be changed but will be used to
    * determine the type of the question.
    */
-  type?: 'inline-checkbox';
+  type?: 'inlineCheckbox';
 
   /**
    * A list of choices for the user to select multiple values from.

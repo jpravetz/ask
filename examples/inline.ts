@@ -12,7 +12,7 @@ try {
       { message: 'Tuesdays', value: 'tue' },
       { message: 'Wednesdays', value: 'wed' },
     ],
-      default: [ 'wed']
+    default: ['wed'],
   });
 
   console.log(result);

@@ -1,7 +1,7 @@
+import { EndOfFileError, InterruptedError } from '$errors';
 import { Fmt } from '$fmt';
 import { readLine } from '$io';
 import type * as Opts from '$opts';
-import { EndOfFileError, InterruptedError } from '../errors.ts';
 import { Prompt } from './base.ts';
 
 /**

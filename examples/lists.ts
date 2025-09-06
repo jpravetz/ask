@@ -1,7 +1,6 @@
 import * as Ask from '../mod.ts';
 
-const _opts = { prefix: '\n' + ' '.repeat(6), suffix: '\n' };
-const ask = new Ask.Main({ prefix: '', indent: 15 });
+const ask = new Ask.Main({ prefix: '', suffix: ':', indent: '>>>>>>' });
 
 const result = await ask.select(
   {

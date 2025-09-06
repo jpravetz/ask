@@ -28,7 +28,7 @@ type PromptResult<O extends SupportedOpts> = O['type'] extends 'input'
   : O['type'] extends 'editor' ? Result<O extends Opts.Editor ? O : never, string>
   : O['type'] extends 'select' ? Result<O extends Opts.Select ? O : never, unknown>
   : O['type'] extends 'checkbox' ? Result<O extends Opts.Checkbox ? O : never, unknown[]>
-  : O['type'] extends 'inline-checkbox' ? Result<O extends Opts.InlineCheckbox ? O : never, unknown[]>
+  : O['type'] extends 'inlineCheckbox' ? Result<O extends Opts.InlineCheckbox ? O : never, unknown[]>
   : never;
 
 type PromptResultMap<T extends Array<SupportedOpts>> = {
@@ -67,7 +67,7 @@ export class Ask {
    * @param opts
    * @example
    * ```ts
-   * import { Ask } from "@sallai/ask";
+   * import { Ask } from "@jpravetz/ask";
    *
    * const ask = new Ask();
    *
@@ -91,7 +91,7 @@ export class Ask {
    * @param opts
    * @example
    * ```ts
-   * import { Ask } from "@sallai/ask";
+   * import { Ask } from "@jpravetz/ask";
    *
    * const ask = new Ask();
    *
@@ -120,7 +120,7 @@ export class Ask {
    * @param opts
    * @example
    * ```ts
-   * import { Ask } from "@sallai/ask";
+   * import { Ask } from "@jpravetz/ask";
    *
    * const ask = new Ask();
    *
@@ -147,7 +147,7 @@ export class Ask {
    * @param opts
    * @example
    * ```ts
-   * import { Ask } from "@sallai/ask";
+   * import { Ask } from "@jpravetz/ask";
    *
    * const ask = new Ask();
    *
@@ -176,7 +176,7 @@ export class Ask {
    * @param opts
    * @example
    * ```ts
-   * import { Ask } from "@sallai/ask";
+   * import { Ask } from "@jpravetz/ask";
    *
    * const ask = new Ask();
    *
@@ -205,7 +205,7 @@ export class Ask {
    * @param opts
    * @example
    * ```ts
-   * import { Ask, Separator } from "@sallai/ask";
+   * import { Ask, Separator } from "@jpravetz/ask";
    *
    * const ask = new Ask();
    *
@@ -239,7 +239,7 @@ export class Ask {
    * @param opts
    * @example
    * ```ts
-   * import { Ask, Separator } from "@sallai/ask";
+   * import { Ask, Separator } from "@jpravetz/ask";
    *
    * const ask = new Ask();
    *
@@ -274,7 +274,7 @@ export class Ask {
    * @param questions
    * @example
    * ```ts
-   * import { Ask } from "@sallai/ask";
+   * import { Ask } from "@jpravetz/ask";
    *
    * const ask = new Ask();
    *
@@ -340,7 +340,7 @@ export class Ask {
           answer = await new Prompt.Checkbox(this.mergeOptions<Opts.Checkbox>(question)).run();
           break;
         }
-        case 'inline-checkbox': {
+        case 'inlineCheckbox': {
           answer = await new Prompt.InlineCheckbox(this.mergeOptions<Opts.InlineCheckbox>(question)).run();
           break;
         }

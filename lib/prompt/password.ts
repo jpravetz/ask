@@ -1,6 +1,7 @@
+import { InterruptedError } from '$errors';
+import { Fmt } from '$fmt';
 import type * as Opts from '$opts';
 import type { Result } from '$types';
-import { InterruptedError } from '../errors.ts';
 import { TextPrompt } from './text.ts';
 
 /**
@@ -23,7 +24,9 @@ export class PasswordPrompt<T extends Opts.Password> extends TextPrompt {
     try {
       const answer = await this.askUntilValid();
 
-      await this.output.redraw(this.getPrompt(true));
+      await this.output.clearPromptLine();
+      const finalPrompt = `${this.getPrompt(true)}${Fmt.answer('')}`;
+      await this.output.redraw(finalPrompt);
 
       const result = {
         [this.name]: answer,

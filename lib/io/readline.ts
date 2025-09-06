@@ -1,4 +1,4 @@
-import { EndOfFileError, InterruptedError } from '../errors.ts';
+import { EndOfFileError, InterruptedError } from '$errors';
 import type * as IO from './types.ts';
 
 export async function readLine({
@@ -30,9 +30,9 @@ export async function readLine({
   const onEnd = async (): Promise<void> => {
     if (isRaw) {
       (input as typeof Deno.stdin).setRaw(false);
-      if (hidden || mask) {
-        await output.newLine();
-      }
+      // if (hidden || mask) {
+      //   await output.newLine();
+      // }
     }
   };
 
