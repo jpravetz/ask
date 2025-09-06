@@ -4,18 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [2.0.3-beta.15] - 2025-09-05
 
-- Fixed inconsistent inlineCheckbox naming.
 - Fixed password finalPrompt rendering.
 - Fixed all example scripts.
 - Fixed some import references for consistency.
-
-## [2.0.3-beta.14] - 2025-09-05
-
-- Added inlineCheckbox prompt.
+- Added `inlineCheckbox` prompt.
 - Made the spacing before questions a global preNewline option.
-
-## [2.0.3-beta.13] - 2025-09-05
-
 - Bug fixes with final prompt output
 
 ## [2.0.3-beta.12] - 2025-09-04
