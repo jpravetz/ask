@@ -27,13 +27,14 @@ export async function readLine({
   const decoder = new TextDecoder();
   let error: Error | undefined;
 
-  const onEnd = async (): Promise<void> => {
+  const onEnd = (): Promise<void> => {
     if (isRaw) {
       (input as typeof Deno.stdin).setRaw(false);
       // if (hidden || mask) {
       //   await output.newLine();
       // }
     }
+    return Promise.resolve();
   };
 
   try {

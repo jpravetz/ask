@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.16] - 2025-09-05
+
+- Fixed lint error
+
 ## [2.0.3-beta.15] - 2025-09-05
 
 - Fixed password finalPrompt rendering.
