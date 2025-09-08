@@ -5,10 +5,10 @@
  * creating prompts and validating user input.
  */
 
+export * from '$errors';
 export * as Io from '$io';
 export * as Item from '$item';
 export * as Opts from '$opts';
 export * as Prompt from '$prompt';
 export type * from '$types';
 export { Ask as Main } from './lib/ask.ts';
-export * from './lib/errors.ts';

@@ -16,6 +16,7 @@ try {
       ],
     },
   );
+  console.log(letterResult);
 
   // Checkbox prompt example
   const results = await ask.prompt([
@@ -73,6 +74,7 @@ try {
       ],
     },
   ]);
+  console.log(results);
 
   // Password prompt example
   const passwordResult = await ask.password({

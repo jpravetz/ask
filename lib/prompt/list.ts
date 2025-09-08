@@ -1,3 +1,4 @@
+import { InterruptedError } from '$errors';
 import { Fmt } from '$fmt';
 import { renderList } from '$io';
 import * as Item from '$item';
@@ -227,8 +228,8 @@ export class ListPrompt extends Prompt<unknown> {
       // Clear the prompt line and redraw with the answer
       await this.output.clearPromptLine();
     } catch (err) {
-      if (err instanceof Error && err.message === 'Terminated by user.') {
-        return this.default as unknown[] | undefined;
+      if (err instanceof InterruptedError) {
+        return undefined;
       }
       throw err;
     } finally {

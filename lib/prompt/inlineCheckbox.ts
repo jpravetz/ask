@@ -1,4 +1,4 @@
-import { InterruptedError } from '$errors';
+import { EndOfFileError, InterruptedError } from '$errors';
 import { Fmt } from '$fmt';
 import * as Item from '$item';
 import type * as Opts from '$opts';
@@ -118,6 +118,8 @@ export class InlineCheckboxPrompt<T extends Opts.InlineCheckbox> extends Prompt<
       }
       await this.output.write(p);
     };
+    let ctrlCPressed = false;
+    let timer;
 
     try {
       while (this._running) {
@@ -134,10 +136,19 @@ export class InlineCheckboxPrompt<T extends Opts.InlineCheckbox> extends Prompt<
         const str = new TextDecoder().decode(data.slice(0, n));
 
         switch (str) {
-          case '\u0003': // ETX
           case '\u0004': // EOT
+            throw new EndOfFileError();
           case '\u001b': // ESC
             throw new InterruptedError();
+
+          case '\u0003': // ETX
+            if (ctrlCPressed) {
+              clearTimeout(timer);
+              throw new EndOfFileError('Terminated by user');
+            }
+            ctrlCPressed = true;
+            timer = setTimeout(() => ctrlCPressed = false, 400);
+            break;
 
           case '\r': // CR
           case '\n': // LF

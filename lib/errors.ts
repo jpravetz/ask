@@ -11,3 +11,5 @@ export class EndOfFileError extends Error {
     this.name = 'EndOfFileError';
   }
 }
+
+export { EndOfFileError as EndOfFile, InterruptedError as Interrupted };

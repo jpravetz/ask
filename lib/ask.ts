@@ -44,7 +44,7 @@ type PromptResultMap<T extends Array<SupportedOpts>> = {
  * prompts easily.
  */
 export class Ask {
-  private opts: Opts.GlobalPrompt;
+  readonly opts: Opts.GlobalPrompt;
 
   /**
    * @constructor

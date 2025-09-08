@@ -47,7 +47,15 @@ export class TextPrompt<T = string> extends Prompt<T> {
   protected async askUntilValid(
     preprocess?: (val: string | undefined) => T,
   ): Promise<T | undefined> {
-    let answer = await this.question();
+    let answer: string | undefined;
+    try {
+      answer = await this.question();
+    } catch (err) {
+      if (err instanceof InterruptedError) {
+        return undefined;
+      }
+      throw err;
+    }
     let pass = true;
 
     let preprocessedAnswer: T | undefined;

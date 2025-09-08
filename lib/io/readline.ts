@@ -36,6 +36,8 @@ export async function readLine({
     }
     return Promise.resolve();
   };
+  let ctrlCPressed = false;
+  let timer;
 
   try {
     while (true) {
@@ -59,13 +61,17 @@ export async function readLine({
           // No visual update for Ctrl-E in this version
           break;
 
-        case '\u0003': // ETX - ctrl+c
-          error = new InterruptedError();
-          throw error;
-
         case '\u0004': // EOT - ctrl+d
-          error = new EndOfFileError();
-          throw error;
+          throw new EndOfFileError();
+
+        case '\u0003': // ETX
+          if (ctrlCPressed) {
+            clearTimeout(timer);
+            throw new EndOfFileError('Terminated by user');
+          }
+          ctrlCPressed = true;
+          timer = setTimeout(() => ctrlCPressed = false, 400);
+          break;
 
         case '\r': // CR - return
         case '\n': // LF - return
@@ -84,22 +90,7 @@ export async function readLine({
           break;
 
         case '\u001b': { // ESC
-          // check for arrow keys
-          const arrow = new Uint8Array(2);
-          const arrowN = await input.read(arrow);
-          if (arrowN === 2 && decoder.decode(arrow) === '[C') { // right
-            if (pos < inputStr.length) {
-              pos++;
-              // No visual update for arrow keys in this version
-            }
-          } else if (arrowN === 2 && decoder.decode(arrow) === '[D') { // left
-            if (pos > 0) {
-              pos--;
-              // No visual update for arrow keys in this version
-            }
-          }
-          // Other escape sequences are ignored
-          break;
+          throw new InterruptedError();
         }
 
         default:

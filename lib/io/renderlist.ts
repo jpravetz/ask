@@ -1,4 +1,4 @@
-import { InterruptedError } from '$errors';
+import { EndOfFileError, InterruptedError } from '$errors';
 import { stripAnsiCodes } from '$io';
 import type * as IO from './types.ts';
 
@@ -46,13 +46,25 @@ export async function renderList({
     return -1;
   }
 
+  let ctrlCPressed = false;
+  let timer;
+
   const str = new TextDecoder().decode(data.slice(0, n));
 
   switch (str) {
-    case '\u0003': // ETX
     case '\u0004': // EOT
+      throw new EndOfFileError();
     case '\u001b': // ESC
       throw new InterruptedError();
+
+    case '\u0003': // ETX
+      if (ctrlCPressed) {
+        clearTimeout(timer);
+        throw new EndOfFileError('Terminated by user');
+      }
+      ctrlCPressed = true;
+      timer = setTimeout(() => ctrlCPressed = false, 400);
+      break;
 
     case '\r': // CR
     case '\n': // LF

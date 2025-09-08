@@ -20,6 +20,7 @@ This module is not maintained for others to use. It is a fork of [@sallai/ask](h
   - `editor` (open an editor to write longer text)
   - `select` (pick one item from a list)
   - `checkbox` (pick multiple items from a list)
+  - `inlineCheckbox` (pick multiple items from a list, contained to one line)
 - Elegant output.
 - Familiar, inquirer-like syntax.
 - Easily configurable.
@@ -34,7 +35,7 @@ deno add jsr:@jpravetz/ask
 ```
 
 Then just create an `Ask` instance and use the `prompt()` method to enumerate
-your questions.
+your questions, or ask questions individually.
 
 ```ts
 import * as Ask from "@jpravetz/ask";
@@ -88,6 +89,14 @@ classDiagram
   class Ask {
     +constructor(opts: GlobalPromptOpts)
     +prompt(prompts: PromptOpts[]): Promise<any>
+    +input(opts: InputOpts): Promise<Result<string | undefined>>
+    +number(opts: NumberOpts): Promise<Result<number | undefined>>
+    +confirm(opts: ConfirmOpts): Promise<Result<boolean | undefined>>
+    +password(opts: PasswordOpts): Promise<Result<string | undefined>>
+    +editor(opts: EditorOpts): Promise<Result<string | undefined>>
+    +select(opts: SelectOpts): Promise<Result<unknown>>
+    +checkbox(opts: CheckboxOpts): Promise<Result<unknown[]>>
+    +inlineCheckbox(opts: InlineCheckboxOpts): Promise<Result<unknown[]>>
   }
 
   class Prompt {
@@ -97,7 +106,7 @@ classDiagram
     #message: string
     #default: any
     #input: Reader & ReaderSync & Closer
-    #output: Writer & WriterSync & Closer
+    #output: Writer
     +constructor(opts: PromptOpts)
     +run(): Promise<any>
   }
@@ -144,6 +153,10 @@ classDiagram
     +constructor(opts: CheckboxOpts)
   }
 
+  class InlineCheckboxPrompt {
+    +constructor(opts: InlineCheckboxOpts)
+  }
+
   class ListItem {
     +message: string
     +disabled: boolean
@@ -158,13 +171,14 @@ classDiagram
   Ask --> Prompt
   Prompt <|-- TextPrompt
   Prompt <|-- ListPrompt
+  Prompt <|-- EditorPrompt
   TextPrompt <|-- InputPrompt
   TextPrompt <|-- NumberPrompt
   TextPrompt <|-- ConfirmPrompt
   TextPrompt <|-- PasswordPrompt
-  TextPrompt <|-- EditorPrompt
   ListPrompt <|-- SelectPrompt
   ListPrompt <|-- CheckboxPrompt
+  ListPrompt <|-- InlineCheckboxPrompt
   ListPrompt o-- ListItem
   ListItem <|-- Separator
 ```

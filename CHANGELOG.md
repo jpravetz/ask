@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.17] - 2025-09-08
+
+- Improved handling of ESC and Ctrl-D
+
 ## [2.0.3-beta.16] - 2025-09-05
 
 - Fixed password finalPrompt rendering.
