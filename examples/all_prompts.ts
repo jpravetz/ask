@@ -16,7 +16,7 @@ try {
       ],
     },
   );
-  console.log(letterResult);
+  // console.log(letterResult);
 
   // Checkbox prompt example
   const results = await ask.prompt([
@@ -33,6 +33,16 @@ try {
         { message: 'Friday', value: 'fri' },
         { message: 'Saturday', value: 'sat' },
         { message: 'Sunday', value: 'sun' },
+      ],
+    },
+    {
+      name: 'hours',
+      type: 'checkbox',
+      message: 'Select what times of the day you are free',
+      choices: [
+        { message: 'Morning', value: 'morning' },
+        { message: 'Afternoon', value: 'afternoon' },
+        { message: 'Evening', value: 'evening' },
       ],
     },
 
@@ -74,7 +84,7 @@ try {
       ],
     },
   ]);
-  console.log(results);
+  // console.log(results);
 
   // Password prompt example
   const passwordResult = await ask.password({

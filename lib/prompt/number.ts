@@ -1,4 +1,5 @@
 import { InterruptedError } from '$errors';
+import { Fmt } from '$fmt';
 import type * as Opts from '$opts';
 import type { NumberType, Result } from '$types';
 import { TextPrompt } from './text.ts';
@@ -67,7 +68,7 @@ export class NumberPrompt<T extends Opts.Number> extends TextPrompt<number> {
         }
       });
 
-      const finalPrompt = `${this.getPrompt(true)}${answer}`;
+      const finalPrompt = `${this.getPrompt(true)}${Fmt.answer(String(answer) ?? '')}`;
       await this.output.redraw(finalPrompt);
 
       const result = {

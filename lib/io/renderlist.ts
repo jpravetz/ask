@@ -50,6 +50,7 @@ export async function renderList({
   let timer;
 
   const str = new TextDecoder().decode(data.slice(0, n));
+  let isFinished = false;
 
   switch (str) {
     case '\u0004': // EOT
@@ -63,12 +64,13 @@ export async function renderList({
         throw new EndOfFileError('Terminated by user');
       }
       ctrlCPressed = true;
-      timer = setTimeout(() => ctrlCPressed = false, 400);
+      timer = setTimeout(() => (ctrlCPressed = false), 400);
       break;
 
     case '\r': // CR
     case '\n': // LF
       onEnter();
+      isFinished = true;
       break;
 
     case '\u0020': // SPACE
@@ -104,14 +106,17 @@ export async function renderList({
     case '9':
       if (onNumber) {
         onNumber(parseInt(str, 10));
+        isFinished = true;
       }
       break;
   }
 
   // clear list to rerender it
-  for (let i = 0; i < rows; i++) {
-    // go to beginning of line
-    await output.deleteLine();
+  if (!isFinished) {
+    for (let i = 0; i < rows; i++) {
+      // go to beginning of line
+      await output.deleteLine();
+    }
   }
 
   return rows;

@@ -71,6 +71,16 @@ export class ListPrompt extends Prompt<unknown> {
     });
   }
 
+  protected override async cleanup(rows: number): Promise<void> {
+    // Clear the list and the blank line
+    const totalLines = rows + 1;
+    for (let i = 0; i < totalLines; i++) {
+      await this.output.deleteLine();
+    }
+    // Clear the prompt line and redraw with the answer
+    await this.output.clearPromptLine();
+  }
+
   protected override getPrompt(final = false): string {
     return super.getPrompt(final);
   }
@@ -221,12 +231,7 @@ export class ListPrompt extends Prompt<unknown> {
           onNumber: (n: number) => this.number(n),
         });
       }
-      // Clear the list
-      for (let i = 0; i < _rows; i++) {
-        await this.output.deleteLine();
-      }
-      // Clear the prompt line and redraw with the answer
-      await this.output.clearPromptLine();
+      await this.cleanup(_rows + 1);
     } catch (err) {
       if (err instanceof InterruptedError) {
         return undefined;
@@ -239,9 +244,6 @@ export class ListPrompt extends Prompt<unknown> {
         (this.input as typeof Deno.stdin).setRaw(false);
       }
     }
-
-    // Clear the prompt line and redraw with the answer
-    await this.output.clearPromptLine();
 
     const selectedItems = this._items.filter((item) => item.selected);
 
@@ -264,13 +266,9 @@ export class ListPrompt extends Prompt<unknown> {
 
       if (choice) {
         finalPrompt += Fmt.answer(choice.message);
-        // finalPrompt = `${finalPrompt.substring(0, finalPrompt.lastIndexOf(':') + 1)} ${
-        //   Fmt.answer(choice.message)
-        // }`;
       }
     }
 
-    await this.output.newLine();
     await this.output.write(finalPrompt);
     await this.output.newLine();
 

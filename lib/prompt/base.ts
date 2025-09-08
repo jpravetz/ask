@@ -57,6 +57,22 @@ export class Prompt<T> {
     }
   }
 
+  /**
+   * Cleans up all the visual elements of the prompt from the screen.
+   *
+   * This method is called after the user has submitted their answer. Its purpose
+   * is to remove the interactive part of the prompt (e.g., the question, list
+   * of options, hints) before the final answer is displayed by `redraw()`.
+   *
+   * Subclasses, especially those for multi-line prompts, should override this
+   * to handle their specific cleanup needs.
+   */
+  protected cleanup(_rows: number = 0): Promise<void> {
+    // Single-line prompts often don't need a separate cleanup step, as `redraw`
+    // handles clearing the line.
+    return Promise.resolve();
+  }
+
   private format(str: string, final = false): string {
     return (
       Fmt.question(str, final) + this.suffix
