@@ -25,7 +25,6 @@ export async function readLine({
   }
   let pos = inputStr.length;
   const decoder = new TextDecoder();
-  let error: Error | undefined;
 
   const onEnd = (): Promise<void> => {
     if (isRaw) {
