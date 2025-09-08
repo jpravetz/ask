@@ -26,6 +26,9 @@ export class Fmt {
   static answer(s: string): string {
     return colors.green(s);
   }
+  static edit(s: string): string {
+    return colors.cyan(s);
+  }
   static question(s: string, final = false): string {
     return colors.white(final ? s : colors.bold(s));
   }

@@ -1,4 +1,5 @@
 import { EndOfFileError, InterruptedError } from '$errors';
+import { Fmt } from '$fmt';
 import type * as IO from './types.ts';
 
 export async function readLine({
@@ -21,7 +22,7 @@ export async function readLine({
 
   let inputStr = defaultValue ?? '';
   if (inputStr.length > 0 && !hidden) {
-    await output.write(inputStr);
+    await output.write(Fmt.edit(inputStr));
   }
   let pos = inputStr.length;
   const decoder = new TextDecoder();
@@ -83,7 +84,7 @@ export async function readLine({
             pos--;
             if (!hidden) {
               const rest = inputStr.slice(pos);
-              await output.write('\b' + rest + ' ' + '\b'.repeat(rest.length + 1));
+              await output.write('\b' + Fmt.edit(rest) + ' ' + '\b'.repeat(rest.length + 1));
             }
           }
           break;
@@ -99,10 +100,10 @@ export async function readLine({
             pos++;
             if (!hidden) {
               if (mask) {
-                await output.write(mask);
+                await output.write(Fmt.edit(mask));
               } else {
                 const rest = inputStr.slice(pos);
-                await output.write(char + rest + '\b'.repeat(rest.length));
+                await output.write(Fmt.edit(char + rest) + '\b'.repeat(rest.length));
               }
             }
           }
