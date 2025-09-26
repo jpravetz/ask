@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.21] - 2025-09-26
+
+- Fixed issue with number keypresses being caught when useNumbers is not true in select prompt.
+
 ## [2.0.3-beta.20] - 2025-09-08
 
 - Added color formatting to input text edits.

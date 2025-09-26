@@ -221,6 +221,7 @@ export class ListPrompt extends Prompt<unknown> {
           items: this._items,
           columns: this.columns,
           indent: this.indent,
+          useNumbers: this.useNumbers,
 
           onEnter: this.enter.bind(this),
           onSpace: this.select.bind(this),

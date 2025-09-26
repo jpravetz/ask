@@ -31,6 +31,8 @@ export type RenderListOpts = {
   onRight: () => void;
   /** Callback executed when a number key (1-9) is pressed. */
   onNumber?: (n: number) => void;
+  /** If true, number keypresses will be handled. */
+  useNumbers?: boolean;
 };
 
 /**

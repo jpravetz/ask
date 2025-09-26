@@ -15,6 +15,7 @@ export async function renderList({
   onNumber,
   columns = 1,
   indent = '',
+  useNumbers = false,
 }: IO.RenderListOpts): Promise<number> {
   const longestItem = items.reduce((longest, item) => {
     const len = stripAnsiCodes(item.message).length;
@@ -104,7 +105,7 @@ export async function renderList({
     case '7':
     case '8':
     case '9':
-      if (onNumber) {
+      if (onNumber && useNumbers) {
         onNumber(parseInt(str, 10));
         isFinished = true;
       }
