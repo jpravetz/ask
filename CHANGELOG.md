@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.22] - 2025-09-30
+
+- Added CTRL-A and CTRL-E to input.
+- Fixed left/right arrow keys not working.
+- Added interactive test using `./examples/test.ts`.
+
 ## [2.0.3-beta.21] - 2025-09-26
 
 - Fixed issue with number keypresses being caught when useNumbers is not true in select prompt.

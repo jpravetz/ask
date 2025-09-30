@@ -6,6 +6,8 @@ This document provides a guide for Gemini to effectively understand and interact
 
 `@jpravetz/ask` is a Deno library for creating interactive command-line prompts. It is a fork of `@sallai/ask` and provides a simple and intuitive API for creating various types of prompts, such as text input, number input, confirmation, password input, and more. The library is designed to be easy to use and customize, with a focus on type safety.
 
+Because this is an interactive package, testing is done via a [test plan](./docs/TEST_PLAN.md).
+
 ### Getting Started
 
 The main entry point of the library is the `Ask` class, which is exported from `mod.ts`. To use the library, you need to import the `Ask` class and create a new instance of it. You can then use the methods of the `Ask` class to create different types of prompts.

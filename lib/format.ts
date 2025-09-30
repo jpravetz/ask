@@ -44,4 +44,12 @@ export class Fmt {
   static disabled(message: string): string {
     return colors.gray(`- ${message} (disabled)`);
   }
+
+  static cursorBackward(n: number): string {
+    return `\u001b[${n}D`;
+  }
+
+  static cursorForward(n: number): string {
+    return `\u001b[${n}C`;
+  }
 }

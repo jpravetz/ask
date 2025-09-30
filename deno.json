@@ -1,12 +1,13 @@
 {
   "name": "@jpravetz/ask",
-  "version": "2.0.3-beta.21",
+  "version": "2.0.3-beta.22",
   "exports": {
     ".": "./mod.ts"
   },
   "tasks": {
     "dev": "deno run --watch main.ts",
-    "check": "deno check mod.ts lib examples"
+    "check": "deno check mod.ts lib examples",
+    "test": "deno run -A ./examples/test.ts"
   },
   "fmt": {
     "singleQuote": true,

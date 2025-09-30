@@ -41,7 +41,7 @@ export async function readLine({
 
   try {
     while (true) {
-      const data = new Uint8Array(1);
+      const data = new Uint8Array(8);
       const n = await input.read(data);
 
       if (!n) {
@@ -52,13 +52,17 @@ export async function readLine({
 
       switch (char) {
         case '\u0001': // Ctrl+A (start of line)
-          pos = 0;
-          // No visual update for Ctrl-A in this version
+          if (pos > 0) {
+            await output.write(Fmt.cursorBackward(pos));
+            pos = 0;
+          }
           break;
 
         case '\u0005': // Ctrl+E (end of line)
-          pos = inputStr.length;
-          // No visual update for Ctrl-E in this version
+          if (pos < inputStr.length) {
+            await output.write(Fmt.cursorForward(inputStr.length - pos));
+            pos = inputStr.length;
+          }
           break;
 
         case '\u0004': // EOT - ctrl+d
@@ -86,6 +90,25 @@ export async function readLine({
               const rest = inputStr.slice(pos);
               await output.write('\b' + Fmt.edit(rest) + ' ' + '\b'.repeat(rest.length + 1));
             }
+          }
+          break;
+
+        case '\u001b[A': // Up arrow
+        case '\u001b[B': // Down arrow
+          // Do nothing
+          break;
+
+        case '\u001b[C': // Right arrow
+          if (pos < inputStr.length) {
+            await output.write(Fmt.cursorForward(1));
+            pos++;
+          }
+          break;
+
+        case '\u001b[D': // Left arrow
+          if (pos > 0) {
+            await output.write(Fmt.cursorBackward(1));
+            pos--;
           }
           break;
 
