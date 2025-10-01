@@ -29,6 +29,7 @@ export class Prompt<T> {
     retryFn?: () => Promise<T | undefined>,
   ) => void | Promise<void>;
   protected preNewLine: number;
+  protected onCtrlR?: () => void | Promise<void>;
 
   constructor(opts: Opts.Prompt<T>) {
     this.name = opts.name;
@@ -49,6 +50,11 @@ export class Prompt<T> {
     this.maxAttempts = opts.maxAttempts;
     this.onExceededAttempts = opts.onExceededAttempts ?? onExceededAttempts;
     this.preNewLine = opts.preNewLine ?? 1;
+    this.onCtrlR = opts.onCtrlR;
+
+    if (this.onCtrlR && (this.prefix === '' || this.prefix === null)) {
+      this.prefix = ' ';
+    }
   }
 
   protected async start(): Promise<void> {

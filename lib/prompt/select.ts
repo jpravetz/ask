@@ -25,8 +25,12 @@ export class SelectPrompt<T extends Opts.Select> extends ListPrompt {
    * selection by pressing the `enter` key. The selected choice will be returned
    * as an object.
    */
-  async run(): Promise<Result<T, unknown>> {
+  async run(): Promise<Result<T, unknown> | undefined> {
     const answer = await this.questionSingle();
+
+    if (answer === undefined) {
+      return undefined;
+    }
 
     const result = {
       [this.name]: answer,

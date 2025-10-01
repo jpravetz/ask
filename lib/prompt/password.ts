@@ -24,6 +24,10 @@ export class PasswordPrompt<T extends Opts.Password> extends TextPrompt {
     try {
       const answer = await this.askUntilValid();
 
+      if (answer === undefined) {
+        return undefined;
+      }
+
       await this.output.clearPromptLine();
       const finalPrompt = `${this.getPrompt(true)}${Fmt.answer('')}`;
       await this.output.redraw(finalPrompt);

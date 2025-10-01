@@ -102,106 +102,116 @@ export class InlineCheckboxPrompt<T extends Opts.InlineCheckbox> extends Prompt<
     return prompt;
   }
 
-  async run(): Promise<Result<T, unknown[]>> {
-    await this.start();
-    if (this.input === Deno.stdin) {
-      (this.input as typeof Deno.stdin).setRaw(true);
-    }
-    await this.output.hideCursor();
-
-    const render = async () => {
-      let p = this.getPrompt();
-      const choices = this._items.map((item) => item.format()).join(' ');
-      p = `${p} ${choices}`;
-      if (this.suffix) {
-        p = `${p} ${this.suffix}`;
-      }
-      await this.output.write(p);
-    };
-    let ctrlCPressed = false;
-    let timer;
-
+  async run(): Promise<Result<T, unknown[]> | undefined> {
     try {
-      while (this._running) {
-        await render();
-
-        const data = new Uint8Array(3);
-        const n = await this.input.read(data);
-        await this.output.clearPromptLine();
-
-        if (!n) {
-          break;
-        }
-
-        const str = new TextDecoder().decode(data.slice(0, n));
-
-        switch (str) {
-          case '\u0004': // EOT
-            throw new EndOfFileError();
-          case '\u001b': // ESC
-            throw new InterruptedError();
-
-          case '\u0003': // ETX
-            if (ctrlCPressed) {
-              clearTimeout(timer);
-              throw new EndOfFileError('Terminated by user');
-            }
-            ctrlCPressed = true;
-            timer = setTimeout(() => ctrlCPressed = false, 400);
-            break;
-
-          case '\r': // CR
-          case '\n': // LF
-            this.enter();
-            break;
-
-          case '\u0020': // SPACE
-            this.select();
-            break;
-
-          case '\u001b[D': // left
-            this.left();
-            break;
-
-          case '\u001b[C': // right
-            this.right();
-            break;
-        }
-      }
-    } catch (err) {
-      throw err;
-    } finally {
-      await this.output.showCursor();
+      await this.start();
       if (this.input === Deno.stdin) {
-        (this.input as typeof Deno.stdin).setRaw(false);
+        (this.input as typeof Deno.stdin).setRaw(true);
       }
-    }
+      await this.output.hideCursor();
 
-    await this.output.clearPromptLine();
+      const render = async () => {
+        let p = this.getPrompt();
+        const choices = this._items.map((item) => item.format()).join(' ');
+        p = `${p} ${choices}`;
+        if (this.suffix) {
+          p = `${p} ${this.suffix}`;
+        }
+        await this.output.write(p);
+      };
+      let ctrlCPressed = false;
+      let timer;
 
-    const selectedItems = this._items.filter((item) => item.selected);
-    const selectedValues = selectedItems.map((item) => item.value);
+      try {
+        while (this._running) {
+          await render();
 
-    let finalPrompt = this.getPrompt(true);
-    const finalChoices = this._items.map((item) => {
-      const prefix = item.selected ? this.finalSelectedPrefix : this.finalUnselectedPrefix;
-      if (item.selected) {
-        return Fmt.inlineCheckbox.finalSelected(prefix + item.message);
+          const data = new Uint8Array(3);
+          const n = await this.input.read(data);
+          await this.output.clearPromptLine();
+
+          if (!n) {
+            break;
+          }
+
+          const str = new TextDecoder().decode(data.slice(0, n));
+
+          switch (str) {
+            case '\u0004': // EOT
+              throw new EndOfFileError();
+            case '\u001b': // ESC
+              throw new InterruptedError();
+
+            case '\u0003': // ETX
+              if (ctrlCPressed) {
+                clearTimeout(timer);
+                throw new EndOfFileError('Terminated by user');
+              }
+              ctrlCPressed = true;
+              timer = setTimeout(() => ctrlCPressed = false, 400);
+              break;
+
+            case '\r': // CR
+            case '\n': // LF
+              this.enter();
+              break;
+
+            case '\u0020': // SPACE
+              this.select();
+              break;
+
+            case '\u001b[D': // left
+              this.left();
+              break;
+
+            case '\u001b[C': // right
+              this.right();
+              break;
+          }
+        }
+      } catch (err) {
+        if (err instanceof InterruptedError) {
+          // This is caught by the outer try/catch
+        }
+        throw err;
+      } finally {
+        await this.output.showCursor();
+        if (this.input === Deno.stdin) {
+          (this.input as typeof Deno.stdin).setRaw(false);
+        }
       }
-      return Fmt.inlineCheckbox.finalUnselected(prefix + item.message);
-    }).join(' ');
-    finalPrompt = `${finalPrompt} ${finalChoices}`;
-    if (this.suffix) {
-      finalPrompt = `${finalPrompt} ${this.suffix}`;
+
+      await this.output.clearPromptLine();
+
+      const selectedItems = this._items.filter((item) => item.selected);
+      const selectedValues = selectedItems.map((item) => item.value);
+
+      let finalPrompt = this.getPrompt(true);
+      const finalChoices = this._items.map((item) => {
+        const prefix = item.selected ? this.finalSelectedPrefix : this.finalUnselectedPrefix;
+        if (item.selected) {
+          return Fmt.inlineCheckbox.finalSelected(prefix + item.message);
+        }
+        return Fmt.inlineCheckbox.finalUnselected(prefix + item.message);
+      }).join(' ');
+      finalPrompt = `${finalPrompt} ${finalChoices}`;
+      if (this.suffix) {
+        finalPrompt = `${finalPrompt} ${this.suffix}`;
+      }
+
+      await this.output.write(finalPrompt);
+      await this.output.newLine();
+
+      const result = {
+        [this.name]: selectedValues,
+      } as Result<T, unknown[]>;
+
+      return result;
+    } catch (err) {
+      if (err instanceof InterruptedError) {
+        return undefined;
+      }
+      throw err;
     }
-
-    await this.output.write(finalPrompt);
-    await this.output.newLine();
-
-    const result = {
-      [this.name]: selectedValues,
-    } as Result<T, unknown[]>;
-
-    return result;
   }
 }

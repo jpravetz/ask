@@ -18,8 +18,12 @@ export class CheckboxPrompt<T extends Opts.Checkbox> extends ListPrompt {
     this.type = 'checkbox';
   }
 
-  async run(): Promise<Result<T, unknown[]>> {
+  async run(): Promise<Result<T, unknown[]> | undefined> {
     const answer = await this.questionMultiple();
+
+    if (answer === undefined) {
+      return undefined;
+    }
 
     const result = {
       [this.name]: answer,

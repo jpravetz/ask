@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.23] - 2025-10-01
+
+- Implemented global `onCtrlR` callback with spinner and final state feedback (green/red circle).
+- Implemented global `CTRL-D` exit confirmation with `UserAbortedError`.
+- Implemented word navigation (`OPT-left/right`, `CTRL-left/right`).
+- Standardized `ESC` key behavior across all prompts to return `undefined`.
+- Improved test suite robustness for `ESC` and `CTRL-D` handling, including an "ABORTED" status.
+- Updated `README.md` with detailed prompt configurations, key behaviors, and global preferences.
+
 ## [2.0.3-beta.22] - 2025-09-30
 
 - Added CTRL-A and CTRL-E to input.
@@ -10,7 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.0.3-beta.21] - 2025-09-26
 
-- Fixed issue with number keypresses being caught when useNumbers is not true in select prompt.
+- Fixed issue with number key presses being caught when useNumbers is not true in select prompt.
 
 ## [2.0.3-beta.20] - 2025-09-08
 

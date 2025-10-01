@@ -37,4 +37,10 @@ export type GlobalPromptOpts = {
    * The number of blank lines to display before the prompt. Defaults to 1.
    */
   preNewLine?: number;
+  /**
+   * Callback function which is called when Ctrl-R is pressed. If it returns a
+   * boolean, the spinner will change to a green or red circle to indicate
+   * success or failure.
+   */
+  onCtrlR?: () => boolean | void | Promise<boolean | void>;
 };

@@ -12,4 +12,18 @@ export class EndOfFileError extends Error {
   }
 }
 
+export class ReloadPromptError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Prompt reloaded by user.');
+    this.name = 'ReloadPromptError';
+  }
+}
+
+export class UserAbortedError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'User aborted the prompt.');
+    this.name = 'UserAbortedError';
+  }
+}
+
 export { EndOfFileError as EndOfFile, InterruptedError as Interrupted };

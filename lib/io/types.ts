@@ -1,5 +1,5 @@
-import type * as Item from '../item/mod.ts';
 import type * as StdIo from '@std/io';
+import type * as Item from '../item/mod.ts';
 import type { Writer } from './writer.ts';
 
 /**
@@ -49,4 +49,13 @@ export type ReadlineOpts = {
   mask?: string;
   /** A default value to pre-populate the input line with. */
   defaultValue?: string;
+  /**
+   * Callback function which is called when Ctrl-R is pressed.
+   */
+  onCtrlR?: () => void | Promise<void>;
+  /**
+   * A function that returns the prompt string. This is used to redraw the
+   * prompt when needed.
+   */
+  getPrompt?: () => string;
 };

@@ -37,8 +37,8 @@ export class EditorPrompt<T extends Opts.Editor> extends Prompt<string | undefin
       const buffer = new Uint8Array(1);
       await this.input.read(buffer);
 
-      if (buffer[0] === 3) {
-        throw new Error('Editor prompt was canceled.');
+      if (buffer[0] === 3 || buffer[0] === 27) { // CTRL-C or ESC
+        throw new InterruptedError('Editor prompt was canceled.');
       }
 
       if (buffer[0] === 13) {
@@ -77,24 +77,31 @@ export class EditorPrompt<T extends Opts.Editor> extends Prompt<string | undefin
    * Opens a temporary file in the user's preferred editor and returns the
    * contents of the file when the editor is closed.
    */
-  async run(): Promise<Result<T, string | undefined>> {
-    await this.output.write(this.getPrompt());
+  async run(): Promise<Result<T, string | undefined> | undefined> {
+    try {
+      await this.output.write(this.getPrompt());
 
-    const editorPromptStr = this.getEditorPrompt();
-    const editorPrompt = new TextEncoder().encode(editorPromptStr);
-    const editorPromptLen = unIro(editorPromptStr).length;
-    await this.output.write(editorPrompt);
+      const editorPromptStr = this.getEditorPrompt();
+      const editorPrompt = new TextEncoder().encode(editorPromptStr);
+      const editorPromptLen = unIro(editorPromptStr).length;
+      await this.output.write(editorPrompt);
 
-    const data = await this.launch();
+      const data = await this.launch();
 
-    await this.output.write(this.getPrompt(true));
-    await this.output.write(' '.repeat(editorPromptLen));
-    await this.output.newLine();
+      await this.output.write(this.getPrompt(true));
+      await this.output.write(' '.repeat(editorPromptLen));
+      await this.output.newLine();
 
-    const result = {
-      [this.name]: data,
-    } as Result<T, string | undefined>;
+      const result = {
+        [this.name]: data,
+      } as Result<T, string | undefined>;
 
-    return result;
+      return result;
+    } catch (err) {
+      if (err instanceof InterruptedError) {
+        return undefined;
+      }
+      throw err;
+    }
   }
 }

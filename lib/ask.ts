@@ -1,3 +1,4 @@
+import { EndOfFileError, UserAbortedError } from './errors.ts';
 import type * as Opts from '$opts';
 import * as Prompt from '$prompt';
 import type { Result } from '$types';
@@ -265,44 +266,74 @@ export class Ask {
     return new Prompt.InlineCheckbox(this.mergeOptions(opts) as Opts.InlineCheckbox).run();
   }
 
-  /**
-   * Will ask a series of questions based on an array of prompt options and
-   * return a type-safe object where each key is the name of a question and the
-   * value is the user's input for that question (the type of the value will be
-   * inferred based on the type of the question).
-   * **For most use cases, it's recommended to use the individual methods.**
-   * @param questions
-   * @example
-   * ```ts
-   * import { Ask } from "@jpravetz/ask";
-   *
-   * const ask = new Ask();
-   *
-   * const answers = await ask.prompt([
-   *   {
-   *     type: "input",
-   *     name: "name",
-   *     message: "What is your name?",
-   *   },
-   *   {
-   *     type: "number",
-   *     name: "age",
-   *     message: "What is your age?",
-   *     min: 16,
-   *     max: 100,
-   *   },
-   *   {
-   *    type: "confirm",
-   *    name: "canDrive",
-   *    message: "Can you drive?",
-   *   },
-   * ] as const);
-   *
-   * console.log(answers.name); // will be a string
-   * console.log(answers.age); // will be a number
-   * console.log(answers.canDrive); // will be a boolean
-   */
-  async prompt<T extends Array<SupportedOpts>>(
+    private async runPrompt<T extends SupportedOpts>(
+      question: T,
+    ): Promise<Result<T, unknown> | undefined> {
+      switch (question.type) {
+        case 'input': {
+          return await new Prompt.Input(this.mergeOptions<Opts.Input>(question)).run();
+        }
+        case 'number': {
+          return await new Prompt.Number(this.mergeOptions<Opts.Number>(question)).run();
+        }
+        case 'confirm': {
+          return await new Prompt.Confirm(this.mergeOptions<Opts.Confirm>(question)).run();
+        }
+        case 'password': {
+          return await new Prompt.Password(this.mergeOptions<Opts.Password>(question)).run();
+        }
+        case 'editor': {
+          return await new Prompt.Editor(this.mergeOptions<Opts.Editor>(question)).run();
+        }
+        case 'select': {
+          return await new Prompt.Select(this.mergeOptions<Opts.Select>(question)).run();
+        }
+        case 'checkbox': {
+          return await new Prompt.Checkbox(this.mergeOptions<Opts.Checkbox>(question)).run();
+        }
+        case 'inlineCheckbox': {
+          return await new Prompt.InlineCheckbox(this.mergeOptions<Opts.InlineCheckbox>(question)).run();
+        }
+      }
+    }
+  
+    /**
+     * Will ask a series of questions based on an array of prompt options and
+     * return a type-safe object where each key is the name of a question and the
+     * value is the user's input for that question (the type of the value will be
+     * inferred based on the type of the question).
+     * **For most use cases, it's recommended to use the individual methods.**
+     * @param questions
+     * @example
+     * ```ts
+     * import { Ask } from "@jpravetz/ask";
+     * 
+     * const ask = new Ask();
+     * 
+     * const answers = await ask.prompt([
+     *   {
+     *     type: "input",
+     *     name: "name",
+     *     message: "What is your name?",
+     *   },
+     *   {
+     *     type: "number",
+     *     name: "age",
+     *     message: "What is your age?",
+     *     min: 16,
+     *     max: 100,
+     *   },
+     *   {
+     *    type: "confirm",
+     *    name: "canDrive",
+     *    message: "Can you drive?",
+     *   },
+     * ] as const);
+     * 
+     * console.log(answers.name); // will be a string
+     * console.log(answers.age); // will be a number
+     * console.log(answers.canDrive); // will be a boolean
+     */  async prompt<T extends Array<SupportedOpts>>(
     questions: T,
   ): Promise<PromptResultMap<T> | undefined> {
     const answers: Record<string, unknown> = {};
@@ -311,38 +342,24 @@ export class Ask {
       const question = questions[i];
       let answer: Result<SupportedOpts, unknown> | undefined;
 
-      switch (question.type) {
-        case 'input': {
-          answer = await new Prompt.Input(this.mergeOptions<Opts.Input>(question)).run();
-          break;
-        }
-        case 'number': {
-          answer = await new Prompt.Number(this.mergeOptions<Opts.Number>(question)).run();
-          break;
-        }
-        case 'confirm': {
-          answer = await new Prompt.Confirm(this.mergeOptions<Opts.Confirm>(question)).run();
-          break;
-        }
-        case 'password': {
-          answer = await new Prompt.Password(this.mergeOptions<Opts.Password>(question)).run();
-          break;
-        }
-        case 'editor': {
-          answer = await new Prompt.Editor(this.mergeOptions<Opts.Editor>(question)).run();
-          break;
-        }
-        case 'select': {
-          answer = await new Prompt.Select(this.mergeOptions<Opts.Select>(question)).run();
-          break;
-        }
-        case 'checkbox': {
-          answer = await new Prompt.Checkbox(this.mergeOptions<Opts.Checkbox>(question)).run();
-          break;
-        }
-        case 'inlineCheckbox': {
-          answer = await new Prompt.InlineCheckbox(this.mergeOptions<Opts.InlineCheckbox>(question)).run();
-          break;
+      while (true) {
+        try {
+          answer = await this.runPrompt(question);
+          break; // Break the while loop if the prompt is successful
+        } catch (error) {
+          if (error instanceof EndOfFileError) {
+            const { exit } = await new Prompt.Confirm(this.mergeOptions<Opts.Confirm>({
+              name: 'exit',
+              message: 'You pressed Ctrl-D. Do you want to exit?',
+              default: true,
+            })).run() as { exit: boolean };
+
+            if (exit) {
+              throw new UserAbortedError(); // Exit the entire prompt series
+            }
+          } else {
+            throw error; // Re-throw other errors
+          }
         }
       }
 

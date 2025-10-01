@@ -53,4 +53,5 @@ export type PromptOpts<RetType> = {
     lastInput?: U,
     retryFn?: () => Promise<U | undefined>,
   ) => void | Promise<void>;
+
 } & GlobalPromptOpts;

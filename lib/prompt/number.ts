@@ -68,6 +68,10 @@ export class NumberPrompt<T extends Opts.Number> extends TextPrompt<number> {
         }
       });
 
+      if (answer === undefined) {
+        return undefined;
+      }
+
       const finalPrompt = `${this.getPrompt(true)}${Fmt.answer(String(answer) ?? '')}`;
       await this.output.redraw(finalPrompt);
 
