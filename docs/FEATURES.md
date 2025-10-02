@@ -12,5 +12,5 @@ This document lists new features that are currently in development and that need
 - **Ctrl-R Behavior:**
   - [x] When a user presses `Ctrl-R`, an optional `onCtrlR` callback should be called to allow the application to reload.
 
-- **Password Input:**
-  - [ ] Type placeholder characters (e.g. •) when typing a password.
+- **Pasting text:**
+  - [x] Pasting text isn't working properly because the length of the pasted string is not being considered.

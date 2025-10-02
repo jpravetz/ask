@@ -1,3 +1,4 @@
+import { InterruptedError } from '$errors';
 import { getPreferredEditor, unIro } from '$io';
 import type * as Opts from '$opts';
 import type { Result } from '$types';

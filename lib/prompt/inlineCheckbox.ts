@@ -1,6 +1,6 @@
 import { EndOfFileError, InterruptedError } from '$errors';
 import { Fmt } from '$fmt';
-import * as Item from '$item';
+import * as List from '$list';
 import type * as Opts from '$opts';
 import type { Choice, Result } from '$types';
 import * as colors from '@std/fmt/colors';
@@ -15,7 +15,7 @@ export class InlineCheckboxPrompt<T extends Opts.InlineCheckbox> extends Prompt<
   protected override suffix?: string;
 
   private _active: number = 0;
-  private _items: Item.List[];
+  private _items: List.Item[];
   private _running: boolean = true;
 
   constructor(opts: Opts.InlineCheckbox) {
@@ -38,7 +38,7 @@ export class InlineCheckboxPrompt<T extends Opts.InlineCheckbox> extends Prompt<
     }
 
     this._items = this.choices.map((choice, idx) => {
-      return new Item.List({
+      return new List.Item({
         message: choice.message,
         value: choice.value,
         disabled: choice.disabled ?? false,

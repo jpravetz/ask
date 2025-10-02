@@ -20,8 +20,13 @@ export class Fmt {
   };
   static questionPrefix = colors.green('?');
   static errorPrefix = colors.red('>>');
-  static yes = colors.green('Yes');
-  static no = colors.red('No');
+
+  static yes(s: string = 'Yes'): string {
+    return colors.green(s);
+  }
+  static no(s: string = 'No'): string {
+    return colors.red(s);
+  }
 
   static answer(s: string): string {
     return colors.green(s);

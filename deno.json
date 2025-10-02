@@ -1,6 +1,6 @@
 {
   "name": "@jpravetz/ask",
-  "version": "2.0.3-beta.23",
+  "version": "2.0.3-beta.24",
   "exports": {
     ".": "./mod.ts"
   },
@@ -30,7 +30,7 @@
     "$errors": "./lib/errors.ts",
     "$fmt": "./lib/format.ts",
     "$types": "./lib/types.ts",
-    "$item": "./lib/item/mod.ts",
+    "$list": "./lib/list/mod.ts",
     "$opts": "./lib/opts/mod.ts",
     "$io": "./lib/io/mod.ts",
     "$prompt": "./lib/prompt/mod.ts",

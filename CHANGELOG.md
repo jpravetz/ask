@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.24] - 2025-10-02
+
+- Modified confirm prompt behaviour
+- Implemented password masking
+- Fixed CTRL-D bug when typed twice
+- Introduced spinner regression for CTRL-R that still needs fixing.
+
 ## [2.0.3-beta.23] - 2025-10-01
 
 - Implemented global `onCtrlR` callback with spinner and final state feedback (green/red circle).

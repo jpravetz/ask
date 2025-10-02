@@ -3,6 +3,15 @@ import { Fmt } from '$fmt';
 import * as colors from '@std/fmt/colors';
 import type * as IO from './types.ts';
 
+const REG = {
+  // deno-lint-ignore no-control-regex
+  toVisible: new RegExp(/\x1b\[[0-9;]*[a-zA-Z]/g),
+};
+function getVisibleLength(str: string): number {
+  // Strips ANSI escape codes to calculate visible length
+  return str.replace(REG.toVisible, '').length;
+}
+
 export async function readLine(
   {
     input,
@@ -26,8 +35,12 @@ export async function readLine(
   }
 
   let inputStr = defaultValue ?? '';
-  if (inputStr.length > 0 && !hidden) {
-    await output.write(Fmt.edit(inputStr));
+  if (inputStr.length > 0) {
+    if (!hidden) {
+      await output.write(Fmt.edit(inputStr));
+    } else if (mask) {
+      await output.write(mask.repeat(inputStr.length));
+    }
   }
   let pos = inputStr.length;
   const decoder = new TextDecoder();
@@ -80,6 +93,16 @@ export async function readLine(
               let i = 0;
               let spinning = true;
 
+              const getDisplayedInput = () => {
+                if (!hidden) {
+                  return Fmt.edit(inputStr);
+                }
+                if (mask) {
+                  return mask.repeat(inputStr.length);
+                }
+                return '';
+              };
+
               const spin = async () => {
                 await output.hideCursor();
                 const spaceAfterPrefixIndex = fullPromptLine.indexOf(' ', prefixIndex);
@@ -87,18 +110,23 @@ export async function readLine(
                 const messagePart = fullPromptLine.substring(spaceAfterPrefixIndex);
 
                 while (spinning) {
-                  const frame = Fmt.question(spinner[i = ++i % spinner.length]);
+                  const frame = Fmt.question(spinner[(i = ++i % spinner.length)]);
                   const newPrompt = indentPart + frame + messagePart;
                   await output.gotoBeginningOfLine();
-                  await output.write(newPrompt + Fmt.edit(inputStr));
+                  await output.write(newPrompt + getDisplayedInput());
                   await output.write('\x1b[K'); // Clear to end of line
+
+                  // Reposition cursor for consistency with other redraw logic
+                  await output.gotoBeginningOfLine();
+                  await output.write(Fmt.cursorForward(getVisibleLength(newPrompt) + pos));
+
                   await new Promise((resolve) => setTimeout(resolve, 80));
                 }
                 await output.showCursor();
               };
 
               const spinPromise = spin();
-              let result: boolean | void;
+              let result: boolean | void | undefined = undefined;
 
               try {
                 result = await onCtrlR();
@@ -123,7 +151,7 @@ export async function readLine(
                 }
 
                 await output.gotoBeginningOfLine();
-                await output.write(finalPrompt + Fmt.edit(inputStr));
+                await output.write(finalPrompt + getDisplayedInput());
                 await output.write('\x1b[K'); // Clear to end of line
               }
             } else {
@@ -156,6 +184,8 @@ export async function readLine(
             if (!hidden) {
               const rest = inputStr.slice(pos);
               await output.write('\b' + Fmt.edit(rest) + ' ' + '\b'.repeat(rest.length + 1));
+            } else if (mask) {
+              await output.write('\b \b');
             }
           }
           break;
@@ -208,17 +238,43 @@ export async function readLine(
           throw new InterruptedError();
         }
 
-        default:
-          // Ignore other control characters
-          if (char.charCodeAt(0) >= 32) {
-            inputStr = inputStr.slice(0, pos) + char + inputStr.slice(pos);
-            pos++;
-            if (!hidden) {
-              if (mask) {
-                await output.write(Fmt.edit(mask));
-              } else {
-                const rest = inputStr.slice(pos);
-                await output.write(Fmt.edit(char + rest) + '\b'.repeat(rest.length));
+        default: {
+            // Filter out control characters and newlines from the input string
+            let printableChars = '';
+            for (const c of char) {
+              const charCode = c.charCodeAt(0);
+              // Allow printable characters (e.g., ASCII 32-126, and other Unicode printable chars)
+              // Exclude control characters (0-31, 127) and newlines
+              if (charCode >= 32 && charCode !== 127 && c !== '\n' && c !== '\r') {
+                printableChars += c;
+              }
+            }
+
+            if (printableChars.length > 0) {
+              // Enforce 120 character limit
+              const newLength = inputStr.length + printableChars.length;
+              if (newLength > 120) {
+                printableChars = printableChars.slice(0, 120 - inputStr.length);
+                if (printableChars.length === 0) {
+                  // If no characters can be added, just break
+                  break;
+                }
+              }
+
+              inputStr = inputStr.slice(0, pos) + printableChars + inputStr.slice(pos);
+              pos += printableChars.length; // Correctly increment pos by the length of the inserted string
+              if (!hidden) {
+                await output.gotoBeginningOfLine();
+                const prompt = getPrompt ? getPrompt() : '';
+                await output.write(prompt + Fmt.edit(inputStr)); // Redraw entire line
+                await output.write('\x1b[K'); // Clear to end of line
+
+                // Move cursor to the beginning of the line
+                await output.gotoBeginningOfLine();
+                // Move cursor forward to the desired position
+                await output.write(Fmt.cursorForward(getVisibleLength(prompt) + pos));
+              } else if (mask) {
+                await output.write(mask.repeat(printableChars.length));
               }
             }
           }

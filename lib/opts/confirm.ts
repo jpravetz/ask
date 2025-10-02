@@ -11,14 +11,20 @@ export type ConfirmOpts = PromptOpts<boolean> & {
   type?: 'confirm';
 
   /**
-   * The text to display and accept as a positive answer. Defaults to "y".
+   * The characters to accept as a positive answer. The first character is displayed in the prompt.
+   * Defaults to "yY1tT"
    */
   accept?: string;
 
+  /** The string to display for a positive answer. Defaults to 'Yes' */
+  acceptDisplay?: string;
+
   /**
-   * The text to display and accept as a negative answer. Defaults to "n". In
-   * practice, anything other than `accept` will be considered a negative
-   * response, so this is mostly for display purposes.
+   * The characters to accept as a negative answer. The first character is displayed in the prompt.
+   * Defaults to "nN0fF"
    */
   deny?: string;
+
+  /** The string to display for a negative answer. Defaults to 'No' */
+  denyDisplay?: string;
 };

@@ -9,7 +9,7 @@ import { ListItem } from './list.ts';
  * constructor. If you don't pass a message, the separator will be a line of
  * 16 dashes.
  */
-export class SeparatorItem extends ListItem {
+export class ListSeparatorItem extends ListItem {
   constructor(message?: string) {
     super({
       message: message ?? colors.gray(' ' + '-'.repeat(16)),

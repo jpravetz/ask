@@ -384,6 +384,10 @@ try {
 }
 ```
 
+### Limitations
+
+-   **Multi-line Input Display**: The `input` prompt is designed for single-line text input. If the prompt message combined with the user's input exceeds the terminal width, the display may become garbled or show repeating prompt messages due to the terminal's line-wrapping behavior and the current rendering mechanism. For multi-line text input, please use the `editor` prompt.
+
 ## Documentation and API
 
 Please visit the [JSR documentation page][docs] for more information on how to

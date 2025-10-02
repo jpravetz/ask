@@ -29,7 +29,7 @@ export class Prompt<T> {
     retryFn?: () => Promise<T | undefined>,
   ) => void | Promise<void>;
   protected preNewLine: number;
-  protected onCtrlR?: () => void | Promise<void>;
+  protected onCtrlR?: () => boolean | void | Promise<boolean | void>;
 
   constructor(opts: Opts.Prompt<T>) {
     this.name = opts.name;

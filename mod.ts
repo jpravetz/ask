@@ -7,7 +7,7 @@
 
 export * from '$errors';
 export * as Io from '$io';
-export * as Item from '$item';
+export * as List from '$list';
 export * as Opts from '$opts';
 export * as Prompt from '$prompt';
 export type * from '$types';

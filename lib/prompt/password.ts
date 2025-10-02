@@ -11,8 +11,8 @@ export class PasswordPrompt<T extends Opts.Password> extends TextPrompt {
   constructor(opts: T) {
     super({
       ...opts,
-      hidden: !opts.mask,
-      mask: opts.mask?.charAt(0),
+      hidden: true,
+      mask: opts.mask === true ? '•' : (typeof opts.mask === 'string' ? opts.mask?.charAt(0) : undefined),
     });
     this.type = 'password';
   }

@@ -1,16 +1,29 @@
 import * as colors from '@std/fmt/colors';
 import { InterruptedError, UserAbortedError } from '../lib/errors.ts';
-import { ListItem } from '../lib/item/list.ts';
-import { Main as Ask } from '../mod.ts';
-import type { GlobalPromptOpts } from '../lib/opts/global.ts';
+import * as Ask from '../mod.ts';
 
 // Default ask instance for most tests
-const ask = new Ask();
+const ask = new Ask.Main();
 
 interface TestResults {
   [key: string]: TestStatus | undefined;
 }
 type TestStatus = 'passed' | 'failed' | 'aborted';
+
+const log = {
+  passed: (s: string): boolean => {
+    console.log('\n', colors.green(`${s} test passed`));
+    return true;
+  },
+  failed: (s: string): boolean => {
+    console.log('\n', colors.red(`${s} test failed`));
+    return false;
+  },
+  aborted: (s: string): boolean => {
+    console.log('\n\n', colors.yellow(`${s} test aborted`));
+    return true;
+  },
+};
 
 async function runTest() {
   console.log('Starting the interactive test suite...');
@@ -39,7 +52,7 @@ async function runTest() {
         console.log('\nTest suite aborted by user.');
         return;
       } else if (err instanceof InterruptedError) {
-        console.log(colors.yellow(`\nTest '${name}' aborted.`));
+        log.aborted(name);
         results[name] = 'aborted';
       } else {
         if (err instanceof Error) {
@@ -91,12 +104,13 @@ async function testInput(): Promise<boolean> {
       name: 'success',
       type: 'confirm',
       message: 'Did you enter ' + colors.green(text) + ' and were able to move the cursor?',
+      default: true,
     },
   ]);
   if (result2 === undefined) {
     throw new InterruptedError();
   }
-  return result2.success;
+  return result2.success === true;
 }
 
 async function testNumber(): Promise<boolean> {
@@ -119,12 +133,13 @@ async function testNumber(): Promise<boolean> {
       name: 'success',
       type: 'confirm',
       message: 'Did you enter ' + colors.green(String(num)) + ' and were able to move the cursor?',
+      default: true,
     },
   ]);
   if (result2 === undefined) {
     throw new InterruptedError();
   }
-  return result2.success;
+  return result2.success === true;
 }
 
 async function testConfirm(): Promise<boolean> {
@@ -142,8 +157,7 @@ async function testConfirm(): Promise<boolean> {
     throw new InterruptedError();
   }
   if (result1.defaultTrue !== true) {
-    console.log('Default true test failed.');
-    return false;
+    return log.failed('Default true');
   }
 
   const result2 = await ask.prompt([
@@ -158,8 +172,7 @@ async function testConfirm(): Promise<boolean> {
     throw new InterruptedError();
   }
   if (result2.defaultFalse !== false) {
-    console.log('Default false test failed.');
-    return false;
+    return log.failed('Default false');
   }
 
   const result3 = await ask.prompt([
@@ -173,8 +186,7 @@ async function testConfirm(): Promise<boolean> {
     throw new InterruptedError();
   }
   if (result3.typeY !== true) {
-    console.log("Type 'y' test failed.");
-    return false;
+    return log.failed("Type 'y'");
   }
 
   const result4 = await ask.prompt([
@@ -188,8 +200,7 @@ async function testConfirm(): Promise<boolean> {
     throw new InterruptedError();
   }
   if (result4.typeN !== false) {
-    console.log("Type 'n' test failed.");
-    return false;
+    log.failed("Type 'n'");
   }
 
   return true;
@@ -197,30 +208,55 @@ async function testConfirm(): Promise<boolean> {
 
 async function testPassword(): Promise<boolean> {
   console.log('\n--- Testing Password Prompt ---');
-  const result = await ask.prompt([
+  const result = await ask.password(
     {
       name: 'password',
-      type: 'password',
       message: "Please type 'password123' and press enter.",
     },
-  ]);
+  );
   if (result === undefined) {
     throw new InterruptedError();
   }
-  if (result.password === 'password123') {
-    console.log('Password test passed!');
-    return true;
+  if (result.password !== 'password123') {
+    return log.failed('Password');
   }
-  console.log('Password test failed.');
-  return false;
+  const result2 = await ask.password(
+    {
+      name: 'password',
+      message: 'Type ENTER if you see xxxx. Otherwise type something else.',
+      default: 'mask',
+      mask: 'x',
+    },
+  );
+  if (result2 === undefined) {
+    throw new InterruptedError();
+  }
+  if (result2.password !== 'mask') {
+    return log.failed('Password');
+  }
+  const result3 = await ask.password(
+    {
+      name: 'password',
+      message: 'Type ENTER if you see ••••. Otherwise type something else.',
+      default: 'mask',
+      mask: true,
+    },
+  );
+  if (result3 === undefined) {
+    throw new InterruptedError();
+  }
+  if (result3.password !== 'mask') {
+    return log.failed('Password');
+  }
+  return log.passed('Password');
 }
 
 async function testSelect(): Promise<boolean> {
   console.log('\n--- Testing Select Prompt ---');
-  const choices: ListItem[] = [
-    new ListItem({ message: 'red', value: 'red' }),
-    new ListItem({ message: 'green', value: 'green' }),
-    new ListItem({ message: 'blue', value: 'blue' }),
+  const choices: Ask.List.Item[] = [
+    new Ask.List.Item({ message: 'Red', value: 'red' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'Green', value: 'green' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'Blue', value: 'blue' } as Ask.List.ItemOpts),
   ];
   const result1 = await ask.prompt([
     {
@@ -234,15 +270,14 @@ async function testSelect(): Promise<boolean> {
     throw new InterruptedError();
   }
   if (result1.color !== 'green') {
-    console.log('\nSelect failed');
-    return false;
+    return log.failed('Select');
   }
 
-  const choices2: ListItem[] = [
-    new ListItem({ message: 'Bob', value: 'bob' }),
-    new ListItem({ message: 'Sally', value: 'sally' }),
-    new ListItem({ message: 'Alice', value: 'alice' }),
-    new ListItem({ message: 'George', value: 'george', disabled: true }),
+  const choices2: Ask.List.Item[] = [
+    new Ask.List.Item({ message: 'Bob', value: 'bob' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'Sally', value: 'sally' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'Alice', value: 'alice' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'George', value: 'george', disabled: true } as Ask.List.ItemOpts),
   ];
   const result2 = await ask.prompt([
     {
@@ -256,15 +291,18 @@ async function testSelect(): Promise<boolean> {
   if (result2 === undefined) {
     throw new InterruptedError();
   }
-  return result2.name === 'alice';
+  if (result2.name !== 'alice') {
+    return log.failed('Select');
+  }
+  return true;
 }
 
 async function testCheckbox(): Promise<boolean> {
   console.log('\n--- Testing Checkbox Prompt ---');
-  const choices: ListItem[] = [
-    new ListItem({ message: 'red', value: 'red' }),
-    new ListItem({ message: 'green', value: 'green' }),
-    new ListItem({ message: 'blue', value: 'blue' }),
+  const choices: Ask.List.Item[] = [
+    new Ask.List.Item({ message: 'red', value: 'red' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'green', value: 'green' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'blue', value: 'blue' } as Ask.List.ItemOpts),
   ];
   const result = await ask.prompt([
     {
@@ -283,10 +321,10 @@ async function testCheckbox(): Promise<boolean> {
 
 async function testInlineCheckbox(): Promise<boolean> {
   console.log('\n--- Testing Inline Checkbox Prompt ---');
-  const choices: ListItem[] = [
-    new ListItem({ message: 'red', value: 'red' }),
-    new ListItem({ message: 'green', value: 'green' }),
-    new ListItem({ message: 'blue', value: 'blue' }),
+  const choices: Ask.List.Item[] = [
+    new Ask.List.Item({ message: 'red', value: 'red' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'green', value: 'green' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'blue', value: 'blue' } as Ask.List.ItemOpts),
   ];
   const result = await ask.prompt([
     {
@@ -313,21 +351,21 @@ async function testEscKey(): Promise<boolean> {
     },
   ]);
   if (result) {
-    console.log('\nESC key was not pressed. Test failed.');
-    return false;
+    return log.failed('ESC key press');
   }
-  console.log('\nESC key pressed. Test passed!');
-  return true;
+  return log.passed('ESC key press');
 }
 
 async function testCtrlD(): Promise<boolean> {
   console.log('\n--- Testing Ctrl-D Key ---');
-  console.log('Press Ctrl-D. You should be asked to confirm exiting. Choose not to exit, and the prompt should reappear. Then type something and press enter.');
+  console.log(
+    'Press Ctrl-D. You should be asked to confirm exiting. Choose not to exit, and the prompt should reappear. Then type something and press enter.',
+  );
   const result = await ask.prompt([
     {
       name: 'test',
       type: 'input',
-      message: 'Press Ctrl-D, then choose not to exit, then type \'hello\' and press enter.',
+      message: "Press Ctrl-D, then choose not to exit, then type 'hello' and press enter.",
     },
   ]);
   if (result === undefined) {
@@ -340,7 +378,7 @@ async function testCtrlR(): Promise<boolean> {
   console.log('\n--- Testing Ctrl-R Key ---');
 
   // Test case 1: onCtrlR returns true
-  const askSuccess = new Ask({
+  const askSuccess = new Ask.Main({
     onCtrlR: async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       return true;
@@ -366,10 +404,10 @@ async function testCtrlR(): Promise<boolean> {
   if (confirm1 === undefined) {
     throw new InterruptedError();
   }
-  if (!confirm1.success) return false;
+  if (confirm1.success !== true) return false;
 
   // Test case 2: onCtrlR returns false
-  const askFail = new Ask({
+  const askFail = new Ask.Main({
     onCtrlR: async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       return false;
@@ -395,10 +433,10 @@ async function testCtrlR(): Promise<boolean> {
   if (confirm2 === undefined) {
     throw new InterruptedError();
   }
-  if (!confirm2.success) return false;
+  if (confirm2.success !== true) return false;
 
   // Test case 3: onCtrlR returns void
-  const askVoid = new Ask({
+  const askVoid = new Ask.Main({
     onCtrlR: async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
     },
@@ -423,7 +461,7 @@ async function testCtrlR(): Promise<boolean> {
   if (confirm3 === undefined) {
     throw new InterruptedError();
   }
-  return confirm3.success;
+  return confirm3.success === true;
 }
 
 async function testWordNavigation(): Promise<boolean> {
@@ -449,7 +487,7 @@ async function testWordNavigation(): Promise<boolean> {
   if (result2 === undefined) {
     throw new InterruptedError();
   }
-  return result2.success;
+  return result2.success === true;
 }
 
 runTest();

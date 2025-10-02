@@ -1,8 +1,6 @@
 import { Fmt } from '$fmt';
+import type * as List from './types.ts';
 
-/**
- * A single item in a list.
- */
 export class ListItem {
   /**
    * The text that will be displayed as the item in the terminal UI.
@@ -57,45 +55,17 @@ export class ListItem {
    */
   disabledFormatter: (message: string, selected: boolean) => string;
 
-  constructor({
-    message,
-    value,
-    disabled,
-    selected,
-    active,
-    selectedPrefix,
-    unselectedPrefix,
-    inactiveFormatter,
-    activeFormatter,
-    disabledFormatter,
-  }: {
-    message: string;
-    value: unknown;
-    disabled: boolean;
-    selected: boolean;
-    active: boolean;
-    selectedPrefix?: string;
-    unselectedPrefix?: string;
-    inactiveFormatter?: (message: string, selected: boolean) => string;
-    activeFormatter?: (message: string, selected: boolean) => string;
-    disabledFormatter?: (message: string, selected: boolean) => string;
-  }) {
-    this.message = message;
-    this.value = value;
-    this.disabled = disabled;
-    this.selected = selected;
-    this.active = active;
-    this.inactiveFormatter = inactiveFormatter ?? this.defaultInactiveFormatter;
-    this.activeFormatter = activeFormatter ?? this.defaultActiveFormatter;
-    this.disabledFormatter = disabledFormatter ?? this.defaultDisabledFormatter;
-
-    if (selectedPrefix) {
-      this.selectedPrefix = selectedPrefix;
-    }
-
-    if (unselectedPrefix) {
-      this.unselectedPrefix = unselectedPrefix;
-    }
+  constructor(opts: List.ItemOpts) {
+    this.message = opts.message;
+    this.value = opts.value;
+    this.disabled = opts.disabled ?? false;
+    this.selected = opts.selected ?? false;
+    this.active = opts.active ?? false;
+    this.selectedPrefix = opts.selectedPrefix ?? '';
+    this.unselectedPrefix = opts.unselectedPrefix ?? '';
+    this.inactiveFormatter = opts.inactiveFormatter ?? this.defaultInactiveFormatter;
+    this.activeFormatter = opts.activeFormatter ?? this.defaultActiveFormatter;
+    this.disabledFormatter = opts.disabledFormatter ?? this.defaultDisabledFormatter;
   }
 
   /**

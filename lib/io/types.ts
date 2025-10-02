@@ -1,5 +1,5 @@
+import type * as List from '$list';
 import type * as StdIo from '@std/io';
-import type * as Item from '../item/mod.ts';
 import type { Writer } from './writer.ts';
 
 /**
@@ -11,7 +11,7 @@ export type RenderListOpts = {
   /** The high-level writer instance to render the list to. */
   output: Writer;
   /** The array of list items to be displayed. */
-  items: Item.List[];
+  items: List.Item[];
   /** The number of columns to arrange the list items in. Defaults to 1. */
   columns?: number;
   /** The string used to indent the entire list. */
@@ -50,9 +50,11 @@ export type ReadlineOpts = {
   /** A default value to pre-populate the input line with. */
   defaultValue?: string;
   /**
-   * Callback function which is called when Ctrl-R is pressed.
+   * Callback function which is called when Ctrl-R is pressed. If it returns a
+   * boolean, the spinner will change to a green or red circle to indicate
+   * success or failure.
    */
-  onCtrlR?: () => void | Promise<void>;
+  onCtrlR?: () => boolean | void | Promise<boolean | void>;
   /**
    * A function that returns the prompt string. This is used to redraw the
    * prompt when needed.

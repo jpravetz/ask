@@ -1,7 +1,7 @@
 import { InterruptedError } from '$errors';
 import { Fmt } from '$fmt';
 import { renderList } from '$io';
-import * as Item from '$item';
+import * as List from '$list';
 import type * as Opts from '$opts';
 import type { Choice } from '$types';
 import { Prompt } from './base.ts';
@@ -18,7 +18,7 @@ export class ListPrompt extends Prompt<unknown> {
   private unselectedPrefix: string;
 
   private _active: number = 0;
-  private _items: Item.List[];
+  private _items: List.Item[];
   private _running: boolean = true;
   private _originalMessage: string;
 
@@ -45,7 +45,7 @@ export class ListPrompt extends Prompt<unknown> {
     }
 
     this._items = this.choices.map((choice, idx) => {
-      if (choice instanceof Item.Separator) {
+      if (choice instanceof List.SeparatorItem) {
         return choice;
       }
 
@@ -54,7 +54,7 @@ export class ListPrompt extends Prompt<unknown> {
         message = `${idx + 1}. ${message}`;
       }
 
-      return new Item.List({
+      return new List.Item({
         message: message,
         value: choice.value,
         disabled: choice.disabled ?? false,

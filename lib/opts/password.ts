@@ -11,8 +11,8 @@ export type PasswordOpts = PromptOpts<string> & {
   type?: 'password';
 
   /**
-   * An optional mask character to hide the input. If not provided, the input
+   * An optional mask character to hide the input. If true, "•" is used. If not provided, the input
    * will be hidden entirely. Only the first character of the mask will be used.
    */
-  mask?: string;
+  mask?: string | boolean;
 };
