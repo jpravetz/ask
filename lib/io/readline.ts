@@ -212,7 +212,8 @@ export async function readLine(
           throw new InterruptedError();
         }
 
-        default: {
+        default:
+          {
             // Filter out control characters and newlines from the input string
             let printableChars = '';
             for (const c of char) {
