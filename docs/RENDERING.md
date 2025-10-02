@@ -15,7 +15,7 @@ The rendering and overwriting of console output in this library is achieved thro
 
 ### The Rendering Loop:
 
-The core of the interactive experience is a loop within each prompt's `run()` method (e.g., in `lib/prompt/select.ts` or `lib/prompt/input.ts`).
+The core of the interactive experience is a loop within each prompt's `run()` or `question()` method.
 
 1.  **Initial Render:** The prompt is first written to the screen.
     *   For `input`-style prompts, the `getPrompt()` method in `lib/prompt/base.ts` assembles the message, prefix, and other elements.
@@ -26,14 +26,21 @@ The core of the interactive experience is a loop within each prompt's `run()` me
 3.  **State Update:** The key press is processed.
     *   If it's an arrow key in a list, the application updates its internal state to change which item is considered "active".
     *   If it's a character in an `input` field, the internal string holding the user's text is updated.
+    *   If it's a valid character in a `confirm` prompt (`y`, `n`, etc.), the internal state is updated to `true` or `false`.
 
 4.  **Clear the Old Output:** This is the "overwrite" part of the process.
-    *   For lists, the `renderList` function knows how many rows it just printed. After receiving user input, it uses ANSI codes to move the cursor up that many times, clearing each line as it goes. This logic is located at the end of the `renderList` function.
-    *   For single-line inputs, the logic in `lib/io/readline.ts` handles echoing characters, backspace, and cursor movement by sending appropriate ANSI escape codes. This involves precisely clearing parts of the line and redrawing the updated input string.
+    *   For lists, the `renderList` function knows how many rows it just printed. After receiving user input, it uses ANSI codes to move the cursor up that many times, clearing each line as it goes.
+    *   For single-line inputs and confirm prompts, the logic in `lib/io/readline.ts` and `lib/prompt/confirm.ts` handles echoing characters, backspace, and cursor movement by sending appropriate ANSI escape codes. This involves precisely clearing parts of the line and redrawing the updated input string or state.
 
-5.  **Re-render:** The loop immediately repeats. The entire prompt (or list) is drawn again to the console, reflecting the new state (e.g., the newly highlighted item in a list, or the updated text in an input).
+5.  **Re-render:** The loop immediately repeats. The entire prompt is drawn again to the console, reflecting the new state (e.g., the newly highlighted item in a list, the updated text in an input, or the colored "Yes"/"No" in a confirm prompt).
 
 This clear-and-redraw cycle happens so quickly for each key press that it appears to the user as if the output is being smoothly updated in place.
+
+### Special Rendering Behaviors
+
+Beyond the standard prompt loops, the library has special rendering cases for global key presses.
+
+-   **`CTRL-R` Waiting Indicator:** When a global `onCtrlR` handler is defined, pressing `CTRL-R` triggers a special rendering state (this does not apply to hidden/password prompts). The prompt's prefix (e.g., `?`) is replaced by a static, gold-colored stopwatch symbol (`⏱`) to indicate that an operation is in progress. The application then `await`s the `onCtrlR` function. Once the function completes, the prompt is redrawn a final time, replacing the stopwatch with a success (`●` green) or failure (`●` red) indicator.
 
 ### Challenges with Raw Mode Echoing (The `Uint8Array` Problem):
 

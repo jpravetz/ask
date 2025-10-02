@@ -34,6 +34,13 @@ export async function readLine(
     }
   }
 
+  let screenWidth = 120; // Default value
+  try {
+    screenWidth = Deno.consoleSize().columns;
+  } catch {
+    // Not a TTY, use default.
+  }
+
   let inputStr = defaultValue ?? '';
   if (inputStr.length > 0) {
     if (!hidden) {
@@ -84,81 +91,48 @@ export async function readLine(
           throw new EndOfFileError();
 
         case '\u0012': { // Ctrl+R
-          if (onCtrlR && getPrompt) {
-            const fullPromptLine = getPrompt();
-            const prefixIndex = fullPromptLine.search(/\S/);
+          if (!hidden) {
+            if (onCtrlR && getPrompt) {
+              const fullPromptLine = getPrompt();
+              const prefixIndex = fullPromptLine.search(/\S/);
 
-            if (prefixIndex !== -1) {
-              const spinner = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
-              let i = 0;
-              let spinning = true;
+              if (prefixIndex !== -1) {
+                const frame = Fmt.question(colors.yellow('⏱'));
+                const spaceAfterPrefixIndex = fullPromptLine.indexOf(' ', prefixIndex);
+                const indentPart = fullPromptLine.substring(0, prefixIndex);
+                const messagePart = fullPromptLine.substring(spaceAfterPrefixIndex);
+                const newPrompt = indentPart + frame + messagePart;
 
-              const getDisplayedInput = () => {
-                if (!hidden) {
-                  return Fmt.edit(inputStr);
-                }
-                if (mask) {
-                  return mask.repeat(inputStr.length);
-                }
-                return '';
-              };
-
-              const spin = async () => {
                 await output.hideCursor();
-                const spaceAfterPrefixIndex = fullPromptLine.indexOf(' ', prefixIndex);
-                const indentPart = fullPromptLine.substring(0, prefixIndex);
-                const messagePart = fullPromptLine.substring(spaceAfterPrefixIndex);
-
-                while (spinning) {
-                  const frame = Fmt.question(spinner[(i = ++i % spinner.length)]);
-                  const newPrompt = indentPart + frame + messagePart;
-                  await output.gotoBeginningOfLine();
-                  await output.write(newPrompt + getDisplayedInput());
-                  await output.write('\x1b[K'); // Clear to end of line
-
-                  // Reposition cursor for consistency with other redraw logic
-                  await output.gotoBeginningOfLine();
-                  await output.write(Fmt.cursorForward(getVisibleLength(newPrompt) + pos));
-
-                  await new Promise((resolve) => setTimeout(resolve, 80));
-                }
-                await output.showCursor();
-              };
-
-              const spinPromise = spin();
-              let result: boolean | void | undefined = undefined;
-
-              try {
-                result = await onCtrlR();
-              } finally {
-                spinning = false;
-                await spinPromise;
-
-                const spaceAfterPrefixIndex = fullPromptLine.indexOf(' ', prefixIndex);
-                const indentPart = fullPromptLine.substring(0, prefixIndex);
-                const messagePart = fullPromptLine.substring(spaceAfterPrefixIndex);
-
-                let finalPrompt;
-
-                if (result === true) {
-                  const finalPrefix = colors.green('●');
-                  finalPrompt = indentPart + finalPrefix + messagePart;
-                } else if (result === false) {
-                  const finalPrefix = colors.red('●');
-                  finalPrompt = indentPart + finalPrefix + messagePart;
-                } else {
-                  finalPrompt = fullPromptLine;
-                }
-
                 await output.gotoBeginningOfLine();
-                await output.write(finalPrompt + getDisplayedInput());
-                await output.write('\x1b[K'); // Clear to end of line
+                await output.write(newPrompt + Fmt.edit(inputStr));
+                await output.write('\x1b[K');
+
+                let result: boolean | void | undefined = undefined;
+                try {
+                  result = await onCtrlR();
+                } finally {
+                  await output.showCursor();
+                  let finalPrompt;
+                  if (result === true) {
+                    const finalPrefix = colors.green('●');
+                    finalPrompt = indentPart + finalPrefix + messagePart;
+                  } else if (result === false) {
+                    const finalPrefix = colors.red('●');
+                    finalPrompt = indentPart + finalPrefix + messagePart;
+                  } else {
+                    finalPrompt = fullPromptLine;
+                  }
+                  await output.gotoBeginningOfLine();
+                  await output.write(finalPrompt + Fmt.edit(inputStr));
+                  await output.write('\x1b[K');
+                }
+              } else {
+                await onCtrlR();
               }
-            } else {
+            } else if (onCtrlR) {
               await onCtrlR();
             }
-          } else if (onCtrlR) {
-            await onCtrlR();
           }
           break;
         }
@@ -251,10 +225,10 @@ export async function readLine(
             }
 
             if (printableChars.length > 0) {
-              // Enforce 120 character limit
+              // Enforce character limit based on screen width
               const newLength = inputStr.length + printableChars.length;
-              if (newLength > 120) {
-                printableChars = printableChars.slice(0, 120 - inputStr.length);
+              if (newLength > screenWidth) {
+                printableChars = printableChars.slice(0, screenWidth - inputStr.length);
                 if (printableChars.length === 0) {
                   // If no characters can be added, just break
                   break;

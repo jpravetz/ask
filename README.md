@@ -92,7 +92,7 @@ All prompts share some common interactive behaviors:
 -   **Enter**: Submits the input or confirms a selection.
 -   **ESC**: Aborts the current prompt, causing the prompt method to return `undefined`.
 -   **CTRL-D**: Triggers the global exit confirmation.
--   **CTRL-R**: Triggers the global `onCtrlR` callback, displaying a spinner during execution.
+-   **CTRL-R**: Triggers the global `onCtrlR` callback, displaying a yellow timer symbol ⏱ during execution.
 
 ### `input` Prompt
 
@@ -146,11 +146,16 @@ const { age } = await ask.number({
 **Configuration Options**:
 -   `name: string` (required): Identifier for the prompt's value.
 -   `message: string` (required): The question displayed to the user.
--   `default?: boolean`: Default answer (`true` for yes, `false` for no).
--   `accept?: string`: Character(s) representing a 'yes' answer (default: `'y'`).
--   `deny?: string`: Character(s) representing a 'no' answer (default: `'n'`).
+-   `default?: boolean`: Default answer (`true` for yes, `false` for no). If provided, "Yes" or "No" will be displayed in color initially.
+-   `accept?: string`: Overrides the default 'yes' character (default: `'y'`). Note: `y`, `1`, and `t` (case-insensitive) are always accepted.
+-   `deny?: string`: Overrides the default 'no' character (default: `'n'`). Note: `n`, `0`, and `f` (case-insensitive) are always accepted.
 
-**Behavior**: User types `y` or `n` (or custom `accept`/`deny` characters) to answer. Pressing Enter without input uses the default.
+**Behavior**: This prompt is highly interactive.
+-   If a `default` value is provided, it will be displayed initially (e.g., "Yes" in green).
+-   Typing `y`, `Y`, `1`, `t`, or `T` will instantly update the display to show "Yes".
+-   Typing `n`, `N`, `0`, `f`, or `F` will instantly update the display to show "No".
+-   Pressing `Backspace` or `Delete` will clear the current selection.
+-   Pressing `Enter` confirms the currently displayed choice. If no choice is displayed, `Enter` is ignored.
 
 **Example**:
 ```ts
@@ -168,7 +173,7 @@ const { proceed } = await ask.confirm({
 **Configuration Options**:
 -   `name: string` (required): Identifier for the prompt's value.
 -   `message: string` (required): The question displayed to the user.
--   `mask?: string`: A character to display instead of the actual input (e.g., `'*'`). If not provided, input is completely hidden.
+-   `mask?: string | boolean`: A character to display instead of the actual input. If set to `true`, `•` is used. If a `string` is provided (e.g., `'*'`), its first character is used. If omitted or `false`, input is completely hidden.
 
 **Behavior**: Input characters are not echoed or are replaced by the `mask` character.
 
@@ -177,28 +182,7 @@ const { proceed } = await ask.confirm({
 const { secret } = await ask.password({
   name: "secret",
   message: "Enter your password:",
-  mask: "*",
-});
-```
-
-### `editor` Prompt
-
-**Description**: Opens a temporary file in the user's preferred text editor for multi-line input.
-
-**Configuration Options**:
--   `name: string` (required): Identifier for the prompt's value.
--   `message: string` (required): The initial message displayed.
--   `editorPath?: string`: Path to a specific editor executable (e.g., `'/usr/bin/nano'`). Overrides environment variables.
--   `editorPromptMessage?: string`: Custom message displayed before launching the editor (default: `Press <enter> to launch your preferred editor.`).
-
-**Behavior**: The prompt waits for `Enter` to launch the editor. After the editor is closed, its content is returned.
-
-**Example**:
-```ts
-const { bio } = await ask.editor({
-  name: "bio",
-  message: "Write a short biography:",
-  editorPath: "code", // Use VS Code if available
+  mask: true, // Will display '•' for each character
 });
 ```
 
@@ -309,19 +293,42 @@ const { options } = await ask.inlineCheckbox({
 });
 ```
 
+### `editor` Prompt
+
+> **Note:** This prompt is not currently supported and may not function as expected.
+
+**Description**: Opens a temporary file in the user's preferred text editor for multi-line input.
+
+**Configuration Options**:
+-   `name: string` (required): Identifier for the prompt's value.
+-   `message: string` (required): The initial message displayed.
+-   `editorPath?: string`: Path to a specific editor executable (e.g., `'/usr/bin/nano'`). Overrides environment variables.
+-   `editorPromptMessage?: string`: Custom message displayed before launching the editor (default: `Press <enter> to launch your preferred editor.`).
+
+**Behavior**: The prompt waits for `Enter` to launch the editor. After the editor is closed, its content is returned.
+
+**Example**:
+```ts
+const { bio } = await ask.editor({
+  name: "bio",
+  message: "Write a short biography:",
+  editorPath: "code", // Use VS Code if available
+});
+```
+
 ## Global Preferences and Special Key Behaviors
 
 The `Ask` instance can be configured with global preferences that affect all prompts. These include visual settings like `prefix`, `suffix`, `indent`, and `preNewLine`, as well as handlers for special key presses.
 
 ### `onCtrlR` Callback (Global)
 
-The `onCtrlR` callback is a global preference that is triggered when the user presses `CTRL-R` during any prompt. This is useful for implementing a "reload data" functionality in your application.
+The `onCtrlR` callback is a global preference that is triggered when the user presses `CTRL-R` during any prompt (except password prompts). This is useful for implementing a "reload data" functionality in your application.
 
--   **Behavior**: When `CTRL-R` is pressed, the prompt's prefix (e.g., `?`) is replaced by a spinning indicator (`⠋`, `⠙`, etc.). Your `onCtrlR` callback is then executed.
+-   **Behavior**: When `CTRL-R` is pressed, the prompt's prefix (e.g., `?`) is replaced by a static, gold-colored stopwatch symbol (`⏱`) while your callback executes.
 -   **Return Value Feedback**:
-    *   If your `onCtrlR` callback returns `true` (or a `Promise<true>`), the spinner will resolve to a green closed circle (`●`).
-    *   If it returns `false` (or a `Promise<false>`), it will resolve to a red closed circle (`●`).
-    *   If it returns `void` (or a `Promise<void>`), the spinner will revert to the original prompt prefix.
+    *   If your `onCtrlR` callback returns `true` (or a `Promise<true>`), the stopwatch will be replaced by a green closed circle (`●`).
+    *   If it returns `false` (or a `Promise<false>`), it will be replaced by a red closed circle (`●`).
+    *   If it returns `void` (or a `Promise<void>`), the prompt will revert to its original prefix.
 -   **Developer Action**: Implement the `onCtrlR` function in the `Ask` constructor to perform any necessary data reloading or state updates.
 
 ```ts

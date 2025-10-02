@@ -1,16 +1,9 @@
-# Features
+# Future Features and Known Issues
 
-This document lists new features that are currently in development and that need to be tracked. Once a feature is completed, we will transfer relevant information to our [general documentation](./docs/) and will manually remove the feature from this document.
+This document tracks desired features, enhancements, and known issues for future development cycles.
 
-- **Word Navigation:**
-  - [x] `CTRL-A` and `CTRL-E` to go to the beginning and end of the input line.
-  - [x] `CTRL` or `OPT` left/right to go forward/backward a word.
+## Dynamic Input Width
 
-- **Ctrl-D Behavior:**
-  - [x] When a user presses `Ctrl-D`, the prompt should not exit. Instead, it should re-run the current prompt. This will make the library more forgiving of accidental `Ctrl-D` presses.
-
-- **Ctrl-R Behavior:**
-  - [x] When a user presses `Ctrl-R`, an optional `onCtrlR` callback should be called to allow the application to reload.
-
-- **Pasting text:**
-  - [x] Pasting text isn't working properly because the length of the pasted string is not being considered.
+-   **Goal:** The `input` and `password` prompts should prevent the user's text input from exceeding the width of the terminal window, avoiding line wrapping and display glitches.
+-   **Implementation Idea:** Use `Deno.consoleSize().columns` to get the terminal width dynamically within the `readLine` function. Replace the hardcoded character limit with this value.
+-   **Current Status:** **Not Implemented / Buggy.** An attempt was made to implement this, but it resulted in the length limit not being applied at all. The code was reverted to the previous hardcoded limit of 120 characters. This needs to be re-investigated and fixed in a future release.
