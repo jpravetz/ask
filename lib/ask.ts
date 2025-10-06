@@ -1,15 +1,8 @@
 import type * as Opts from '$opts';
 import * as Prompt from '$prompt';
 import type { Result } from '$types';
+import * as colors from '@std/fmt/colors';
 import { EndOfFileError, UserAbortedError } from './errors.ts';
-
-// import { type Opts.Input, Prompt.Input } from './handlers/input.ts';
-// import { type Opts.Number, Prompt.Number } from './handlers/number.ts';
-// import { type Opts.Confirm, Prompt.Confirm } from './handlers/confirm.ts';
-// import { type Opts.Password, Prompt.Password } from './handlers/password.ts';
-// import { type Opts.Editor, Prompt.Editor } from './handlers/editor.ts';
-// import { type Opts.Select, Prompt.Select } from './handlers/select.ts';
-// import { type Opts.Checkbox, Prompt.Checkbox } from './handlers/checkbox.ts';
 
 type SupportedOpts =
   | Opts.Input
@@ -376,10 +369,11 @@ export class Ask {
         } catch (error) {
           if (error instanceof EndOfFileError) {
             try {
+              console.log();
               const { exit } = (await new Prompt.Confirm(
                 this.mergeOptions<Opts.Confirm>({
                   name: 'exit',
-                  message: 'You pressed Ctrl-D. Do you want to exit?',
+                  message: colors.red('You pressed Ctrl-D. Do you want to exit?'),
                   default: true,
                 }),
               ).run()) as { exit: boolean };
@@ -391,6 +385,7 @@ export class Ask {
               if (innerError instanceof EndOfFileError || innerError instanceof UserAbortedError) {
                 // If user Ctrl-D's or ESC's on the exit confirmation,
                 // treat it as an exit.
+                console.log();
                 throw new UserAbortedError();
               }
               throw innerError; // Re-throw other unexpected errors

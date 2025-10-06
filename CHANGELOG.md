@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3-beta.26] - 2025-10-06
+
+- Added blank lines around CTRL-D behaviour.
+- Changed color of CTRL-D confirm to red.
+
 ## [2.0.3-beta.25] - 2025-10-02
 
 - Replaced spinner with static stopwatch symbol
