@@ -1,8 +1,8 @@
+import { EndOfFileError, UserAbortedError } from '$errors';
 import type * as Opts from '$opts';
 import * as Prompt from '$prompt';
 import type { Result } from '$types';
 import * as colors from '@std/fmt/colors';
-import { EndOfFileError, UserAbortedError } from './errors.ts';
 
 type SupportedOpts =
   | Opts.Input
@@ -353,7 +353,9 @@ export class Ask {
    * console.log(answers.name); // will be a string
    * console.log(answers.age); // will be a number
    * console.log(answers.canDrive); // will be a boolean
-   */ async prompt<T extends Array<SupportedOpts>>(
+   */
+
+  async prompt<T extends Array<SupportedOpts>>(
     questions: T,
   ): Promise<PromptResultMap<T> | undefined> {
     const answers: Record<string, unknown> = {};
