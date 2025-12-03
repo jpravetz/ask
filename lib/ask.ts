@@ -372,14 +372,21 @@ export class Ask {
           if (error instanceof EndOfFileError) {
             try {
               console.log();
-              const { exit } = (await new Prompt.Confirm(
+              const result = await new Prompt.Confirm(
                 this.mergeOptions<Opts.Confirm>({
                   name: 'exit',
                   message: colors.red('You pressed Ctrl-D. Do you want to exit?'),
                   default: true,
                 }),
-              ).run()) as { exit: boolean };
+              ).run();
 
+              // If result is undefined (user pressed ESC), treat as exit
+              if (result === undefined) {
+                console.log();
+                throw new UserAbortedError();
+              }
+
+              const { exit } = result as { exit: boolean };
               if (exit) {
                 throw new UserAbortedError(); // Exit the entire prompt series
               }
