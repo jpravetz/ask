@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.4] - 2025-12-03
+
+- Fix destructuring error when ESC pressed on Ctrl-D confirmation
+
 ## [2.0.3-beta.26] - 2025-10-06
 
 - Added blank lines around CTRL-D behaviour.
