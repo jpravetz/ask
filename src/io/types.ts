@@ -31,6 +31,16 @@ export type RenderListOpts = {
   onRight: () => void;
   /** Callback executed when a number key (1-9) is pressed. */
   onNumber?: (n: number) => void;
+  /** Callback executed when Ctrl-A is pressed. */
+  onSelectAll?: () => void;
+  /** Callback executed when Shift+Up is pressed. */
+  onShiftUp?: () => void;
+  /** Callback executed when Shift+Down is pressed. */
+  onShiftDown?: () => void;
+  /** Callback executed when Shift+Left is pressed. */
+  onShiftLeft?: () => void;
+  /** Callback executed when Shift+Right is pressed. */
+  onShiftRight?: () => void;
   /** If true, number keypresses will be handled. */
   useNumbers?: boolean;
 };

@@ -13,6 +13,11 @@ export async function renderList({
   onLeft,
   onRight,
   onNumber,
+  onSelectAll,
+  onShiftUp,
+  onShiftDown,
+  onShiftLeft,
+  onShiftRight,
   columns = 1,
   indent = '',
   useNumbers = false,
@@ -40,7 +45,7 @@ export async function renderList({
     await output.write(indent + rowStr + '\n');
   }
 
-  const data = new Uint8Array(3);
+  const data = new Uint8Array(6); // Increased buffer size for multi-byte sequences
   const n = await input.read(data);
 
   if (!n) {
@@ -50,7 +55,8 @@ export async function renderList({
   let ctrlCPressed = false;
   let timer;
 
-  const str = new TextDecoder().decode(data.slice(0, n));
+  const bytes = data.slice(0, n);
+  const str = new TextDecoder().decode(bytes);
   let isFinished = false;
 
   switch (str) {
@@ -66,6 +72,12 @@ export async function renderList({
       }
       ctrlCPressed = true;
       timer = setTimeout(() => (ctrlCPressed = false), 400);
+      break;
+
+    case '\u0001': // CTRL-A
+      if (onSelectAll) {
+        onSelectAll();
+      }
       break;
 
     case '\r': // CR
@@ -86,6 +98,30 @@ export async function renderList({
 
     case '\u001b[B': // DOWN
       onDown();
+      break;
+
+    case '\u001b[1;2A': // SHIFT+UP
+      if (onShiftUp) {
+        onShiftUp();
+      }
+      break;
+
+    case '\u001b[1;2B': // SHIFT+DOWN
+      if (onShiftDown) {
+        onShiftDown();
+      }
+      break;
+
+    case '\u001b[1;2D': // SHIFT+LEFT
+      if (onShiftLeft) {
+        onShiftLeft();
+      }
+      break;
+
+    case '\u001b[1;2C': // SHIFT+RIGHT
+      if (onShiftRight) {
+        onShiftRight();
+      }
       break;
 
     case '\u001b[D': // left

@@ -189,6 +189,75 @@ export class ListPrompt extends Prompt<unknown> {
     this._items[this._active].selected = !this._items[this._active].selected;
   }
 
+  private selectAll() {
+    if (!this.multiple) {
+      return;
+    }
+
+    const selectableItems = this._items.filter(item => !item.disabled && !(item instanceof List.SeparatorItem));
+    const allSelected = selectableItems.every(item => item.selected);
+    
+    selectableItems.forEach(item => {
+      item.selected = !allSelected;
+    });
+  }
+
+  private shiftUp() {
+    if (!this.multiple) {
+      return;
+    }
+
+    const currentSelected = this._items[this._active].selected;
+    this.up(this._active);
+    
+    // Apply the selection state to the new active item
+    if (!this._items[this._active].disabled && !(this._items[this._active] instanceof List.SeparatorItem)) {
+      this._items[this._active].selected = currentSelected;
+    }
+  }
+
+  private shiftDown() {
+    if (!this.multiple) {
+      return;
+    }
+
+    const currentSelected = this._items[this._active].selected;
+    this.down(this._active);
+    
+    // Apply the selection state to the new active item
+    if (!this._items[this._active].disabled && !(this._items[this._active] instanceof List.SeparatorItem)) {
+      this._items[this._active].selected = currentSelected;
+    }
+  }
+
+  private shiftLeft() {
+    if (!this.multiple) {
+      return;
+    }
+
+    const currentSelected = this._items[this._active].selected;
+    this.left();
+    
+    // Apply the selection state to the new active item
+    if (!this._items[this._active].disabled && !(this._items[this._active] instanceof List.SeparatorItem)) {
+      this._items[this._active].selected = currentSelected;
+    }
+  }
+
+  private shiftRight() {
+    if (!this.multiple) {
+      return;
+    }
+
+    const currentSelected = this._items[this._active].selected;
+    this.right();
+    
+    // Apply the selection state to the new active item
+    if (!this._items[this._active].disabled && !(this._items[this._active] instanceof List.SeparatorItem)) {
+      this._items[this._active].selected = currentSelected;
+    }
+  }
+
   private enter() {
     if (this.multiple) {
       this.finish();
@@ -230,6 +299,11 @@ export class ListPrompt extends Prompt<unknown> {
           onLeft: () => this.left(),
           onRight: () => this.right(),
           onNumber: (n: number) => this.number(n),
+          onSelectAll: this.selectAll.bind(this),
+          onShiftUp: this.shiftUp.bind(this),
+          onShiftDown: this.shiftDown.bind(this),
+          onShiftLeft: this.shiftLeft.bind(this),
+          onShiftRight: this.shiftRight.bind(this),
         });
       }
       await this.cleanup(_rows + 1);

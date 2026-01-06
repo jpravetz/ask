@@ -242,6 +242,9 @@ const { color } = await ask.select({
 **Behavior**:
 -   **Arrow Keys (`↑`, `↓`, `←`, `→`)**: Navigate through choices.
 -   **Spacebar**: Toggles the selection of the currently active choice.
+-   **CTRL-A**: Toggles between "select all" and "deselect all" states. If any items are unselected, selects all selectable items. If all items are selected, deselects all items.
+-   **SHIFT-UP/SHIFT-DOWN**: Navigate while propagating the current item's selection state to the destination item.
+-   **SHIFT-LEFT/SHIFT-RIGHT**: Navigate while propagating the current item's selection state to the destination item (for multi-column layouts).
 -   **Numbers (`1-9`)**: Select/deselect a choice by its displayed number (if `useNumbers` is `true`).
 -   **Enter**: Confirms all selected choices.
 

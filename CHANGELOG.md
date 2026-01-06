@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.6] - 2026-01-06
+
+- Add enhanced multi-selection for checkbox prompts with CTRL-A and SHIFT+arrow keys
+
 ## [2.0.5] - 2026-01-06
 
 - Moved lib folder to src for consistency with other projects
