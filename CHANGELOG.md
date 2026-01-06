@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.5] - 2026-01-06
+
+- Moved lib folder to src for consistency with other projects
+
 ## [2.0.4] - 2025-12-03
 
 - Fix destructuring error when ESC pressed on Ctrl-D confirmation

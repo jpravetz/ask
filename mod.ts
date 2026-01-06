@@ -11,4 +11,4 @@ export * as List from '$list';
 export * as Opts from '$opts';
 export * as Prompt from '$prompt';
 export type * from '$types';
-export { Ask as Main } from './lib/ask.ts';
+export { Ask as Main } from './src/ask.ts';

@@ -1,6 +1,6 @@
 import * as colors from '@std/fmt/colors';
-import { InterruptedError, UserAbortedError } from '../lib/errors.ts';
 import * as Ask from '../mod.ts';
+import { InterruptedError, UserAbortedError } from '../src/errors.ts';
 
 // Default ask instance for most tests
 const ask = new Ask.Main();

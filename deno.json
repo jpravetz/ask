@@ -1,19 +1,19 @@
 {
   "name": "@jpravetz/ask",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "exports": {
     ".": "./mod.ts"
   },
   "tasks": {
     "dev": "deno run --watch main.ts",
-    "check": "deno check mod.ts lib examples",
+    "check": "deno check mod.ts src examples",
     "test": "deno run -A ./examples/test.ts"
   },
   "fmt": {
     "singleQuote": true,
     "lineWidth": 110,
     "include": [
-      "lib",
+      "src",
       "examples",
       "launch.config.json",
       "mod.ts"
@@ -21,19 +21,19 @@
   },
   "lint": {
     "include": [
-      "lib",
+      "src",
       "examples",
       "mod.ts"
     ]
   },
   "imports": {
-    "$errors": "./lib/errors.ts",
-    "$fmt": "./lib/format.ts",
-    "$types": "./lib/types.ts",
-    "$list": "./lib/list/mod.ts",
-    "$opts": "./lib/opts/mod.ts",
-    "$io": "./lib/io/mod.ts",
-    "$prompt": "./lib/prompt/mod.ts",
+    "$errors": "./src/errors.ts",
+    "$fmt": "./src/format.ts",
+    "$types": "./src/types.ts",
+    "$list": "./src/list/mod.ts",
+    "$opts": "./src/opts/mod.ts",
+    "$io": "./src/io/mod.ts",
+    "$prompt": "./src/prompt/mod.ts",
     "@std/fmt": "jsr:@std/fmt@^1.0.8",
     "@std/io": "jsr:@std/io@^0.225.2"
   }
