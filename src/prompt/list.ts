@@ -194,10 +194,12 @@ export class ListPrompt extends Prompt<unknown> {
       return;
     }
 
-    const selectableItems = this._items.filter(item => !item.disabled && !(item instanceof List.SeparatorItem));
-    const allSelected = selectableItems.every(item => item.selected);
-    
-    selectableItems.forEach(item => {
+    const selectableItems = this._items.filter((item) =>
+      !item.disabled && !(item instanceof List.SeparatorItem)
+    );
+    const allSelected = selectableItems.every((item) => item.selected);
+
+    selectableItems.forEach((item) => {
       item.selected = !allSelected;
     });
   }
@@ -209,7 +211,7 @@ export class ListPrompt extends Prompt<unknown> {
 
     const currentSelected = this._items[this._active].selected;
     this.up(this._active);
-    
+
     // Apply the selection state to the new active item
     if (!this._items[this._active].disabled && !(this._items[this._active] instanceof List.SeparatorItem)) {
       this._items[this._active].selected = currentSelected;
@@ -223,7 +225,7 @@ export class ListPrompt extends Prompt<unknown> {
 
     const currentSelected = this._items[this._active].selected;
     this.down(this._active);
-    
+
     // Apply the selection state to the new active item
     if (!this._items[this._active].disabled && !(this._items[this._active] instanceof List.SeparatorItem)) {
       this._items[this._active].selected = currentSelected;
@@ -237,7 +239,7 @@ export class ListPrompt extends Prompt<unknown> {
 
     const currentSelected = this._items[this._active].selected;
     this.left();
-    
+
     // Apply the selection state to the new active item
     if (!this._items[this._active].disabled && !(this._items[this._active] instanceof List.SeparatorItem)) {
       this._items[this._active].selected = currentSelected;
@@ -251,7 +253,7 @@ export class ListPrompt extends Prompt<unknown> {
 
     const currentSelected = this._items[this._active].selected;
     this.right();
-    
+
     // Apply the selection state to the new active item
     if (!this._items[this._active].disabled && !(this._items[this._active] instanceof List.SeparatorItem)) {
       this._items[this._active].selected = currentSelected;

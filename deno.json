@@ -1,13 +1,17 @@
 {
   "name": "@jpravetz/ask",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "exports": {
     ".": "./mod.ts"
   },
   "tasks": {
-    "dev": "deno run --watch main.ts",
+    "fmt": "deno fmt src test *.json",
+    "lint": "deno lint src test *.ts *.json",
     "check": "deno check mod.ts src examples",
-    "test": "deno run -A ./examples/test.ts"
+    "test": "deno run -A ./examples/test.ts",
+    "docs": "deno doc --json src/mod.ts 2> /dev/null | cat > library-docs.json",
+    "ok": "deno fmt && deno task lint && deno task check && deno task test && deno task docs",
+    "dev": "deno run --watch main.ts"
   },
   "fmt": {
     "singleQuote": true,
@@ -34,7 +38,8 @@
     "$opts": "./src/opts/mod.ts",
     "$io": "./src/io/mod.ts",
     "$prompt": "./src/prompt/mod.ts",
-    "@std/fmt": "jsr:@std/fmt@^1.0.8",
-    "@std/io": "jsr:@std/io@^0.225.2"
+    "$terminal": "../../@epdoc/std/terminal/src/mod.ts",
+    "@std/fmt": "jsr:@std/fmt@^1.0.10",
+    "@std/io": "jsr:@std/io@^0.225.3"
   }
 }

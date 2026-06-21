@@ -1,3 +1,4 @@
+import * as Terminal from '$terminal';
 import type * as StdIo from '@std/io';
 
 /**
@@ -7,6 +8,8 @@ import type * as StdIo from '@std/io';
  * convenient methods for manipulating the terminal using ANSI escape codes. It
  * simplifies tasks like moving the cursor, clearing lines, and changing cursor
  * visibility, which are essential for creating interactive command-line prompts.
+ *
+ * Now delegates to @epdoc/terminal for core terminal operations.
  */
 export class Writer {
   protected output: StdIo.Writer & StdIo.WriterSync & StdIo.Closer;
@@ -25,14 +28,14 @@ export class Writer {
    * Moves the cursor to the beginning of the current line.
    */
   async gotoBeginningOfLine(): Promise<void> {
-    await this.write('\r');
+    await Terminal.screen.moveToLineStart();
   }
 
   /**
    * Moves the cursor up one line.
    */
   async goUp(): Promise<void> {
-    await this.write('\x1b[A');
+    await Terminal.screen.moveUp();
   }
 
   /**
@@ -89,21 +92,22 @@ export class Writer {
    * Clears the current line from the cursor to the end and moves the cursor to the beginning.
    */
   async clearLine(): Promise<void> {
-    await this.write('\r\x1b[K');
+    Terminal.screen.moveToLineStart();
+    await Terminal.screen.clearLine();
   }
 
   /**
    * Hides the terminal cursor.
    */
   async hideCursor(): Promise<void> {
-    await this.write('\x1b[?25l');
+    await Terminal.screen.hideCursor();
   }
 
   /**
    * Shows the terminal cursor.
    */
   async showCursor(): Promise<void> {
-    await this.write('\x1b[?25h');
+    await Terminal.screen.showCursor();
   }
 
   /**
@@ -120,6 +124,6 @@ export class Writer {
    */
   async clearPromptLine(): Promise<void> {
     await this.gotoBeginningOfLine();
-    await this.write('\x1b[K');
+    Terminal.screen.clearLine();
   }
 }

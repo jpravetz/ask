@@ -1,5 +1,6 @@
 import { EndOfFileError, InterruptedError } from '$errors';
 import { Fmt } from '$fmt';
+import * as Terminal from '$terminal';
 import * as colors from '@std/fmt/colors';
 import type * as IO from './types.ts';
 
@@ -34,12 +35,7 @@ export async function readLine(
     }
   }
 
-  let screenWidth = 120; // Default value
-  try {
-    screenWidth = Deno.consoleSize().columns;
-  } catch {
-    // Not a TTY, use default.
-  }
+  const screenWidth = Terminal.screen.getTerminalSize().columns;
 
   let inputStr = defaultValue ?? '';
   if (inputStr.length > 0) {

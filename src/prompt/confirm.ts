@@ -83,7 +83,7 @@ export class ConfirmPrompt<T extends Opts.Confirm> extends TextPrompt<boolean> {
     let currentValue: boolean | undefined = this.default;
     let result: string | undefined;
     let ctrlCPressed = false;
-    let timer: number | undefined;
+    let timer: NodeJS.Timeout | undefined;
 
     const redraw = async () => {
       await this.output.clearLine();
