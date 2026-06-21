@@ -1,0 +1,3151 @@
+{
+  "version": 2,
+  "nodes": {
+    "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts": {
+      "module_doc": {
+        "tags": [
+          {
+            "kind": "module",
+            "name": "`ask` is a slick Deno module that allows you to create interactive\ncommand-line applications. It provides a simple and intuitive API for\ncreating prompts and validating user input."
+          }
+        ]
+      },
+      "symbols": [
+        {
+          "name": "Main",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                "line": 40,
+                "col": 0,
+                "byteIndex": 1549
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "tags": [
+                  {
+                    "kind": "constructor"
+                  }
+                ]
+              },
+              "kind": "class",
+              "def": {
+                "constructors": [
+                  {
+                    "jsDoc": {
+                      "tags": [
+                        {
+                          "kind": "constructor"
+                        },
+                        {
+                          "kind": "param",
+                          "name": "opts"
+                        }
+                      ]
+                    },
+                    "hasBody": true,
+                    "name": "constructor",
+                    "params": [
+                      {
+                        "kind": "identifier",
+                        "name": "opts",
+                        "optional": true,
+                        "tsType": {
+                          "repr": "Opts.GlobalPrompt",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeName": "Opts.GlobalPrompt",
+                            "resolution": {
+                              "kind": "import",
+                              "specifier": "$opts"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 49,
+                      "col": 2,
+                      "byteIndex": 1810
+                    }
+                  }
+                ],
+                "properties": [
+                  {
+                    "tsType": {
+                      "repr": "Opts.GlobalPrompt",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeName": "Opts.GlobalPrompt",
+                        "resolution": {
+                          "kind": "import",
+                          "specifier": "$opts"
+                        }
+                      }
+                    },
+                    "readonly": true,
+                    "name": "opts",
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 41,
+                      "col": 2,
+                      "byteIndex": 1570
+                    }
+                  }
+                ],
+                "methods": [
+                  {
+                    "accessibility": "private",
+                    "name": "mergeOptions",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "opts",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "Omit",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeParams": [
+                                {
+                                  "repr": "SupportedOpts",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeName": "SupportedOpts",
+                                    "resolution": {
+                                      "kind": "local"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "type",
+                                  "kind": "literal",
+                                  "value": {
+                                    "kind": "string",
+                                    "string": "type"
+                                  }
+                                }
+                              ],
+                              "typeName": "Omit"
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "T",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeName": "T",
+                          "resolution": {
+                            "kind": "typeParam",
+                            "declaringName": "mergeOptions",
+                            "declaringKind": "method"
+                          }
+                        }
+                      },
+                      "hasBody": true,
+                      "typeParams": [
+                        {
+                          "name": "T"
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 53,
+                      "col": 2,
+                      "byteIndex": 1885
+                    }
+                  },
+                  {
+                    "jsDoc": {
+                      "doc": "Will ask for a string input and will return an object with a single\nproperty where the key is the name of the input and the value is a string\ncontaining the user's input (can be undefined).",
+                      "tags": [
+                        {
+                          "kind": "param",
+                          "name": "opts"
+                        },
+                        {
+                          "kind": "example",
+                          "doc": "```ts\nimport { Ask } from \"@jpravetz/ask\";\n\nconst ask = new Ask();\n\nconst { name } = await ask.input({\n  name: \"name\",\n  message: \"What is your name?\",\n} as const);\n\nconsole.log(name);"
+                        }
+                      ]
+                    },
+                    "name": "input",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "opts",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "input",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "Result",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "input",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "union",
+                                        "value": [
+                                          {
+                                            "repr": "string",
+                                            "kind": "keyword",
+                                            "value": "string"
+                                          },
+                                          {
+                                            "repr": "undefined",
+                                            "kind": "keyword",
+                                            "value": "undefined"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "typeName": "Result",
+                                    "resolution": {
+                                      "kind": "import",
+                                      "specifier": "$types",
+                                      "name": "Result"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "Opts.Input",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "Opts.Input",
+                              "resolution": {
+                                "kind": "import",
+                                "specifier": "$opts"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 75,
+                      "col": 2,
+                      "byteIndex": 2484
+                    }
+                  },
+                  {
+                    "jsDoc": {
+                      "doc": "Will ask for a number input and will return an object with a single\nproperty where the key is the name of the input and the value is a number\ncontaining the user's input (can be undefined). You can also specify a\nmaximum and a minimum value, which will affect the way the prompt message\nis displayed and will also validate the user's input.",
+                      "tags": [
+                        {
+                          "kind": "param",
+                          "name": "opts"
+                        },
+                        {
+                          "kind": "example",
+                          "doc": "```ts\nimport { Ask } from \"@jpravetz/ask\";\n\nconst ask = new Ask();\n\nconst { age } = await ask.number({\n  name: \"age\",\n  message: \"What is your age?\",\n  min: 16,\n  max: 100,\n} as const);\n\nconsole.log(age);"
+                        }
+                      ]
+                    },
+                    "name": "number",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "opts",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "number",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "Result",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "number",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "union",
+                                        "value": [
+                                          {
+                                            "repr": "number",
+                                            "kind": "keyword",
+                                            "value": "number"
+                                          },
+                                          {
+                                            "repr": "undefined",
+                                            "kind": "keyword",
+                                            "value": "undefined"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "typeName": "Result",
+                                    "resolution": {
+                                      "kind": "import",
+                                      "specifier": "$types",
+                                      "name": "Result"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "Opts.Number",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "Opts.Number",
+                              "resolution": {
+                                "kind": "import",
+                                "specifier": "$opts"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 104,
+                      "col": 2,
+                      "byteIndex": 3407
+                    }
+                  },
+                  {
+                    "jsDoc": {
+                      "doc": "Will ask a yes/no question and return an object with a single property\nwhere the key is the name of the input and the value is a boolean depending\non the provided answer. You can override the string that will be used for\nthe confirmation and denial of the question. The default values are \"y\" and\n\"n\" respectively. The prompt message will be displayed with the provided\nvalues in square brackets.",
+                      "tags": [
+                        {
+                          "kind": "param",
+                          "name": "opts"
+                        },
+                        {
+                          "kind": "example",
+                          "doc": "```ts\nimport { Ask } from \"@jpravetz/ask\";\n\nconst ask = new Ask();\n\nconst { canDrive } = await ask.confirm({\n  name: \"canDrive\",\n  message: \"Can you drive?\",\n} as const);\n\nconsole.log(canDrive);"
+                        }
+                      ]
+                    },
+                    "name": "confirm",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "opts",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "confirm",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "Result",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "confirm",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "union",
+                                        "value": [
+                                          {
+                                            "repr": "boolean",
+                                            "kind": "keyword",
+                                            "value": "boolean"
+                                          },
+                                          {
+                                            "repr": "undefined",
+                                            "kind": "keyword",
+                                            "value": "undefined"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "typeName": "Result",
+                                    "resolution": {
+                                      "kind": "import",
+                                      "specifier": "$types",
+                                      "name": "Result"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "Opts.Confirm",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "Opts.Confirm",
+                              "resolution": {
+                                "kind": "import",
+                                "specifier": "$opts"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 132,
+                      "col": 2,
+                      "byteIndex": 4374
+                    }
+                  },
+                  {
+                    "jsDoc": {
+                      "doc": "Will ask for a password input and will return an object with a single\nproperty where the key is the name of the input and the value is a string\ncontaining the user's input (can be undefined). The input will be hidden\nby default (meaning there will be no feedback when typing the answer), but\nyou can override this behavior by specifying a mask character (such as an\nasterisk).",
+                      "tags": [
+                        {
+                          "kind": "param",
+                          "name": "opts"
+                        },
+                        {
+                          "kind": "example",
+                          "doc": "```ts\nimport { Ask } from \"@jpravetz/ask\";\n\nconst ask = new Ask();\n\nconst { password } = await ask.password({\n  name: \"password\",\n  message: \"Enter your password:\",\n  mask: \"*\",\n} as const);\n\nconsole.log(password);"
+                        }
+                      ]
+                    },
+                    "name": "password",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "opts",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "password",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "Result",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "password",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "union",
+                                        "value": [
+                                          {
+                                            "repr": "string",
+                                            "kind": "keyword",
+                                            "value": "string"
+                                          },
+                                          {
+                                            "repr": "undefined",
+                                            "kind": "keyword",
+                                            "value": "undefined"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "typeName": "Result",
+                                    "resolution": {
+                                      "kind": "import",
+                                      "specifier": "$types",
+                                      "name": "Result"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "Opts.Password",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "Opts.Password",
+                              "resolution": {
+                                "kind": "import",
+                                "specifier": "$opts"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 161,
+                      "col": 2,
+                      "byteIndex": 5351
+                    }
+                  },
+                  {
+                    "jsDoc": {
+                      "doc": "Will open a temporary file in the user's preferred editor and will return\nthe contents of the file when the editor is closed. You can specify a path\noverride or an executable name for the editor to use. If not provided, the\n`VISUAL` or `EDITOR` environment variables will be used, and if those\naren't present either, a series of common editors will be searched for in\nthe system `PATH`. You can also provide a custom message to tell the user\nto press enter to launch their preferred editor.",
+                      "tags": [
+                        {
+                          "kind": "param",
+                          "name": "opts"
+                        },
+                        {
+                          "kind": "example",
+                          "doc": "```ts\nimport { Ask } from \"@jpravetz/ask\";\n\nconst ask = new Ask();\n\nconst { content } = await ask.editor({\n  name: \"bio\",\n  message: \"Write a short bio about yourself:\",\n  editorPath: \"nano\",\n  editorPromptMessage: \"Press enter to open the nano editor\",\n} as const);\n\nconsole.log(content);"
+                        }
+                      ]
+                    },
+                    "name": "editor",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "opts",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "editor",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "Result",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "editor",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "union",
+                                        "value": [
+                                          {
+                                            "repr": "string",
+                                            "kind": "keyword",
+                                            "value": "string"
+                                          },
+                                          {
+                                            "repr": "undefined",
+                                            "kind": "keyword",
+                                            "value": "undefined"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "typeName": "Result",
+                                    "resolution": {
+                                      "kind": "import",
+                                      "specifier": "$types",
+                                      "name": "Result"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "Opts.Editor",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "Opts.Editor",
+                              "resolution": {
+                                "kind": "import",
+                                "specifier": "$opts"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 192,
+                      "col": 2,
+                      "byteIndex": 6528
+                    }
+                  },
+                  {
+                    "jsDoc": {
+                      "doc": "Will display a list of choices to the user. The user can select one of the\nchoices by using the `up` and `down` arrow keys. The user can confirm their\nselection by pressing the `enter` key. The selected choice will be returned\nas an object. You can also provide a function that can override the way the\nchoices are displayed based on their status (active, inactive, disabled).\nYou can also use the `Separator` class to add a separator between choices.",
+                      "tags": [
+                        {
+                          "kind": "param",
+                          "name": "opts"
+                        },
+                        {
+                          "kind": "example",
+                          "doc": "```ts\nimport { Ask, Separator } from \"@jpravetz/ask\";\n\nconst ask = new Ask();\n\nconst { topping } = await ask.select({\n  name: \"topping\",\n  message: \"Select a pizza topping:\",\n  choices: [\n    { message: \"Pepperoni\", value: \"pepperoni\" },\n    { message: \"Mushrooms\", value: \"mushrooms\" },\n    new Separator(),\n    { message: \"Pineapple\", value: \"pineapple\" },\n ],\n} as const);\n\nconsole.log(topping);\n```"
+                        }
+                      ]
+                    },
+                    "name": "select",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "opts",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "select",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "Result",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "select",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "repr": "unknown",
+                                        "kind": "keyword",
+                                        "value": "unknown"
+                                      }
+                                    ],
+                                    "typeName": "Result",
+                                    "resolution": {
+                                      "kind": "import",
+                                      "specifier": "$types",
+                                      "name": "Result"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "Opts.Select",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "Opts.Select",
+                              "resolution": {
+                                "kind": "import",
+                                "specifier": "$opts"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 227,
+                      "col": 2,
+                      "byteIndex": 7793
+                    }
+                  },
+                  {
+                    "jsDoc": {
+                      "doc": "Will display a list of choices to the user. The user can select several of\nchoices by using the `up` and `down` arrow keys. The user can mark an\noption as selected by pressing the `space` key and can finalize their\nselections using the `enter` key. The selected choices will be returned as\nas an object. You can also provide a function that can override the way the\nchoices are displayed based on their status (active, inactive, disabled),\nas well as prefixes for selected and unselected choices. You can also use\nthe `Separator` class to add a separator between choices.",
+                      "tags": [
+                        {
+                          "kind": "param",
+                          "name": "opts"
+                        },
+                        {
+                          "kind": "example",
+                          "doc": "```ts\nimport { Ask, Separator } from \"@jpravetz/ask\";\n\nconst ask = new Ask();\n\nconst { toppings } = await ask.checkbox({\n  name: \"toppings\",\n  message: \"Select pizza toppings:\",\n  choices: [\n    { message: \"Pepperoni\", value: \"pepperoni\" },\n    { message: \"Mushrooms\", value: \"mushrooms\" },\n    new Separator(),\n    { message: \"Pineapple\", value: \"pineapple\" },\n  ],\n} as const);\n\nconsole.log(toppings);\n```"
+                        }
+                      ]
+                    },
+                    "name": "checkbox",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "opts",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "checkbox",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "Result",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "checkbox",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "array",
+                                        "value": {
+                                          "repr": "unknown",
+                                          "kind": "keyword",
+                                          "value": "unknown"
+                                        }
+                                      }
+                                    ],
+                                    "typeName": "Result",
+                                    "resolution": {
+                                      "kind": "import",
+                                      "specifier": "$types",
+                                      "name": "Result"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "Opts.Checkbox",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "Opts.Checkbox",
+                              "resolution": {
+                                "kind": "import",
+                                "specifier": "$opts"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 264,
+                      "col": 2,
+                      "byteIndex": 9171
+                    }
+                  },
+                  {
+                    "name": "inlineCheckbox",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "opts",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "inlineCheckbox",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "Result",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "inlineCheckbox",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "array",
+                                        "value": {
+                                          "repr": "unknown",
+                                          "kind": "keyword",
+                                          "value": "unknown"
+                                        }
+                                      }
+                                    ],
+                                    "typeName": "Result",
+                                    "resolution": {
+                                      "kind": "import",
+                                      "specifier": "$types",
+                                      "name": "Result"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "Opts.InlineCheckbox",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "Opts.InlineCheckbox",
+                              "resolution": {
+                                "kind": "import",
+                                "specifier": "$opts"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 271,
+                      "col": 2,
+                      "byteIndex": 9409
+                    }
+                  },
+                  {
+                    "accessibility": "private",
+                    "name": "runPrompt",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "question",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "runPrompt",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "PromptResult",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "runPrompt",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      }
+                                    ],
+                                    "typeName": "PromptResult",
+                                    "resolution": {
+                                      "kind": "local"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "SupportedOpts",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "SupportedOpts",
+                              "resolution": {
+                                "kind": "local"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 278,
+                      "col": 2,
+                      "byteIndex": 9665
+                    }
+                  },
+                  {
+                    "jsDoc": {
+                      "doc": "Will ask a series of questions based on an array of prompt options and\nreturn a type-safe object where each key is the name of a question and the\nvalue is the user's input for that question (the type of the value will be\ninferred based on the type of the question).\n**For most use cases, it's recommended to use the individual methods.**",
+                      "tags": [
+                        {
+                          "kind": "param",
+                          "name": "questions"
+                        },
+                        {
+                          "kind": "example",
+                          "doc": "```ts\nimport { Ask } from \"@jpravetz/ask\";\n\nconst ask = new Ask();\n\nconst answers = await ask.prompt([\n  {\n    type: \"input\",\n    name: \"name\",\n    message: \"What is your name?\",\n  },\n  {\n    type: \"number\",\n    name: \"age\",\n    message: \"What is your age?\",\n    min: 16,\n    max: 100,\n  },\n  {\n   type: \"confirm\",\n   name: \"canDrive\",\n   message: \"Can you drive?\",\n  },\n] as const);\n\nconsole.log(answers.name); // will be a string\nconsole.log(answers.age); // will be a number\nconsole.log(answers.canDrive); // will be a boolean"
+                        }
+                      ]
+                    },
+                    "name": "prompt",
+                    "kind": "method",
+                    "functionDef": {
+                      "params": [
+                        {
+                          "kind": "identifier",
+                          "name": "questions",
+                          "optional": false,
+                          "tsType": {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "prompt",
+                                "declaringKind": "method"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "returnType": {
+                        "repr": "Promise",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "kind": "union",
+                              "value": [
+                                {
+                                  "repr": "PromptResultMap",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeParams": [
+                                      {
+                                        "repr": "T",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "T",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "prompt",
+                                            "declaringKind": "method"
+                                          }
+                                        }
+                                      }
+                                    ],
+                                    "typeName": "PromptResultMap",
+                                    "resolution": {
+                                      "kind": "local"
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "undefined",
+                                  "kind": "keyword",
+                                  "value": "undefined"
+                                }
+                              ]
+                            }
+                          ],
+                          "typeName": "Promise"
+                        }
+                      },
+                      "hasBody": true,
+                      "isAsync": true,
+                      "typeParams": [
+                        {
+                          "name": "T",
+                          "constraint": {
+                            "repr": "Array",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeParams": [
+                                {
+                                  "repr": "SupportedOpts",
+                                  "kind": "typeRef",
+                                  "value": {
+                                    "typeName": "SupportedOpts",
+                                    "resolution": {
+                                      "kind": "local"
+                                    }
+                                  }
+                                }
+                              ],
+                              "typeName": "Array"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/ask.ts",
+                      "line": 357,
+                      "col": 2,
+                      "byteIndex": 12160
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "InterruptedError",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                "line": 0,
+                "col": 0,
+                "byteIndex": 0
+              },
+              "declarationKind": "export",
+              "kind": "class",
+              "def": {
+                "constructors": [
+                  {
+                    "hasBody": true,
+                    "name": "constructor",
+                    "params": [
+                      {
+                        "kind": "identifier",
+                        "name": "message",
+                        "optional": true,
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      }
+                    ],
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 2,
+                      "col": 2,
+                      "byteIndex": 66
+                    }
+                  }
+                ],
+                "properties": [
+                  {
+                    "tsType": {
+                      "repr": "boolean",
+                      "kind": "keyword",
+                      "value": "boolean"
+                    },
+                    "name": "silent",
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 1,
+                      "col": 2,
+                      "byteIndex": 48
+                    }
+                  }
+                ],
+                "extends": "Error"
+              }
+            }
+          ]
+        },
+        {
+          "name": "EndOfFileError",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                "line": 8,
+                "col": 0,
+                "byteIndex": 203
+              },
+              "declarationKind": "export",
+              "kind": "class",
+              "def": {
+                "constructors": [
+                  {
+                    "hasBody": true,
+                    "name": "constructor",
+                    "params": [
+                      {
+                        "kind": "identifier",
+                        "name": "message",
+                        "optional": true,
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      }
+                    ],
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 10,
+                      "col": 2,
+                      "byteIndex": 267
+                    }
+                  }
+                ],
+                "properties": [
+                  {
+                    "tsType": {
+                      "repr": "boolean",
+                      "kind": "keyword",
+                      "value": "boolean"
+                    },
+                    "name": "silent",
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 9,
+                      "col": 2,
+                      "byteIndex": 249
+                    }
+                  }
+                ],
+                "extends": "Error"
+              }
+            }
+          ]
+        },
+        {
+          "name": "ReloadPromptError",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                "line": 16,
+                "col": 0,
+                "byteIndex": 395
+              },
+              "declarationKind": "export",
+              "kind": "class",
+              "def": {
+                "constructors": [
+                  {
+                    "hasBody": true,
+                    "name": "constructor",
+                    "params": [
+                      {
+                        "kind": "identifier",
+                        "name": "message",
+                        "optional": true,
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      }
+                    ],
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 18,
+                      "col": 2,
+                      "byteIndex": 462
+                    }
+                  }
+                ],
+                "properties": [
+                  {
+                    "tsType": {
+                      "repr": "boolean",
+                      "kind": "keyword",
+                      "value": "boolean"
+                    },
+                    "name": "silent",
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 17,
+                      "col": 2,
+                      "byteIndex": 444
+                    }
+                  }
+                ],
+                "extends": "Error"
+              }
+            }
+          ]
+        },
+        {
+          "name": "UserAbortedError",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                "line": 24,
+                "col": 0,
+                "byteIndex": 588
+              },
+              "declarationKind": "export",
+              "kind": "class",
+              "def": {
+                "constructors": [
+                  {
+                    "hasBody": true,
+                    "name": "constructor",
+                    "params": [
+                      {
+                        "kind": "identifier",
+                        "name": "message",
+                        "optional": true,
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      }
+                    ],
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 26,
+                      "col": 2,
+                      "byteIndex": 654
+                    }
+                  }
+                ],
+                "properties": [
+                  {
+                    "tsType": {
+                      "repr": "boolean",
+                      "kind": "keyword",
+                      "value": "boolean"
+                    },
+                    "name": "silent",
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 25,
+                      "col": 2,
+                      "byteIndex": 636
+                    }
+                  }
+                ],
+                "extends": "Error"
+              }
+            }
+          ]
+        },
+        {
+          "name": "EndOfFile",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                "line": 8,
+                "col": 0,
+                "byteIndex": 203
+              },
+              "declarationKind": "export",
+              "kind": "class",
+              "def": {
+                "constructors": [
+                  {
+                    "hasBody": true,
+                    "name": "constructor",
+                    "params": [
+                      {
+                        "kind": "identifier",
+                        "name": "message",
+                        "optional": true,
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      }
+                    ],
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 10,
+                      "col": 2,
+                      "byteIndex": 267
+                    }
+                  }
+                ],
+                "properties": [
+                  {
+                    "tsType": {
+                      "repr": "boolean",
+                      "kind": "keyword",
+                      "value": "boolean"
+                    },
+                    "name": "silent",
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 9,
+                      "col": 2,
+                      "byteIndex": 249
+                    }
+                  }
+                ],
+                "extends": "Error"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Interrupted",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                "line": 0,
+                "col": 0,
+                "byteIndex": 0
+              },
+              "declarationKind": "export",
+              "kind": "class",
+              "def": {
+                "constructors": [
+                  {
+                    "hasBody": true,
+                    "name": "constructor",
+                    "params": [
+                      {
+                        "kind": "identifier",
+                        "name": "message",
+                        "optional": true,
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      }
+                    ],
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 2,
+                      "col": 2,
+                      "byteIndex": 66
+                    }
+                  }
+                ],
+                "properties": [
+                  {
+                    "tsType": {
+                      "repr": "boolean",
+                      "kind": "keyword",
+                      "value": "boolean"
+                    },
+                    "name": "silent",
+                    "location": {
+                      "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/errors.ts",
+                      "line": 1,
+                      "col": 2,
+                      "byteIndex": 48
+                    }
+                  }
+                ],
+                "extends": "Error"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Choice",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                "line": 5,
+                "col": 0,
+                "byteIndex": 75
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A single choice in a list."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "typeLiteral",
+                  "value": {
+                    "properties": [
+                      {
+                        "name": "message",
+                        "jsDoc": {
+                          "doc": "The text that will be displayed as the choice in the terminal UI."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                          "line": 9,
+                          "col": 2,
+                          "byteIndex": 183
+                        },
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      },
+                      {
+                        "name": "value",
+                        "jsDoc": {
+                          "doc": "The value that will be returned when the choice is selected."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                          "line": 14,
+                          "col": 2,
+                          "byteIndex": 281
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "unknown",
+                          "kind": "keyword",
+                          "value": "unknown"
+                        }
+                      },
+                      {
+                        "name": "disabled",
+                        "jsDoc": {
+                          "doc": "Whether the choice is disabled or not."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                          "line": 19,
+                          "col": 2,
+                          "byteIndex": 357
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "boolean",
+                          "kind": "keyword",
+                          "value": "boolean"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "NumberType",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                "line": 26,
+                "col": 0,
+                "byteIndex": 512
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "The type of number that can be entered. This will determine if the input will\nbe parsed as an integer or as a float."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "union",
+                  "value": [
+                    {
+                      "repr": "integer",
+                      "kind": "literal",
+                      "value": {
+                        "kind": "string",
+                        "string": "integer"
+                      }
+                    },
+                    {
+                      "repr": "float",
+                      "kind": "literal",
+                      "value": {
+                        "kind": "string",
+                        "string": "float"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Result",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                "line": 31,
+                "col": 0,
+                "byteIndex": 594
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "The result of a prompt."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "mapped",
+                  "value": {
+                    "typeParam": {
+                      "name": "K",
+                      "constraint": {
+                        "kind": "indexedAccess",
+                        "value": {
+                          "objType": {
+                            "repr": "O",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "O",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "Result",
+                                "declaringKind": "typeAlias"
+                              }
+                            }
+                          },
+                          "indexType": {
+                            "repr": "name",
+                            "kind": "literal",
+                            "value": {
+                              "kind": "string",
+                              "string": "name"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tsType": {
+                      "repr": "T",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeName": "T",
+                        "resolution": {
+                          "kind": "typeParam",
+                          "declaringName": "Result",
+                          "declaringKind": "typeAlias"
+                        }
+                      }
+                    }
+                  }
+                },
+                "typeParams": [
+                  {
+                    "name": "O",
+                    "constraint": {
+                      "repr": "Opts.Prompt",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeParams": [
+                          {
+                            "repr": "T",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "T",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "Result",
+                                "declaringKind": "typeAlias"
+                              }
+                            }
+                          }
+                        ],
+                        "typeName": "Opts.Prompt",
+                        "resolution": {
+                          "kind": "import",
+                          "specifier": "$opts"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "name": "T"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Io",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                "line": 8,
+                "col": 7,
+                "byteIndex": 242
+              },
+              "declarationKind": "export",
+              "kind": "namespace",
+              "def": {
+                "elements": [
+                  {
+                    "name": "RenderListOpts",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                          "line": 7,
+                          "col": 0,
+                          "byteIndex": 194
+                        },
+                        "declarationKind": "export",
+                        "jsDoc": {
+                          "doc": "Defines the options for rendering an interactive list of items."
+                        },
+                        "kind": "typeAlias",
+                        "def": {
+                          "tsType": {
+                            "kind": "typeLiteral",
+                            "value": {
+                              "properties": [
+                                {
+                                  "name": "input",
+                                  "jsDoc": {
+                                    "doc": "The input stream to read user key presses from (e.g., `Deno.stdin`)."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 9,
+                                    "col": 2,
+                                    "byteIndex": 305
+                                  },
+                                  "tsType": {
+                                    "kind": "intersection",
+                                    "value": [
+                                      {
+                                        "repr": "StdIo.Reader",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "StdIo.Reader",
+                                          "resolution": {
+                                            "kind": "import",
+                                            "specifier": "@std/io"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "repr": "StdIo.ReaderSync",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "StdIo.ReaderSync",
+                                          "resolution": {
+                                            "kind": "import",
+                                            "specifier": "@std/io"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "repr": "StdIo.Closer",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "StdIo.Closer",
+                                          "resolution": {
+                                            "kind": "import",
+                                            "specifier": "@std/io"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                },
+                                {
+                                  "name": "output",
+                                  "jsDoc": {
+                                    "doc": "The high-level writer instance to render the list to."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 11,
+                                    "col": 2,
+                                    "byteIndex": 425
+                                  },
+                                  "tsType": {
+                                    "repr": "Writer",
+                                    "kind": "typeRef",
+                                    "value": {
+                                      "typeName": "Writer",
+                                      "resolution": {
+                                        "kind": "import",
+                                        "specifier": "./writer.ts",
+                                        "name": "Writer"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "items",
+                                  "jsDoc": {
+                                    "doc": "The array of list items to be displayed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 13,
+                                    "col": 2,
+                                    "byteIndex": 493
+                                  },
+                                  "tsType": {
+                                    "kind": "array",
+                                    "value": {
+                                      "repr": "List.Item",
+                                      "kind": "typeRef",
+                                      "value": {
+                                        "typeName": "List.Item",
+                                        "resolution": {
+                                          "kind": "import",
+                                          "specifier": "$list"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "columns",
+                                  "jsDoc": {
+                                    "doc": "The number of columns to arrange the list items in. Defaults to 1."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 15,
+                                    "col": 2,
+                                    "byteIndex": 591
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "repr": "number",
+                                    "kind": "keyword",
+                                    "value": "number"
+                                  }
+                                },
+                                {
+                                  "name": "indent",
+                                  "jsDoc": {
+                                    "doc": "The string used to indent the entire list."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 17,
+                                    "col": 2,
+                                    "byteIndex": 663
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "repr": "string",
+                                    "kind": "keyword",
+                                    "value": "string"
+                                  }
+                                },
+                                {
+                                  "name": "onEnter",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when the `Enter` key is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 20,
+                                    "col": 2,
+                                    "byteIndex": 743
+                                  },
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onSpace",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when the `Space` key is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 22,
+                                    "col": 2,
+                                    "byteIndex": 826
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onUp",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when the `Up Arrow` key is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 24,
+                                    "col": 2,
+                                    "byteIndex": 913
+                                  },
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onDown",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when the `Down Arrow` key is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 26,
+                                    "col": 2,
+                                    "byteIndex": 998
+                                  },
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onLeft",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when the `Left Arrow` key is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 28,
+                                    "col": 2,
+                                    "byteIndex": 1085
+                                  },
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onRight",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when the `Right Arrow` key is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 30,
+                                    "col": 2,
+                                    "byteIndex": 1173
+                                  },
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onNumber",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when a number key (1-9) is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 32,
+                                    "col": 2,
+                                    "byteIndex": 1259
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": [
+                                        {
+                                          "kind": "identifier",
+                                          "name": "n",
+                                          "optional": false,
+                                          "tsType": {
+                                            "repr": "number",
+                                            "kind": "keyword",
+                                            "value": "number"
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onSelectAll",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when Ctrl-A is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 34,
+                                    "col": 2,
+                                    "byteIndex": 1344
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onShiftUp",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when Shift+Up is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 36,
+                                    "col": 2,
+                                    "byteIndex": 1425
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onShiftDown",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when Shift+Down is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 38,
+                                    "col": 2,
+                                    "byteIndex": 1506
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onShiftLeft",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when Shift+Left is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 40,
+                                    "col": 2,
+                                    "byteIndex": 1589
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onShiftRight",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when Shift+Right is pressed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 42,
+                                    "col": 2,
+                                    "byteIndex": 1673
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "useNumbers",
+                                  "jsDoc": {
+                                    "doc": "If true, number keypresses will be handled."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 44,
+                                    "col": 2,
+                                    "byteIndex": 1755
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "repr": "boolean",
+                                    "kind": "keyword",
+                                    "value": "boolean"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "ReadlineOpts",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                          "line": 50,
+                          "col": 0,
+                          "byteIndex": 1853
+                        },
+                        "declarationKind": "export",
+                        "jsDoc": {
+                          "doc": "Defines the options for reading a single line of user input."
+                        },
+                        "kind": "typeAlias",
+                        "def": {
+                          "tsType": {
+                            "kind": "typeLiteral",
+                            "value": {
+                              "properties": [
+                                {
+                                  "name": "input",
+                                  "jsDoc": {
+                                    "doc": "The input stream to read user input from (e.g., `Deno.stdin`)."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 52,
+                                    "col": 2,
+                                    "byteIndex": 1956
+                                  },
+                                  "tsType": {
+                                    "kind": "intersection",
+                                    "value": [
+                                      {
+                                        "repr": "StdIo.Reader",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "StdIo.Reader",
+                                          "resolution": {
+                                            "kind": "import",
+                                            "specifier": "@std/io"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "repr": "StdIo.ReaderSync",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "StdIo.ReaderSync",
+                                          "resolution": {
+                                            "kind": "import",
+                                            "specifier": "@std/io"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "repr": "StdIo.Closer",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "StdIo.Closer",
+                                          "resolution": {
+                                            "kind": "import",
+                                            "specifier": "@std/io"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                },
+                                {
+                                  "name": "output",
+                                  "jsDoc": {
+                                    "doc": "The high-level writer instance for displaying the prompt and user input."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 54,
+                                    "col": 2,
+                                    "byteIndex": 2095
+                                  },
+                                  "tsType": {
+                                    "repr": "Writer",
+                                    "kind": "typeRef",
+                                    "value": {
+                                      "typeName": "Writer",
+                                      "resolution": {
+                                        "kind": "import",
+                                        "specifier": "./writer.ts",
+                                        "name": "Writer"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "hidden",
+                                  "jsDoc": {
+                                    "doc": "If true, the user's input will not be echoed to the terminal."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 56,
+                                    "col": 2,
+                                    "byteIndex": 2184
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "repr": "boolean",
+                                    "kind": "keyword",
+                                    "value": "boolean"
+                                  }
+                                },
+                                {
+                                  "name": "mask",
+                                  "jsDoc": {
+                                    "doc": "A character to use for masking input, commonly used for passwords."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 58,
+                                    "col": 2,
+                                    "byteIndex": 2280
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "repr": "string",
+                                    "kind": "keyword",
+                                    "value": "string"
+                                  }
+                                },
+                                {
+                                  "name": "defaultValue",
+                                  "jsDoc": {
+                                    "doc": "A default value to pre-populate the input line with."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 60,
+                                    "col": 2,
+                                    "byteIndex": 2359
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "repr": "string",
+                                    "kind": "keyword",
+                                    "value": "string"
+                                  }
+                                },
+                                {
+                                  "name": "onCtrlR",
+                                  "jsDoc": {
+                                    "doc": "Callback function which is called when Ctrl-R is pressed. If it returns a\nboolean, the spinner will change to a green or red circle to indicate\nsuccess or failure."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 66,
+                                    "col": 2,
+                                    "byteIndex": 2575
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "kind": "union",
+                                        "value": [
+                                          {
+                                            "repr": "boolean",
+                                            "kind": "keyword",
+                                            "value": "boolean"
+                                          },
+                                          {
+                                            "repr": "void",
+                                            "kind": "keyword",
+                                            "value": "void"
+                                          },
+                                          {
+                                            "repr": "Promise",
+                                            "kind": "typeRef",
+                                            "value": {
+                                              "typeParams": [
+                                                {
+                                                  "kind": "union",
+                                                  "value": [
+                                                    {
+                                                      "repr": "boolean",
+                                                      "kind": "keyword",
+                                                      "value": "boolean"
+                                                    },
+                                                    {
+                                                      "repr": "void",
+                                                      "kind": "keyword",
+                                                      "value": "void"
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "typeName": "Promise"
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "getPrompt",
+                                  "jsDoc": {
+                                    "doc": "A function that returns the prompt string. This is used to redraw the\nprompt when needed."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 71,
+                                    "col": 2,
+                                    "byteIndex": 2747
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "fnOrConstructor",
+                                    "value": {
+                                      "constructor": false,
+                                      "tsType": {
+                                        "repr": "string",
+                                        "kind": "keyword",
+                                        "value": "string"
+                                      },
+                                      "params": []
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "getPreferredEditor",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/utils.ts",
+                          "line": 0,
+                          "col": 0,
+                          "byteIndex": 0
+                        },
+                        "declarationKind": "export",
+                        "kind": "function",
+                        "def": {
+                          "params": [],
+                          "returnType": {
+                            "repr": "Promise",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeParams": [
+                                {
+                                  "kind": "union",
+                                  "value": [
+                                    {
+                                      "repr": "string",
+                                      "kind": "keyword",
+                                      "value": "string"
+                                    },
+                                    {
+                                      "repr": "undefined",
+                                      "kind": "keyword",
+                                      "value": "undefined"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "typeName": "Promise"
+                            }
+                          },
+                          "hasBody": true,
+                          "isAsync": true
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "unIro",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/utils.ts",
+                          "line": 35,
+                          "col": 0,
+                          "byteIndex": 743
+                        },
+                        "declarationKind": "export",
+                        "kind": "function",
+                        "def": {
+                          "params": [
+                            {
+                              "kind": "identifier",
+                              "name": "input",
+                              "optional": false,
+                              "tsType": {
+                                "repr": "string",
+                                "kind": "keyword",
+                                "value": "string"
+                              }
+                            }
+                          ],
+                          "returnType": {
+                            "repr": "string",
+                            "kind": "keyword",
+                            "value": "string"
+                          },
+                          "hasBody": true
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "stripAnsiCodes",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/utils.ts",
+                          "line": 59,
+                          "col": 0,
+                          "byteIndex": 1382
+                        },
+                        "declarationKind": "export",
+                        "kind": "function",
+                        "def": {
+                          "params": [
+                            {
+                              "kind": "identifier",
+                              "name": "str",
+                              "optional": false,
+                              "tsType": {
+                                "repr": "string",
+                                "kind": "keyword",
+                                "value": "string"
+                              }
+                            }
+                          ],
+                          "returnType": {
+                            "repr": "string",
+                            "kind": "keyword",
+                            "value": "string"
+                          },
+                          "hasBody": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                "line": 9,
+                "col": 7,
+                "byteIndex": 269
+              },
+              "declarationKind": "export",
+              "kind": "namespace",
+              "def": {
+                "elements": [
+                  {
+                    "name": "ItemOpts",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                          "line": 3,
+                          "col": 0,
+                          "byteIndex": 36
+                        },
+                        "declarationKind": "export",
+                        "jsDoc": {
+                          "doc": "A single item in a list."
+                        },
+                        "kind": "interface",
+                        "def": {
+                          "properties": [
+                            {
+                              "name": "message",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 4,
+                                "col": 2,
+                                "byteIndex": 66
+                              },
+                              "tsType": {
+                                "repr": "string",
+                                "kind": "keyword",
+                                "value": "string"
+                              }
+                            },
+                            {
+                              "name": "value",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 5,
+                                "col": 2,
+                                "byteIndex": 85
+                              },
+                              "optional": true,
+                              "tsType": {
+                                "repr": "unknown",
+                                "kind": "keyword",
+                                "value": "unknown"
+                              }
+                            },
+                            {
+                              "name": "disabled",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 6,
+                                "col": 2,
+                                "byteIndex": 104
+                              },
+                              "optional": true,
+                              "tsType": {
+                                "repr": "boolean",
+                                "kind": "keyword",
+                                "value": "boolean"
+                              }
+                            },
+                            {
+                              "name": "selected",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 7,
+                                "col": 2,
+                                "byteIndex": 126
+                              },
+                              "optional": true,
+                              "tsType": {
+                                "repr": "boolean",
+                                "kind": "keyword",
+                                "value": "boolean"
+                              }
+                            },
+                            {
+                              "name": "active",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 8,
+                                "col": 2,
+                                "byteIndex": 148
+                              },
+                              "optional": true,
+                              "tsType": {
+                                "repr": "boolean",
+                                "kind": "keyword",
+                                "value": "boolean"
+                              }
+                            },
+                            {
+                              "name": "selectedPrefix",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 9,
+                                "col": 2,
+                                "byteIndex": 168
+                              },
+                              "optional": true,
+                              "tsType": {
+                                "repr": "string",
+                                "kind": "keyword",
+                                "value": "string"
+                              }
+                            },
+                            {
+                              "name": "unselectedPrefix",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 10,
+                                "col": 2,
+                                "byteIndex": 195
+                              },
+                              "optional": true,
+                              "tsType": {
+                                "repr": "string",
+                                "kind": "keyword",
+                                "value": "string"
+                              }
+                            },
+                            {
+                              "name": "inactiveFormatter",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 11,
+                                "col": 2,
+                                "byteIndex": 224
+                              },
+                              "optional": true,
+                              "tsType": {
+                                "kind": "fnOrConstructor",
+                                "value": {
+                                  "constructor": false,
+                                  "tsType": {
+                                    "repr": "string",
+                                    "kind": "keyword",
+                                    "value": "string"
+                                  },
+                                  "params": [
+                                    {
+                                      "kind": "identifier",
+                                      "name": "message",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "string",
+                                        "kind": "keyword",
+                                        "value": "string"
+                                      }
+                                    },
+                                    {
+                                      "kind": "identifier",
+                                      "name": "selected",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "boolean",
+                                        "kind": "keyword",
+                                        "value": "boolean"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "name": "activeFormatter",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 12,
+                                "col": 2,
+                                "byteIndex": 294
+                              },
+                              "optional": true,
+                              "tsType": {
+                                "kind": "fnOrConstructor",
+                                "value": {
+                                  "constructor": false,
+                                  "tsType": {
+                                    "repr": "string",
+                                    "kind": "keyword",
+                                    "value": "string"
+                                  },
+                                  "params": [
+                                    {
+                                      "kind": "identifier",
+                                      "name": "message",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "string",
+                                        "kind": "keyword",
+                                        "value": "string"
+                                      }
+                                    },
+                                    {
+                                      "kind": "identifier",
+                                      "name": "selected",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "boolean",
+                                        "kind": "keyword",
+                                        "value": "boolean"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "name": "disabledFormatter",
+                              "location": {
+                                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/list/types.ts",
+                                "line": 13,
+                                "col": 2,
+                                "byteIndex": 362
+                              },
+                              "optional": true,
+                              "tsType": {
+                                "kind": "fnOrConstructor",
+                                "value": {
+                                  "constructor": false,
+                                  "tsType": {
+                                    "repr": "string",
+                                    "kind": "keyword",
+                                    "value": "string"
+                                  },
+                                  "params": [
+                                    {
+                                      "kind": "identifier",
+                                      "name": "message",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "string",
+                                        "kind": "keyword",
+                                        "value": "string"
+                                      }
+                                    },
+                                    {
+                                      "kind": "identifier",
+                                      "name": "selected",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "boolean",
+                                        "kind": "keyword",
+                                        "value": "boolean"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Opts",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                "line": 10,
+                "col": 7,
+                "byteIndex": 300
+              },
+              "declarationKind": "export",
+              "kind": "namespace",
+              "def": {
+                "elements": [
+                  {
+                    "name": "Text",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/opts/mod.ts",
+                          "line": 17,
+                          "col": 0,
+                          "byteIndex": 743
+                        },
+                        "declarationKind": "export",
+                        "jsDoc": {
+                          "doc": "Common options for text prompts."
+                        },
+                        "kind": "typeAlias",
+                        "def": {
+                          "tsType": {
+                            "kind": "intersection",
+                            "value": [
+                              {
+                                "kind": "typeLiteral",
+                                "value": {
+                                  "properties": [
+                                    {
+                                      "name": "hidden",
+                                      "location": {
+                                        "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/opts/mod.ts",
+                                        "line": 18,
+                                        "col": 2,
+                                        "byteIndex": 778
+                                      },
+                                      "optional": true,
+                                      "tsType": {
+                                        "repr": "boolean",
+                                        "kind": "keyword",
+                                        "value": "boolean"
+                                      }
+                                    },
+                                    {
+                                      "name": "mask",
+                                      "location": {
+                                        "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/opts/mod.ts",
+                                        "line": 19,
+                                        "col": 2,
+                                        "byteIndex": 798
+                                      },
+                                      "optional": true,
+                                      "tsType": {
+                                        "repr": "string",
+                                        "kind": "keyword",
+                                        "value": "string"
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "repr": "PromptOpts",
+                                "kind": "typeRef",
+                                "value": {
+                                  "typeParams": [
+                                    {
+                                      "repr": "T",
+                                      "kind": "typeRef",
+                                      "value": {
+                                        "typeName": "T",
+                                        "resolution": {
+                                          "kind": "typeParam",
+                                          "declaringName": "Text",
+                                          "declaringKind": "typeAlias"
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "typeName": "PromptOpts",
+                                  "resolution": {
+                                    "kind": "import",
+                                    "specifier": "./prompt.ts",
+                                    "name": "PromptOpts"
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "typeParams": [
+                            {
+                              "name": "T",
+                              "default": {
+                                "repr": "string",
+                                "kind": "keyword",
+                                "value": "string"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Prompt",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                "line": 11,
+                "col": 7,
+                "byteIndex": 331
+              },
+              "declarationKind": "export",
+              "kind": "namespace",
+              "def": {
+                "elements": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
