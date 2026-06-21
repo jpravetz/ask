@@ -5,4 +5,4 @@ export * from './utils.ts';
 export { Writer } from './writer.ts';
 
 // Re-export terminal utilities for convenience
-export * as Terminal from '$terminal';
+export * as Terminal from '@epdoc/terminal';

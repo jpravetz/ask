@@ -1,6 +1,6 @@
 import { EndOfFileError, InterruptedError } from '$errors';
 import { Fmt } from '$fmt';
-import * as Terminal from '$terminal';
+import * as Terminal from '@epdoc/terminal';
 import * as colors from '@std/fmt/colors';
 import type * as IO from './types.ts';
 

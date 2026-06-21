@@ -1,4 +1,4 @@
-import * as Ask from '../mod.ts';
+import * as Ask from '@jpravetz/ask';
 
 const ask = new Ask.Main({ prefix: '', suffix: ':', indent: 8 });
 

@@ -1,4 +1,4 @@
-import * as Terminal from '$terminal';
+import * as Terminal from '@epdoc/terminal';
 import type * as StdIo from '@std/io';
 
 /**

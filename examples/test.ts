@@ -1,5 +1,5 @@
+import * as Ask from '@jpravetz/ask';
 import * as colors from '@std/fmt/colors';
-import * as Ask from '../mod.ts';
 import { InterruptedError, UserAbortedError } from '../src/errors.ts';
 
 // Default ask instance for most tests

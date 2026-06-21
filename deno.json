@@ -1,14 +1,20 @@
 {
   "name": "@jpravetz/ask",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "exports": {
-    ".": "./mod.ts"
+    ".": "./src/mod.ts"
+  },
+  "publish": {
+    "include": [
+      "./src"
+    ]
   },
   "tasks": {
     "fmt": "deno fmt src test *.json",
     "lint": "deno lint src test *.ts *.json",
-    "check": "deno check mod.ts src examples",
-    "test": "deno run -A ./examples/test.ts",
+    "check": "deno check src examples",
+    "test:interactive": "deno run -A ./examples/test.ts",
+    "test": "deno test -A ./test/dummy.test.ts",
     "docs": "deno doc --json src/mod.ts 2> /dev/null | cat > library-docs.json",
     "ok": "deno fmt && deno task lint && deno task check && deno task test && deno task docs",
     "dev": "deno run --watch main.ts"
@@ -38,7 +44,8 @@
     "$opts": "./src/opts/mod.ts",
     "$io": "./src/io/mod.ts",
     "$prompt": "./src/prompt/mod.ts",
-    "$terminal": "../../@epdoc/std/terminal/src/mod.ts",
+    "@epdoc/terminal": "jsr:@epdoc/terminal@^0.0.14",
+    "@std/assert": "jsr:@std/assert@^1.0.19",
     "@std/fmt": "jsr:@std/fmt@^1.0.10",
     "@std/io": "jsr:@std/io@^0.225.3"
   }
