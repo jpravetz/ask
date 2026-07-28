@@ -1,6 +1,6 @@
 {
   "name": "@jpravetz/ask",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "exports": {
     ".": "./src/mod.ts"
   },
@@ -44,7 +44,7 @@
     "$opts": "./src/opts/mod.ts",
     "$io": "./src/io/mod.ts",
     "$prompt": "./src/prompt/mod.ts",
-    "@epdoc/terminal": "jsr:@epdoc/terminal@^0.0.14",
+    "@epdoc/terminal": "jsr:@epdoc/terminal@^0.0.15",
     "@std/assert": "jsr:@std/assert@^1.0.19",
     "@std/fmt": "jsr:@std/fmt@^1.0.10",
     "@std/io": "jsr:@std/io@^0.225.3"
