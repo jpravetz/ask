@@ -66,9 +66,9 @@ export class TextPrompt<T = string> extends Prompt<T> {
       if (preprocess) {
         preprocessedAnswer = preprocess(answer);
       } else {
-        if (!answer && typeof this.default !== 'undefined') {
-          answer = String(this.default);
-        }
+        // The default value is pre-filled into the input buffer, so an empty
+        // answer means the user deliberately cleared the field. Do not
+        // substitute the default back in that case.
         preprocessedAnswer = answer as T | undefined;
       }
 
