@@ -1,6 +1,6 @@
 import * as Ask from '@jpravetz/ask';
 import * as colors from '@std/fmt/colors';
-import { InterruptedError, UserAbortedError } from '../src/errors.ts';
+import { InterruptedError, ReturnToMainMenuError, UserAbortedError } from '../src/errors.ts';
 
 // Default ask instance for most tests
 const ask = new Ask.Main();
@@ -40,6 +40,8 @@ async function runTest() {
     escKey: testEscKey,
     ctrlD: testCtrlD,
     ctrlR: testCtrlR,
+    ctrlRList: testCtrlRList,
+    returnToMainMenu: testReturnToMainMenu,
     wordNavigation: testWordNavigation,
   };
 
@@ -462,6 +464,119 @@ async function testCtrlR(): Promise<boolean> {
     throw new InterruptedError();
   }
   return confirm3.success === true;
+}
+
+async function testCtrlRList(): Promise<boolean> {
+  console.log('\n--- Testing Ctrl-R in List Prompts ---');
+
+  const askReload = new Ask.Main({
+    onCtrlR: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return true;
+    },
+  });
+  const choices: Ask.List.Item[] = [
+    new Ask.List.Item({ message: 'Red', value: 'red' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'Green', value: 'green' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'Blue', value: 'blue' } as Ask.List.ItemOpts),
+  ];
+  const result = await askReload.prompt([
+    {
+      name: 'color',
+      type: 'select',
+      message: 'Press Ctrl-R, then select Green with the down arrow and press enter.',
+      choices: choices,
+    },
+  ]);
+  if (result === undefined) {
+    throw new InterruptedError();
+  }
+  if (result.color !== 'green') {
+    return log.failed('Ctrl-R in list prompt');
+  }
+  const confirm = await ask.prompt([
+    {
+      name: 'success',
+      type: 'confirm',
+      message: 'Did Ctrl-R work in the select prompt without issues?',
+      default: true,
+    },
+  ]);
+  if (confirm === undefined) {
+    throw new InterruptedError();
+  }
+  return confirm.success === true;
+}
+
+async function testReturnToMainMenu(): Promise<boolean> {
+  console.log('\n--- Testing Return to Main Menu ---');
+
+  const choices: Ask.List.Item[] = [
+    new Ask.List.Item({ message: 'Red', value: 'red' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'Green', value: 'green' } as Ask.List.ItemOpts),
+    new Ask.List.Item({ message: 'Blue', value: 'blue' } as Ask.List.ItemOpts),
+  ];
+
+  // Test case 1: visible footer
+  const askVisible = new Ask.Main({ returnToMainMenu: 'visible' });
+  console.log('A "0. Return to Main Menu" footer should be visible below the choices. Press 0.');
+  try {
+    await askVisible.prompt([
+      {
+        name: 'color',
+        type: 'select',
+        message: 'Press 0 to return to the main menu.',
+        choices: choices,
+      },
+    ]);
+    return log.failed('Return to Main Menu (visible): no error was thrown');
+  } catch (err) {
+    if (!(err instanceof ReturnToMainMenuError)) {
+      console.log(colors.red(err instanceof Error ? err.message : String(err)));
+      return log.failed('Return to Main Menu (visible)');
+    }
+  }
+
+  // Test case 2: hidden
+  const askHidden = new Ask.Main({ returnToMainMenu: 'hidden' });
+  console.log('No footer should be visible. Press 0 to return to the main menu.');
+  try {
+    await askHidden.prompt([
+      {
+        name: 'color',
+        type: 'select',
+        message: 'Press 0 to return to the main menu (footer is hidden).',
+        choices: choices,
+      },
+    ]);
+    return log.failed('Return to Main Menu (hidden): no error was thrown');
+  } catch (err) {
+    if (!(err instanceof ReturnToMainMenuError)) {
+      console.log(colors.red(err instanceof Error ? err.message : String(err)));
+      return log.failed('Return to Main Menu (hidden)');
+    }
+  }
+
+  // Test case 3: off — pressing 0 should be ignored
+  const askOff = new Ask.Main();
+  console.log('Press 0 (nothing should happen), then select Green with the down arrow and press enter.');
+  const result = await askOff.prompt([
+    {
+      name: 'color',
+      type: 'select',
+      message: 'Press 0 (should be ignored), then select Green.',
+      choices: choices,
+      useNumbers: true,
+    },
+  ]);
+  if (result === undefined) {
+    throw new InterruptedError();
+  }
+  if (result.color !== 'green') {
+    return log.failed('Return to Main Menu (off)');
+  }
+
+  return log.passed('Return to Main Menu');
 }
 
 async function testWordNavigation(): Promise<boolean> {

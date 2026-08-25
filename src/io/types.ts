@@ -31,6 +31,8 @@ export type RenderListOpts = {
   onRight: () => void;
   /** Callback executed when a number key (1-9) is pressed. */
   onNumber?: (n: number) => void;
+  /** Callback executed when the `0` key is pressed. */
+  onZero?: () => void;
   /** Callback executed when Ctrl-A is pressed. */
   onSelectAll?: () => void;
   /** Callback executed when Shift+Up is pressed. */
@@ -43,6 +45,10 @@ export type RenderListOpts = {
   onShiftRight?: () => void;
   /** If true, number keypresses will be handled. */
   useNumbers?: boolean;
+  /** Callback executed when Ctrl-R is pressed. */
+  onCtrlR?: () => boolean | void | Promise<boolean | void>;
+  /** An optional footer line rendered below the list items. */
+  footer?: string;
 };
 
 /**

@@ -92,7 +92,8 @@ All prompts share some common interactive behaviors:
 -   **Enter**: Submits the input or confirms a selection.
 -   **ESC**: Aborts the current prompt, causing the prompt method to return `undefined`.
 -   **CTRL-D**: Triggers the global exit confirmation.
--   **CTRL-R**: Triggers the global `onCtrlR` callback, displaying a yellow timer symbol ⏱ during execution.
+-   **CTRL-R**: Triggers the global `onCtrlR` callback, displaying a yellow timer symbol ⏱ during execution. In text prompts (`input`, `number`, `confirm`) the prompt prefix is replaced by ⏱, which then changes to a green or red circle based on the callback's return value. In list prompts (`select`, `checkbox`, `inlineCheckbox`) the callback is invoked directly.
+-   **0**: In `select` and `checkbox` prompts, when the `returnToMainMenu` option is enabled, pressing `0` throws a `ReturnToMainMenuError`. See [Return to Main Menu](#return-to-main-menu).
 
 ### `input` Prompt
 
@@ -332,6 +333,7 @@ The `onCtrlR` callback is a global preference that is triggered when the user pr
     *   If your `onCtrlR` callback returns `true` (or a `Promise<true>`), the stopwatch will be replaced by a green closed circle (`●`).
     *   If it returns `false` (or a `Promise<false>`), it will be replaced by a red closed circle (`●`).
     *   If it returns `void` (or a `Promise<void>`), the prompt will revert to its original prefix.
+-   **List Prompts**: The stopwatch/circle indicators are only rendered in text prompts (`input`, `number`, `confirm`). In list prompts (`select`, `checkbox`, `inlineCheckbox`) the callback is invoked directly when `CTRL-R` is pressed, and the list is re-rendered afterwards.
 -   **Developer Action**: Implement the `onCtrlR` function in the `Ask` constructor to perform any necessary data reloading or state updates.
 
 ```ts
@@ -343,6 +345,54 @@ const ask = new Ask.Main({
     return true; // Indicate success
   },
 });
+```
+
+### `Return to Main Menu` (Global)
+
+The `returnToMainMenu` option provides a consistent way for users to navigate back to the application's main menu from any `select` or `checkbox` page. When enabled, pressing the `0` key in a list prompt causes the prompt to throw a `ReturnToMainMenuError`, which the application catches to display its main menu.
+
+-   **Behavior**:
+    *   Pressing `0` in a `select` or `checkbox` prompt throws a `ReturnToMainMenuError`.
+    *   The rendered list and prompt line are cleaned up from the screen before the error is thrown.
+-   **Configuration**: The `returnToMainMenu` global option accepts one of three values:
+    *   `'visible'`: Enabled. A `0. Return to Main Menu` item is displayed below the choices. It is not part of arrow-key navigation; it is triggered only by pressing `0`.
+    *   `'hidden'`: Enabled, but the item is not displayed. Pressing `0` still works silently.
+    *   `'off'` (default): Disabled. Pressing `0` has no effect.
+-   **Label**: The displayed label defaults to `'Return to Main Menu'` and can be customized with the `returnToMainMenuLabel` global option.
+-   **Prompt Types**: Applies to `select` and `checkbox` prompts. Other prompt types are unaffected.
+-   **Developer Action**: Wrap calls to list prompts in a `try...catch` block and handle `ReturnToMainMenuError` by navigating back to the main menu.
+
+```ts
+import { Ask, ReturnToMainMenuError } from "@jpravetz/ask";
+
+const ask = new Ask.Main({
+  returnToMainMenu: "visible",
+  returnToMainMenuLabel: "Return to Main Menu",
+});
+
+async function showMainMenu() {
+  // ... render the main menu ...
+}
+
+while (true) {
+  try {
+    const { page } = await ask.select({
+      name: "page",
+      message: "Choose an option:",
+      choices: [
+        { message: "Settings", value: "settings" },
+        { message: "Help", value: "help" },
+      ],
+    });
+    // ... handle the selected page ...
+  } catch (error) {
+    if (error instanceof ReturnToMainMenuError) {
+      await showMainMenu();
+    } else {
+      throw error;
+    }
+  }
+}
 ```
 
 ### `ESC` Key Behavior

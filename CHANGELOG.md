@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+- Extended the global `onCtrlR` callback to list prompts (`select`, `checkbox`,
+  `inlineCheckbox`). The callback is now invoked when `CTRL-R` is pressed in any
+  non-password prompt.
+- Added a global `returnToMainMenu` option (`'off' | 'hidden' | 'visible'`) for
+  `select` and `checkbox` prompts. When enabled, pressing `0` throws a
+  `ReturnToMainMenuError` so the application can navigate back to its main menu.
+  The displayed label is configurable via `returnToMainMenuLabel`.
+
 ## [2.0.6] - 2026-01-06
 
 - Add enhanced multi-selection for checkbox prompts with CTRL-A and SHIFT+arrow keys

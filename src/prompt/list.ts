@@ -1,9 +1,10 @@
-import { InterruptedError } from '$errors';
+import { InterruptedError, ReturnToMainMenuError } from '$errors';
 import { Fmt } from '$fmt';
 import { renderList } from '$io';
 import * as List from '$list';
 import type * as Opts from '$opts';
 import type { Choice } from '$types';
+import * as colors from '@std/fmt/colors';
 import { Prompt } from './base.ts';
 
 export class ListPrompt extends Prompt<unknown> {
@@ -13,7 +14,7 @@ export class ListPrompt extends Prompt<unknown> {
   private disabledFormatter?: (message: string, selected: boolean) => string;
   private multiple?: boolean;
   private useNumbers?: boolean;
-  private columns?: number;
+  private columns: number;
   private selectedPrefix: string;
   private unselectedPrefix: string;
 
@@ -276,6 +277,10 @@ export class ListPrompt extends Prompt<unknown> {
     await this.output.write(this.getPrompt());
     await this.output.newLine(2);
 
+    const footer = this.returnToMainMenu === 'visible'
+      ? colors.gray(`0. ${this.returnToMainMenuLabel}`)
+      : undefined;
+
     // Hide cursor
     await this.output.hideCursor();
 
@@ -293,6 +298,7 @@ export class ListPrompt extends Prompt<unknown> {
           columns: this.columns,
           indent: this.indent,
           useNumbers: this.useNumbers,
+          footer,
 
           onEnter: this.enter.bind(this),
           onSpace: this.select.bind(this),
@@ -306,12 +312,23 @@ export class ListPrompt extends Prompt<unknown> {
           onShiftDown: this.shiftDown.bind(this),
           onShiftLeft: this.shiftLeft.bind(this),
           onShiftRight: this.shiftRight.bind(this),
+          onZero: this.returnToMainMenu !== 'off'
+            ? () => {
+              throw new ReturnToMainMenuError();
+            }
+            : undefined,
+          onCtrlR: this.onCtrlR,
         });
       }
       await this.cleanup(_rows + 1);
     } catch (err) {
       if (err instanceof InterruptedError) {
         return undefined;
+      }
+      if (err instanceof ReturnToMainMenuError) {
+        const rows = Math.ceil(this._items.length / this.columns) + (footer ? 1 : 0);
+        await this.cleanup(rows + 1);
+        throw err;
       }
       throw err;
     } finally {

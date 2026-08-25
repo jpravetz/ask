@@ -5,6 +5,7 @@ export type { ConfirmOpts as Confirm } from './confirm.ts';
 export type { EditorOpts as Editor } from './editor.ts';
 export type { InlineCheckboxOpts as InlineCheckbox } from './inlineCheckbox.ts';
 export type { GlobalPromptOpts as GlobalPrompt } from './global.ts';
+export type { ReturnToMainMenuOpt } from './global.ts';
 export type { InputOpts as Input } from './input.ts';
 export type { ListOpts as List } from './list.ts';
 export type { NumberOpts as Number } from './number.ts';

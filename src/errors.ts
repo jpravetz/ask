@@ -30,4 +30,12 @@ export class UserAbortedError extends Error {
   }
 }
 
+export class ReturnToMainMenuError extends Error {
+  silent = false;
+  constructor(message?: string) {
+    super(message ?? 'User requested to return to the main menu.');
+    this.name = 'ReturnToMainMenuError';
+  }
+}
+
 export { EndOfFileError as EndOfFile, InterruptedError as Interrupted };

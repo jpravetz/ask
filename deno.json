@@ -1,6 +1,6 @@
 {
   "name": "@jpravetz/ask",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "exports": {
     ".": "./src/mod.ts"
   },

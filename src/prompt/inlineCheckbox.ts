@@ -142,6 +142,12 @@ export class InlineCheckboxPrompt<T extends Opts.InlineCheckbox> extends Prompt<
             case '\u001b': // ESC
               throw new InterruptedError();
 
+            case '\u0012': // CTRL-R
+              if (this.onCtrlR) {
+                await this.onCtrlR();
+              }
+              break;
+
             case '\u0003': // ETX
               if (ctrlCPressed) {
                 clearTimeout(timer);

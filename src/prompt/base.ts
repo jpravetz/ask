@@ -30,6 +30,8 @@ export class Prompt<T> {
   ) => void | Promise<void>;
   protected preNewLine: number;
   protected onCtrlR?: () => boolean | void | Promise<boolean | void>;
+  protected returnToMainMenu: Opts.ReturnToMainMenuOpt;
+  protected returnToMainMenuLabel: string;
 
   constructor(opts: Opts.Prompt<T>) {
     this.name = opts.name;
@@ -51,6 +53,8 @@ export class Prompt<T> {
     this.onExceededAttempts = opts.onExceededAttempts ?? onExceededAttempts;
     this.preNewLine = opts.preNewLine ?? 1;
     this.onCtrlR = opts.onCtrlR;
+    this.returnToMainMenu = opts.returnToMainMenu ?? 'off';
+    this.returnToMainMenuLabel = opts.returnToMainMenuLabel ?? 'Return to Main Menu';
 
     if (this.onCtrlR && (this.prefix === '' || this.prefix === null)) {
       this.prefix = ' ';

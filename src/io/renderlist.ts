@@ -18,6 +18,9 @@ export async function renderList({
   onShiftDown,
   onShiftLeft,
   onShiftRight,
+  onZero,
+  onCtrlR,
+  footer,
   columns = 1,
   indent = '',
   useNumbers = false,
@@ -29,6 +32,7 @@ export async function renderList({
   const columnWidth = longestItem + 4; // 4 spaces for padding
 
   const rows = Math.ceil(items.length / columns);
+  const totalRows = rows + (footer ? 1 : 0);
 
   for (let i = 0; i < rows; i++) {
     let rowStr = '';
@@ -43,6 +47,10 @@ export async function renderList({
       }
     }
     await output.write(indent + rowStr + '\n');
+  }
+
+  if (footer) {
+    await output.write(indent + footer + '\n');
   }
 
   const data = new Uint8Array(6); // Increased buffer size for multi-byte sequences
@@ -64,6 +72,12 @@ export async function renderList({
       throw new EndOfFileError();
     case '\u001b': // ESC
       throw new InterruptedError();
+
+    case '\u0012': // CTRL-R
+      if (onCtrlR) {
+        await onCtrlR();
+      }
+      break;
 
     case '\u0003': // ETX
       if (ctrlCPressed) {
@@ -132,6 +146,12 @@ export async function renderList({
       onRight();
       break;
 
+    case '0':
+      if (onZero) {
+        onZero();
+      }
+      break;
+
     case '1':
     case '2':
     case '3':
@@ -150,11 +170,11 @@ export async function renderList({
 
   // clear list to rerender it
   if (!isFinished) {
-    for (let i = 0; i < rows; i++) {
+    for (let i = 0; i < totalRows; i++) {
       // go to beginning of line
       await output.deleteLine();
     }
   }
 
-  return rows;
+  return totalRows;
 }
