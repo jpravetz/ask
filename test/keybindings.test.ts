@@ -69,6 +69,23 @@ Deno.test('keyBindings resolve a select prompt with the bound value', async () =
   assertEquals(result, { action: 'reload' });
 });
 
+Deno.test('keyBindings can bind arrow keys', async () => {
+  const ask = new Ask({
+    input: new KeypressInput([0x1b, 0x5b, 0x44]), // LEFT arrow
+    output: new DiscardOutput(),
+    keyBindings: [{ key: 'left', value: 'go-left' }],
+  });
+
+  const result = await ask.select({
+    name: 'action',
+    message: 'Choose an operation',
+    choices: CHOICES,
+    useNumbers: true,
+  } as const);
+
+  assertEquals(result, { action: 'go-left' });
+});
+
 Deno.test('keyBindings can be overridden per prompt', async () => {
   const ask = new Ask({
     input: new KeypressInput([0x12]), // CTRL-R

@@ -33,8 +33,10 @@ export type NumberType = 'integer' | 'float';
  */
 export type KeyBinding = {
   /**
-   * The single character of the binding. For `ctrl` this should be a lowercase
-   * letter (e.g. `'r'` for Ctrl-R). For `alt` it should be a single character.
+   * The key of the binding. For `ctrl` this should be a lowercase letter
+   * (e.g. `'r'` for Ctrl-R). For `alt` it should be a single character.
+   * May also be a named arrow key: `'up'`, `'down'`, `'left'`, or `'right'`.
+   * Named arrow keys do not use a modifier.
    */
   key: string;
 

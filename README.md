@@ -341,6 +341,8 @@ with no custom key-press handling required.
     binding can override default behavior.
 -   **Modifiers**: `ctrl` (default) and `alt`. For `ctrl`, the key is a letter
     (e.g. `'r'` for Ctrl-R). For `alt`, the key is a single character.
+-   **Arrow keys**: `key` may also be `'up'`, `'down'`, `'left'`, or `'right'`
+    to bind an arrow key. No modifier is used for these.
 -   **Scope**: Applies to `select` and `checkbox` prompts. Other prompt types
     are unaffected.
 -   **Override**: Per-prompt `keyBindings` replace the global bindings for that
@@ -358,6 +360,25 @@ const { action } = await ask.select({
   choices: [
     { message: 'View', value: 'view' },
     { message: 'Reload', value: 'reload' },
+  ],
+});
+```
+
+Arrow keys are bound the same way, without a modifier. The binding overrides
+the default arrow-key navigation:
+
+```ts
+const ask = new Ask.Main({
+  keyBindings: [{ key: 'left', value: 'back' }],
+});
+
+// Pressing the left arrow key resolves `action` with the value "back".
+const { action } = await ask.select({
+  name: 'action',
+  message: 'Choose an operation',
+  choices: [
+    { message: 'View', value: 'view' },
+    { message: 'Back', value: 'back' },
   ],
 });
 ```

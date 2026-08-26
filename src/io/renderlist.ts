@@ -4,6 +4,16 @@ import type { KeyBinding } from '$types';
 import type * as IO from './types.ts';
 
 /**
+ * The escape sequence emitted by a terminal for each named arrow key.
+ */
+const NAMED_KEYS: Record<string, string> = {
+  up: '\u001b[A',
+  down: '\u001b[B',
+  right: '\u001b[C',
+  left: '\u001b[D',
+};
+
+/**
  * Matches a decoded keypress against the configured key bindings. Returns the
  * first binding whose key combination matches, or `undefined` if none match.
  */
@@ -16,6 +26,13 @@ function matchKeyBinding(
   }
   for (const kb of keyBindings) {
     if (!kb.key) {
+      continue;
+    }
+    const named = NAMED_KEYS[kb.key];
+    if (named) {
+      if (str === named) {
+        return kb;
+      }
       continue;
     }
     if (kb.modifier === 'alt') {
