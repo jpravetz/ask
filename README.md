@@ -92,8 +92,8 @@ All prompts share some common interactive behaviors:
 -   **Enter**: Submits the input or confirms a selection.
 -   **ESC**: Aborts the current prompt, causing the prompt method to return `undefined`.
 -   **CTRL-D**: Triggers the global exit confirmation.
--   **CTRL-R**: Triggers the global `onCtrlR` callback, displaying a yellow timer symbol ⏱ during execution. In text prompts (`input`, `number`, `confirm`) the prompt prefix is replaced by ⏱, which then changes to a green or red circle based on the callback's return value. In list prompts (`select`, `checkbox`, `inlineCheckbox`) the callback is invoked directly.
 -   **0**: In `select` and `checkbox` prompts, when the `returnToMainMenu` option is enabled, pressing `0` throws a `ReturnToMainMenuError`. See [Return to Main Menu](#return-to-main-menu).
+-   **Key bindings**: Configured `ctrl`/`alt` key combinations resolve `select` and `checkbox` prompts with the binding's value, exactly as if the matching choice had been selected. See [Key Bindings (Global)](#key-bindings-global).
 
 ### `input` Prompt
 
@@ -324,26 +324,37 @@ const { bio } = await ask.editor({
 
 The `Ask` instance can be configured with global preferences that affect all prompts. These include visual settings like `prefix`, `suffix`, `indent`, and `preNewLine`, as well as handlers for special key presses.
 
-### `onCtrlR` Callback (Global)
+### `Key Bindings` (Global)
 
-The `onCtrlR` callback is a global preference that is triggered when the user presses `CTRL-R` during any prompt (except password prompts). This is useful for implementing a "reload data" functionality in your application.
+Key bindings let you map key combinations (e.g. `CTRL-R`) to a value. When the
+key is pressed in a `select` or `checkbox` prompt, the prompt resolves with that
+value exactly as if the user had selected a matching choice. This makes bound
+actions flow through the normal prompt result handling of your application,
+with no custom key-press handling required.
 
--   **Behavior**: When `CTRL-R` is pressed, the prompt's prefix (e.g., `?`) is replaced by a static, gold-colored stopwatch symbol (`⏱`) while your callback executes.
--   **Return Value Feedback**:
-    *   If your `onCtrlR` callback returns `true` (or a `Promise<true>`), the stopwatch will be replaced by a green closed circle (`●`).
-    *   If it returns `false` (or a `Promise<false>`), it will be replaced by a red closed circle (`●`).
-    *   If it returns `void` (or a `Promise<void>`), the prompt will revert to its original prefix.
--   **List Prompts**: The stopwatch/circle indicators are only rendered in text prompts (`input`, `number`, `confirm`). In list prompts (`select`, `checkbox`, `inlineCheckbox`) the callback is invoked directly when `CTRL-R` is pressed, and the list is re-rendered afterwards.
--   **Developer Action**: Implement the `onCtrlR` function in the `Ask` constructor to perform any necessary data reloading or state updates.
+-   **Behavior**: The binding's `value` is returned as the prompt's answer when
+    the key is pressed. Key bindings are matched before built-in keys, so a
+    binding can override default behavior.
+-   **Modifiers**: `ctrl` (default) and `alt`. For `ctrl`, the key is a letter
+    (e.g. `'r'` for Ctrl-R). For `alt`, the key is a single character.
+-   **Scope**: Applies to `select` and `checkbox` prompts. Other prompt types
+    are unaffected.
+-   **Override**: Per-prompt `keyBindings` replace the global bindings for that
+    prompt.
 
 ```ts
 const ask = new Ask.Main({
-  onCtrlR: async () => {
-    console.log("\nReloading data...");
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate async work
-    console.log("\nData reloaded!");
-    return true; // Indicate success
-  },
+  keyBindings: [{ key: 'r', modifier: 'ctrl', value: 'reload' }],
+});
+
+// Pressing Ctrl-R resolves `action` with the value "reload".
+const { action } = await ask.select({
+  name: 'action',
+  message: 'Choose an operation',
+  choices: [
+    { message: 'View', value: 'view' },
+    { message: 'Reload', value: 'reload' },
+  ],
 });
 ```
 

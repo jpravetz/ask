@@ -39,7 +39,6 @@ export class TextPrompt<T = string> extends Prompt<T> {
       mask: this.mask,
       hidden: this.hidden,
       defaultValue: typeof this.default === 'undefined' ? undefined : String(this.default),
-      onCtrlR: this.onCtrlR,
       getPrompt: () => this.getPrompt(),
     });
 

@@ -40,7 +40,7 @@ This clear-and-redraw cycle happens so quickly for each key press that it appear
 
 Beyond the standard prompt loops, the library has special rendering cases for global key presses.
 
--   **`CTRL-R` Waiting Indicator:** When a global `onCtrlR` handler is defined, pressing `CTRL-R` triggers a special rendering state (this does not apply to hidden/password prompts). The prompt's prefix (e.g., `?`) is replaced by a static, gold-colored stopwatch symbol (`⏱`) to indicate that an operation is in progress. The application then `await`s the `onCtrlR` function. Once the function completes, the prompt is redrawn a final time, replacing the stopwatch with a success (`●` green) or failure (`●` red) indicator.
+-   **`Key Bindings`:** A global (or per-prompt) `keyBindings` option maps key combinations such as `CTRL-R` to a value. When a bound key is pressed in a `select` or `checkbox` prompt, the prompt resolves with the binding's value exactly as if the matching choice had been selected. The normal list cleanup and final prompt redraw take place, so no special inline rendering is required.
 
 ### Challenges with Raw Mode Echoing (The `Uint8Array` Problem):
 

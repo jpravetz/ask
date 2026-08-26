@@ -1,7 +1,6 @@
 import { EndOfFileError, InterruptedError } from '$errors';
 import { Fmt } from '$fmt';
 import * as Terminal from '@epdoc/terminal';
-import * as colors from '@std/fmt/colors';
 import type * as IO from './types.ts';
 
 const REG = {
@@ -20,7 +19,6 @@ export async function readLine(
     hidden,
     mask,
     defaultValue,
-    onCtrlR,
     getPrompt,
   }: IO.ReadlineOpts,
 ): Promise<string | undefined> {
@@ -85,53 +83,6 @@ export async function readLine(
 
         case '\u0004': // EOT - ctrl+d
           throw new EndOfFileError();
-
-        case '\u0012': { // Ctrl+R
-          if (!hidden) {
-            if (onCtrlR && getPrompt) {
-              const fullPromptLine = getPrompt();
-              const prefixIndex = fullPromptLine.search(/\S/);
-
-              if (prefixIndex !== -1) {
-                const frame = Fmt.question(colors.yellow('⏱'));
-                const spaceAfterPrefixIndex = fullPromptLine.indexOf(' ', prefixIndex);
-                const indentPart = fullPromptLine.substring(0, prefixIndex);
-                const messagePart = fullPromptLine.substring(spaceAfterPrefixIndex);
-                const newPrompt = indentPart + frame + messagePart;
-
-                await output.hideCursor();
-                await output.gotoBeginningOfLine();
-                await output.write(newPrompt + Fmt.edit(inputStr));
-                await output.write('\x1b[K');
-
-                let result: boolean | void | undefined = undefined;
-                try {
-                  result = await onCtrlR();
-                } finally {
-                  await output.showCursor();
-                  let finalPrompt;
-                  if (result === true) {
-                    const finalPrefix = colors.green('●');
-                    finalPrompt = indentPart + finalPrefix + messagePart;
-                  } else if (result === false) {
-                    const finalPrefix = colors.red('●');
-                    finalPrompt = indentPart + finalPrefix + messagePart;
-                  } else {
-                    finalPrompt = fullPromptLine;
-                  }
-                  await output.gotoBeginningOfLine();
-                  await output.write(finalPrompt + Fmt.edit(inputStr));
-                  await output.write('\x1b[K');
-                }
-              } else {
-                await onCtrlR();
-              }
-            } else if (onCtrlR) {
-              await onCtrlR();
-            }
-          }
-          break;
-        }
 
         case '\u0003': // ETX
           if (ctrlCPressed) {

@@ -40,7 +40,7 @@ async function runTest() {
     escKey: testEscKey,
     ctrlD: testCtrlD,
     ctrlR: testCtrlR,
-    ctrlRList: testCtrlRList,
+    ctrlROverride: testCtrlROverride,
     returnToMainMenu: testReturnToMainMenu,
     wordNavigation: testWordNavigation,
   };
@@ -377,135 +377,58 @@ async function testCtrlD(): Promise<boolean> {
 }
 
 async function testCtrlR(): Promise<boolean> {
-  console.log('\n--- Testing Ctrl-R Key ---');
-
-  // Test case 1: onCtrlR returns true
-  const askSuccess = new Ask.Main({
-    onCtrlR: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      return true;
-    },
-  });
-  const result1 = await askSuccess.prompt([
-    {
-      name: 'test1',
-      type: 'input',
-      message: 'Press Ctrl-R. You should see a spinner and then a green circle.',
-    },
-  ]);
-  if (result1 === undefined) {
-    throw new InterruptedError();
-  }
-  const confirm1 = await ask.prompt([
-    {
-      name: 'success',
-      type: 'confirm',
-      message: 'Did you see the green circle?',
-    },
-  ]);
-  if (confirm1 === undefined) {
-    throw new InterruptedError();
-  }
-  if (confirm1.success !== true) return false;
-
-  // Test case 2: onCtrlR returns false
-  const askFail = new Ask.Main({
-    onCtrlR: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      return false;
-    },
-  });
-  const result2 = await askFail.prompt([
-    {
-      name: 'test2',
-      type: 'input',
-      message: 'Press Ctrl-R. You should see a spinner and then a red circle.',
-    },
-  ]);
-  if (result2 === undefined) {
-    throw new InterruptedError();
-  }
-  const confirm2 = await ask.prompt([
-    {
-      name: 'success',
-      type: 'confirm',
-      message: 'Did you see the red circle?',
-    },
-  ]);
-  if (confirm2 === undefined) {
-    throw new InterruptedError();
-  }
-  if (confirm2.success !== true) return false;
-
-  // Test case 3: onCtrlR returns void
-  const askVoid = new Ask.Main({
-    onCtrlR: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    },
-  });
-  const result3 = await askVoid.prompt([
-    {
-      name: 'test3',
-      type: 'input',
-      message: 'Press Ctrl-R. The spinner should revert to the original prompt prefix.',
-    },
-  ]);
-  if (result3 === undefined) {
-    throw new InterruptedError();
-  }
-  const confirm3 = await ask.prompt([
-    {
-      name: 'success',
-      type: 'confirm',
-      message: 'Did the prompt prefix revert correctly?',
-    },
-  ]);
-  if (confirm3 === undefined) {
-    throw new InterruptedError();
-  }
-  return confirm3.success === true;
-}
-
-async function testCtrlRList(): Promise<boolean> {
-  console.log('\n--- Testing Ctrl-R in List Prompts ---');
+  console.log('\n--- Testing Ctrl-R Key Binding (global) ---');
 
   const askReload = new Ask.Main({
-    onCtrlR: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return true;
-    },
+    keyBindings: [{ key: 'r', modifier: 'ctrl', value: 'reload' }],
   });
-  const choices: Ask.List.Item[] = [
-    new Ask.List.Item({ message: 'Red', value: 'red' } as Ask.List.ItemOpts),
-    new Ask.List.Item({ message: 'Green', value: 'green' } as Ask.List.ItemOpts),
-    new Ask.List.Item({ message: 'Blue', value: 'blue' } as Ask.List.ItemOpts),
-  ];
   const result = await askReload.prompt([
     {
-      name: 'color',
+      name: 'action',
       type: 'select',
-      message: 'Press Ctrl-R, then select Green with the down arrow and press enter.',
-      choices: choices,
+      message: 'Press Ctrl-R. The prompt should resolve with the value "reload".',
+      choices: [
+        { message: 'View', value: 'view' },
+        { message: 'Edit', value: 'edit' },
+      ],
+      useNumbers: true,
     },
   ]);
   if (result === undefined) {
     throw new InterruptedError();
   }
-  if (result.color !== 'green') {
-    return log.failed('Ctrl-R in list prompt');
+  if (result.action !== 'reload') {
+    return log.failed('Ctrl-R key binding (global)');
   }
-  const confirm = await ask.prompt([
+  return log.passed('Ctrl-R key binding (global)');
+}
+
+async function testCtrlROverride(): Promise<boolean> {
+  console.log('\n--- Testing Ctrl-R Key Binding (per-prompt override) ---');
+
+  const askReload = new Ask.Main({
+    keyBindings: [{ key: 'r', modifier: 'ctrl', value: 'global' }],
+  });
+  const result = await askReload.prompt([
     {
-      name: 'success',
-      type: 'confirm',
-      message: 'Did Ctrl-R work in the select prompt without issues?',
-      default: true,
+      name: 'action',
+      type: 'select',
+      message: 'Press Ctrl-R. The per-prompt binding should override the global one.',
+      choices: [
+        { message: 'View', value: 'view' },
+        { message: 'Edit', value: 'edit' },
+      ],
+      useNumbers: true,
+      keyBindings: [{ key: 'r', modifier: 'ctrl', value: 'local' }],
     },
   ]);
-  if (confirm === undefined) {
+  if (result === undefined) {
     throw new InterruptedError();
   }
-  return confirm.success === true;
+  if (result.action !== 'local') {
+    return log.failed('Ctrl-R key binding (per-prompt override)');
+  }
+  return log.passed('Ctrl-R key binding (per-prompt override)');
 }
 
 async function testReturnToMainMenu(): Promise<boolean> {

@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-- Extended the global `onCtrlR` callback to list prompts (`select`, `checkbox`,
-  `inlineCheckbox`). The callback is now invoked when `CTRL-R` is pressed in any
-  non-password prompt.
+- **BREAKING**: Removed the global `onCtrlR` callback. Use the new `keyBindings`
+  global option instead, which maps a key combination to a value that resolves
+  `select` and `checkbox` prompts exactly as if the matching choice had been
+  selected. Bindings can be overridden per prompt.
 - Added a global `returnToMainMenu` option (`'off' | 'hidden' | 'visible'`) for
   `select` and `checkbox` prompts. When enabled, pressing `0` throws a
   `ReturnToMainMenuError` so the application can navigate back to its main menu.

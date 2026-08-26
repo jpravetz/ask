@@ -3,7 +3,7 @@ import { Fmt } from '$fmt';
 import { renderList } from '$io';
 import * as List from '$list';
 import type * as Opts from '$opts';
-import type { Choice } from '$types';
+import type { Choice, KeyBinding } from '$types';
 import * as colors from '@std/fmt/colors';
 import { Prompt } from './base.ts';
 
@@ -17,11 +17,13 @@ export class ListPrompt extends Prompt<unknown> {
   private columns: number;
   private selectedPrefix: string;
   private unselectedPrefix: string;
+  private keyBindings: KeyBinding[];
 
   private _active: number = 0;
   private _items: List.Item[];
   private _running: boolean = true;
   private _originalMessage: string;
+  private _keyBindingValue: unknown = undefined;
 
   constructor(opts: Opts.List) {
     super(opts);
@@ -34,6 +36,7 @@ export class ListPrompt extends Prompt<unknown> {
     this.columns = opts.columns ?? 1;
     this.selectedPrefix = opts.selectedPrefix ?? '';
     this.unselectedPrefix = opts.unselectedPrefix ?? '';
+    this.keyBindings = opts.keyBindings ?? [];
     this._originalMessage = this.message;
 
     if (this.default) {
@@ -182,6 +185,11 @@ export class ListPrompt extends Prompt<unknown> {
     this._running = false;
   }
 
+  private keyBinding(value: unknown) {
+    this._keyBindingValue = value;
+    this.finish();
+  }
+
   private select() {
     if (!this.multiple) {
       return;
@@ -317,7 +325,8 @@ export class ListPrompt extends Prompt<unknown> {
               throw new ReturnToMainMenuError();
             }
             : undefined,
-          onCtrlR: this.onCtrlR,
+          keyBindings: this.keyBindings,
+          onKeyBinding: this.keyBinding.bind(this),
         });
       }
       await this.cleanup(_rows + 1);
@@ -340,6 +349,12 @@ export class ListPrompt extends Prompt<unknown> {
     }
 
     const selectedItems = this._items.filter((item) => item.selected);
+
+    if (this._keyBindingValue !== undefined) {
+      await this.output.write(this.getPrompt(true));
+      await this.output.newLine();
+      return [this._keyBindingValue];
+    }
 
     let finalPrompt = this.getPrompt(true);
 

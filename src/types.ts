@@ -27,6 +27,29 @@ export type Choice = {
 export type NumberType = 'integer' | 'float';
 
 /**
+ * A key combination that, when pressed in a list prompt, resolves the prompt
+ * with the configured `value` as if the user had selected a matching choice.
+ * Key bindings are matched before built-in keys, so they can override defaults.
+ */
+export type KeyBinding = {
+  /**
+   * The single character of the binding. For `ctrl` this should be a lowercase
+   * letter (e.g. `'r'` for Ctrl-R). For `alt` it should be a single character.
+   */
+  key: string;
+
+  /**
+   * The modifier key. Defaults to `'ctrl'`.
+   */
+  modifier?: 'ctrl' | 'alt';
+
+  /**
+   * The value the prompt resolves to when the binding is activated.
+   */
+  value?: unknown;
+};
+
+/**
  * The result of a prompt.
  */
 export type Result<O extends Opts.Prompt<T>, T> = {

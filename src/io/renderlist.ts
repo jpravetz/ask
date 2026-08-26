@@ -1,6 +1,37 @@
 import { EndOfFileError, InterruptedError } from '$errors';
 import { stripAnsiCodes } from '$io';
+import type { KeyBinding } from '$types';
 import type * as IO from './types.ts';
+
+/**
+ * Matches a decoded keypress against the configured key bindings. Returns the
+ * first binding whose key combination matches, or `undefined` if none match.
+ */
+function matchKeyBinding(
+  keyBindings: KeyBinding[] | undefined,
+  str: string,
+): KeyBinding | undefined {
+  if (!keyBindings || str.length === 0) {
+    return undefined;
+  }
+  for (const kb of keyBindings) {
+    if (!kb.key) {
+      continue;
+    }
+    if (kb.modifier === 'alt') {
+      if (str === `\u001b${kb.key}` || str === `\u001b${kb.key.toUpperCase()}`) {
+        return kb;
+      }
+    } else {
+      // ctrl
+      const code = kb.key.toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0) + 1;
+      if (code >= 1 && code <= 26 && str === String.fromCharCode(code)) {
+        return kb;
+      }
+    }
+  }
+  return undefined;
+}
 
 export async function renderList({
   input,
@@ -19,7 +50,8 @@ export async function renderList({
   onShiftLeft,
   onShiftRight,
   onZero,
-  onCtrlR,
+  keyBindings,
+  onKeyBinding,
   footer,
   columns = 1,
   indent = '',
@@ -67,105 +99,105 @@ export async function renderList({
   const str = new TextDecoder().decode(bytes);
   let isFinished = false;
 
-  switch (str) {
-    case '\u0004': // EOT
-      throw new EndOfFileError();
-    case '\u001b': // ESC
-      throw new InterruptedError();
+  const binding = matchKeyBinding(keyBindings, str);
+  if (binding && binding.value !== undefined) {
+    onKeyBinding?.(binding.value);
+    isFinished = true;
+  } else {
+    switch (str) {
+      case '\u0004': // EOT
+        throw new EndOfFileError();
+      case '\u001b': // ESC
+        throw new InterruptedError();
 
-    case '\u0012': // CTRL-R
-      if (onCtrlR) {
-        await onCtrlR();
-      }
-      break;
+      case '\u0003': // ETX
+        if (ctrlCPressed) {
+          clearTimeout(timer);
+          throw new EndOfFileError('Terminated by user');
+        }
+        ctrlCPressed = true;
+        timer = setTimeout(() => (ctrlCPressed = false), 400);
+        break;
 
-    case '\u0003': // ETX
-      if (ctrlCPressed) {
-        clearTimeout(timer);
-        throw new EndOfFileError('Terminated by user');
-      }
-      ctrlCPressed = true;
-      timer = setTimeout(() => (ctrlCPressed = false), 400);
-      break;
+      case '\u0001': // CTRL-A
+        if (onSelectAll) {
+          onSelectAll();
+        }
+        break;
 
-    case '\u0001': // CTRL-A
-      if (onSelectAll) {
-        onSelectAll();
-      }
-      break;
-
-    case '\r': // CR
-    case '\n': // LF
-      onEnter();
-      isFinished = true;
-      break;
-
-    case '\u0020': // SPACE
-      if (onSpace) {
-        onSpace();
-      }
-      break;
-
-    case '\u001b[A': // UP
-      onUp();
-      break;
-
-    case '\u001b[B': // DOWN
-      onDown();
-      break;
-
-    case '\u001b[1;2A': // SHIFT+UP
-      if (onShiftUp) {
-        onShiftUp();
-      }
-      break;
-
-    case '\u001b[1;2B': // SHIFT+DOWN
-      if (onShiftDown) {
-        onShiftDown();
-      }
-      break;
-
-    case '\u001b[1;2D': // SHIFT+LEFT
-      if (onShiftLeft) {
-        onShiftLeft();
-      }
-      break;
-
-    case '\u001b[1;2C': // SHIFT+RIGHT
-      if (onShiftRight) {
-        onShiftRight();
-      }
-      break;
-
-    case '\u001b[D': // left
-      onLeft();
-      break;
-
-    case '\u001b[C': // right
-      onRight();
-      break;
-
-    case '0':
-      if (onZero) {
-        onZero();
-      }
-      break;
-
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-      if (onNumber && useNumbers) {
-        onNumber(parseInt(str, 10));
+      case '\r': // CR
+      case '\n': // LF
+        onEnter();
         isFinished = true;
-      }
-      break;
+        break;
+
+      case '\u0020': // SPACE
+        if (onSpace) {
+          onSpace();
+        }
+        break;
+
+      case '\u001b[A': // UP
+        onUp();
+        break;
+
+      case '\u001b[B': // DOWN
+        onDown();
+        break;
+
+      case '\u001b[1;2A': // SHIFT+UP
+        if (onShiftUp) {
+          onShiftUp();
+        }
+        break;
+
+      case '\u001b[1;2B': // SHIFT+DOWN
+        if (onShiftDown) {
+          onShiftDown();
+        }
+        break;
+
+      case '\u001b[1;2D': // SHIFT+LEFT
+        if (onShiftLeft) {
+          onShiftLeft();
+        }
+        break;
+
+      case '\u001b[1;2C': // SHIFT+RIGHT
+        if (onShiftRight) {
+          onShiftRight();
+        }
+        break;
+
+      case '\u001b[D': // left
+        onLeft();
+        break;
+
+      case '\u001b[C': // right
+        onRight();
+        break;
+
+      case '0':
+        if (onZero) {
+          onZero();
+        }
+        break;
+
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        if (onNumber && useNumbers) {
+          onNumber(parseInt(str, 10));
+          isFinished = true;
+        }
+        break;
+    }
   }
 
   // clear list to rerender it

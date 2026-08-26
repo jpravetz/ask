@@ -1,4 +1,5 @@
 import type * as List from '$list';
+import type { KeyBinding } from '$types';
 import type * as StdIo from '@std/io';
 import type { Writer } from './writer.ts';
 
@@ -45,8 +46,10 @@ export type RenderListOpts = {
   onShiftRight?: () => void;
   /** If true, number keypresses will be handled. */
   useNumbers?: boolean;
-  /** Callback executed when Ctrl-R is pressed. */
-  onCtrlR?: () => boolean | void | Promise<boolean | void>;
+  /** Key combinations that resolve the prompt with their configured value. */
+  keyBindings?: KeyBinding[];
+  /** Callback executed when a configured key binding is matched. */
+  onKeyBinding?: (value: unknown) => void;
   /** An optional footer line rendered below the list items. */
   footer?: string;
 };
@@ -65,12 +68,6 @@ export type ReadlineOpts = {
   mask?: string;
   /** A default value to pre-populate the input line with. */
   defaultValue?: string;
-  /**
-   * Callback function which is called when Ctrl-R is pressed. If it returns a
-   * boolean, the spinner will change to a green or red circle to indicate
-   * success or failure.
-   */
-  onCtrlR?: () => boolean | void | Promise<boolean | void>;
   /**
    * A function that returns the prompt string. This is used to redraw the
    * prompt when needed.

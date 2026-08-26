@@ -1,4 +1,5 @@
 import type { Closer, Reader, ReaderSync, Writer, WriterSync } from '@std/io';
+import type { KeyBinding } from '$types';
 
 /**
  * The visibility of the 'Return to Main Menu' menu item in list prompts.
@@ -46,12 +47,14 @@ export type GlobalPromptOpts = {
    * The number of blank lines to display before the prompt. Defaults to 1.
    */
   preNewLine?: number;
+
   /**
-   * Callback function which is called when Ctrl-R is pressed. If it returns a
-   * boolean, the spinner will change to a green or red circle to indicate
-   * success or failure.
+   * Key combinations that, when pressed in a list prompt (`select` and
+   * `checkbox`), resolve the prompt with the binding's `value` as if the user
+   * had selected a matching choice. Bindings can be overridden per prompt by
+   * passing `keyBindings` in the prompt's own options.
    */
-  onCtrlR?: () => boolean | void | Promise<boolean | void>;
+  keyBindings?: KeyBinding[];
 
   /**
    * Controls the 'Return to Main Menu' feature for list prompts (`select` and

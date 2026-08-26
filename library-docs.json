@@ -1838,14 +1838,110 @@
           ]
         },
         {
+          "name": "KeyBinding",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                "line": 33,
+                "col": 0,
+                "byteIndex": 804
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A key combination that, when pressed in a list prompt, resolves the prompt\nwith the configured `value` as if the user had selected a matching choice.\nKey bindings are matched before built-in keys, so they can override defaults."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "typeLiteral",
+                  "value": {
+                    "properties": [
+                      {
+                        "name": "key",
+                        "jsDoc": {
+                          "doc": "The single character of the binding. For `ctrl` this should be a lowercase\nletter (e.g. `'r'` for Ctrl-R). For `alt` it should be a single character."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                          "line": 38,
+                          "col": 2,
+                          "byteIndex": 1005
+                        },
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      },
+                      {
+                        "name": "modifier",
+                        "jsDoc": {
+                          "doc": "The modifier key. Defaults to `'ctrl'`."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                          "line": 43,
+                          "col": 2,
+                          "byteIndex": 1078
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "kind": "union",
+                          "value": [
+                            {
+                              "repr": "ctrl",
+                              "kind": "literal",
+                              "value": {
+                                "kind": "string",
+                                "string": "ctrl"
+                              }
+                            },
+                            {
+                              "repr": "alt",
+                              "kind": "literal",
+                              "value": {
+                                "kind": "string",
+                                "string": "alt"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "value",
+                        "jsDoc": {
+                          "doc": "The value the prompt resolves to when the binding is activated."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
+                          "line": 48,
+                          "col": 2,
+                          "byteIndex": 1189
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "unknown",
+                          "kind": "keyword",
+                          "value": "unknown"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
           "name": "Result",
           "declarations": [
             {
               "location": {
                 "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
-                "line": 31,
+                "line": 54,
                 "col": 0,
-                "byteIndex": 594
+                "byteIndex": 1245
               },
               "declarationKind": "export",
               "jsDoc": {
@@ -1955,9 +2051,9 @@
                       {
                         "location": {
                           "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                          "line": 7,
+                          "line": 8,
                           "col": 0,
-                          "byteIndex": 194
+                          "byteIndex": 236
                         },
                         "declarationKind": "export",
                         "jsDoc": {
@@ -1976,9 +2072,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 9,
+                                    "line": 10,
                                     "col": 2,
-                                    "byteIndex": 305
+                                    "byteIndex": 347
                                   },
                                   "tsType": {
                                     "kind": "intersection",
@@ -2026,9 +2122,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 11,
+                                    "line": 12,
                                     "col": 2,
-                                    "byteIndex": 425
+                                    "byteIndex": 467
                                   },
                                   "tsType": {
                                     "repr": "Writer",
@@ -2050,9 +2146,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 13,
+                                    "line": 14,
                                     "col": 2,
-                                    "byteIndex": 493
+                                    "byteIndex": 535
                                   },
                                   "tsType": {
                                     "kind": "array",
@@ -2076,9 +2172,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 15,
+                                    "line": 16,
                                     "col": 2,
-                                    "byteIndex": 591
+                                    "byteIndex": 633
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2094,9 +2190,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 17,
+                                    "line": 18,
                                     "col": 2,
-                                    "byteIndex": 663
+                                    "byteIndex": 705
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2112,9 +2208,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 20,
+                                    "line": 21,
                                     "col": 2,
-                                    "byteIndex": 743
+                                    "byteIndex": 785
                                   },
                                   "tsType": {
                                     "kind": "fnOrConstructor",
@@ -2136,9 +2232,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 22,
+                                    "line": 23,
                                     "col": 2,
-                                    "byteIndex": 826
+                                    "byteIndex": 868
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2161,9 +2257,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 24,
+                                    "line": 25,
                                     "col": 2,
-                                    "byteIndex": 913
+                                    "byteIndex": 955
                                   },
                                   "tsType": {
                                     "kind": "fnOrConstructor",
@@ -2185,9 +2281,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 26,
+                                    "line": 27,
                                     "col": 2,
-                                    "byteIndex": 998
+                                    "byteIndex": 1040
                                   },
                                   "tsType": {
                                     "kind": "fnOrConstructor",
@@ -2209,9 +2305,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 28,
+                                    "line": 29,
                                     "col": 2,
-                                    "byteIndex": 1085
+                                    "byteIndex": 1127
                                   },
                                   "tsType": {
                                     "kind": "fnOrConstructor",
@@ -2233,9 +2329,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 30,
+                                    "line": 31,
                                     "col": 2,
-                                    "byteIndex": 1173
+                                    "byteIndex": 1215
                                   },
                                   "tsType": {
                                     "kind": "fnOrConstructor",
@@ -2257,9 +2353,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 32,
+                                    "line": 33,
                                     "col": 2,
-                                    "byteIndex": 1259
+                                    "byteIndex": 1301
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2293,9 +2389,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 34,
+                                    "line": 35,
                                     "col": 2,
-                                    "byteIndex": 1349
+                                    "byteIndex": 1391
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2318,9 +2414,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 36,
+                                    "line": 37,
                                     "col": 2,
-                                    "byteIndex": 1423
+                                    "byteIndex": 1465
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2343,9 +2439,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 38,
+                                    "line": 39,
                                     "col": 2,
-                                    "byteIndex": 1504
+                                    "byteIndex": 1546
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2368,9 +2464,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 40,
+                                    "line": 41,
                                     "col": 2,
-                                    "byteIndex": 1585
+                                    "byteIndex": 1627
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2393,9 +2489,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 42,
+                                    "line": 43,
                                     "col": 2,
-                                    "byteIndex": 1668
+                                    "byteIndex": 1710
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2418,9 +2514,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 44,
+                                    "line": 45,
                                     "col": 2,
-                                    "byteIndex": 1752
+                                    "byteIndex": 1794
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2443,9 +2539,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 46,
+                                    "line": 47,
                                     "col": 2,
-                                    "byteIndex": 1834
+                                    "byteIndex": 1876
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2455,15 +2551,43 @@
                                   }
                                 },
                                 {
-                                  "name": "onCtrlR",
+                                  "name": "keyBindings",
                                   "jsDoc": {
-                                    "doc": "Callback executed when Ctrl-R is pressed."
+                                    "doc": "Key combinations that resolve the prompt with their configured value."
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 48,
+                                    "line": 49,
                                     "col": 2,
-                                    "byteIndex": 1909
+                                    "byteIndex": 1979
+                                  },
+                                  "optional": true,
+                                  "tsType": {
+                                    "kind": "array",
+                                    "value": {
+                                      "repr": "KeyBinding",
+                                      "kind": "typeRef",
+                                      "value": {
+                                        "typeName": "KeyBinding",
+                                        "resolution": {
+                                          "kind": "import",
+                                          "specifier": "$types",
+                                          "name": "KeyBinding"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "name": "onKeyBinding",
+                                  "jsDoc": {
+                                    "doc": "Callback executed when a configured key binding is matched."
+                                  },
+                                  "location": {
+                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
+                                    "line": 51,
+                                    "col": 2,
+                                    "byteIndex": 2078
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2471,45 +2595,22 @@
                                     "value": {
                                       "constructor": false,
                                       "tsType": {
-                                        "kind": "union",
-                                        "value": [
-                                          {
-                                            "repr": "boolean",
-                                            "kind": "keyword",
-                                            "value": "boolean"
-                                          },
-                                          {
-                                            "repr": "void",
-                                            "kind": "keyword",
-                                            "value": "void"
-                                          },
-                                          {
-                                            "repr": "Promise",
-                                            "kind": "typeRef",
-                                            "value": {
-                                              "typeParams": [
-                                                {
-                                                  "kind": "union",
-                                                  "value": [
-                                                    {
-                                                      "repr": "boolean",
-                                                      "kind": "keyword",
-                                                      "value": "boolean"
-                                                    },
-                                                    {
-                                                      "repr": "void",
-                                                      "kind": "keyword",
-                                                      "value": "void"
-                                                    }
-                                                  ]
-                                                }
-                                              ],
-                                              "typeName": "Promise"
-                                            }
-                                          }
-                                        ]
+                                        "repr": "void",
+                                        "kind": "keyword",
+                                        "value": "void"
                                       },
-                                      "params": []
+                                      "params": [
+                                        {
+                                          "kind": "identifier",
+                                          "name": "value",
+                                          "optional": false,
+                                          "tsType": {
+                                            "repr": "unknown",
+                                            "kind": "keyword",
+                                            "value": "unknown"
+                                          }
+                                        }
+                                      ]
                                     }
                                   }
                                 },
@@ -2520,9 +2621,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 50,
+                                    "line": 53,
                                     "col": 2,
-                                    "byteIndex": 2033
+                                    "byteIndex": 2185
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2544,9 +2645,9 @@
                       {
                         "location": {
                           "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                          "line": 56,
+                          "line": 59,
                           "col": 0,
-                          "byteIndex": 2126
+                          "byteIndex": 2278
                         },
                         "declarationKind": "export",
                         "jsDoc": {
@@ -2565,9 +2666,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 58,
+                                    "line": 61,
                                     "col": 2,
-                                    "byteIndex": 2229
+                                    "byteIndex": 2381
                                   },
                                   "tsType": {
                                     "kind": "intersection",
@@ -2615,9 +2716,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 60,
+                                    "line": 63,
                                     "col": 2,
-                                    "byteIndex": 2368
+                                    "byteIndex": 2520
                                   },
                                   "tsType": {
                                     "repr": "Writer",
@@ -2639,9 +2740,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 62,
+                                    "line": 65,
                                     "col": 2,
-                                    "byteIndex": 2457
+                                    "byteIndex": 2609
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2657,9 +2758,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 64,
+                                    "line": 67,
                                     "col": 2,
-                                    "byteIndex": 2553
+                                    "byteIndex": 2705
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2675,9 +2776,9 @@
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 66,
+                                    "line": 69,
                                     "col": 2,
-                                    "byteIndex": 2632
+                                    "byteIndex": 2784
                                   },
                                   "optional": true,
                                   "tsType": {
@@ -2687,74 +2788,15 @@
                                   }
                                 },
                                 {
-                                  "name": "onCtrlR",
-                                  "jsDoc": {
-                                    "doc": "Callback function which is called when Ctrl-R is pressed. If it returns a\nboolean, the spinner will change to a green or red circle to indicate\nsuccess or failure."
-                                  },
-                                  "location": {
-                                    "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 72,
-                                    "col": 2,
-                                    "byteIndex": 2848
-                                  },
-                                  "optional": true,
-                                  "tsType": {
-                                    "kind": "fnOrConstructor",
-                                    "value": {
-                                      "constructor": false,
-                                      "tsType": {
-                                        "kind": "union",
-                                        "value": [
-                                          {
-                                            "repr": "boolean",
-                                            "kind": "keyword",
-                                            "value": "boolean"
-                                          },
-                                          {
-                                            "repr": "void",
-                                            "kind": "keyword",
-                                            "value": "void"
-                                          },
-                                          {
-                                            "repr": "Promise",
-                                            "kind": "typeRef",
-                                            "value": {
-                                              "typeParams": [
-                                                {
-                                                  "kind": "union",
-                                                  "value": [
-                                                    {
-                                                      "repr": "boolean",
-                                                      "kind": "keyword",
-                                                      "value": "boolean"
-                                                    },
-                                                    {
-                                                      "repr": "void",
-                                                      "kind": "keyword",
-                                                      "value": "void"
-                                                    }
-                                                  ]
-                                                }
-                                              ],
-                                              "typeName": "Promise"
-                                            }
-                                          }
-                                        ]
-                                      },
-                                      "params": []
-                                    }
-                                  }
-                                },
-                                {
                                   "name": "getPrompt",
                                   "jsDoc": {
                                     "doc": "A function that returns the prompt string. This is used to redraw the\nprompt when needed."
                                   },
                                   "location": {
                                     "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/io/types.ts",
-                                    "line": 77,
+                                    "line": 74,
                                     "col": 2,
-                                    "byteIndex": 3020
+                                    "byteIndex": 2921
                                   },
                                   "optional": true,
                                   "tsType": {
