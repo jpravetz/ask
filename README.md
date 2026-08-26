@@ -198,6 +198,7 @@ const { secret } = await ask.password({
 -   `useNumbers?: boolean`: If `true`, numbers `1-9` are displayed next to the first 9 choices, allowing selection by typing the number. (Default: `false`).
     *   **Note**: While numbers are displayed only for the first 9 choices, the prompt can technically handle selection by number for more items if the user types a multi-digit number.
 -   `columns?: number`: Number of columns to display the choices in (default: `1`).
+-   `keyBindings?: KeyBinding[]`: Key combinations (e.g. `CTRL-R`) that resolve the prompt with the binding's `value`, exactly as if the matching choice had been selected. Replaces the global `keyBindings` for this prompt. See [Key Bindings (Global)](#key-bindings-global).
 -   `activeFormatter?: (message: string, selected: boolean) => string`: Custom formatter for the active (highlighted) choice.
 -   `inactiveFormatter?: (message: string, selected: boolean) => string`: Custom formatter for inactive choices.
 -   `disabledFormatter?: (message: string, selected: boolean) => string`: Custom formatter for disabled choices.
@@ -205,6 +206,7 @@ const { secret } = await ask.password({
 **Behavior**:
 -   **Arrow Keys (`↑`, `↓`, `←`, `→`)**: Navigate through choices.
 -   **Numbers (`1-9`)**: Select a choice by its displayed number (if `useNumbers` is `true`).
+-   **Key Bindings**: Pressing a configured key binding resolves the prompt with the binding's value. See [Key Bindings (Global)](#key-bindings-global).
 -   **Enter**: Confirms the currently active choice.
 
 **Example**:
@@ -238,6 +240,7 @@ const { color } = await ask.select({
 -   `columns?: number`: Number of columns to display the choices in (default: `1`).
 -   `selectedPrefix?: string`: Prefix for selected items (default: `● `).
 -   `unselectedPrefix?: string`: Prefix for unselected items (default: `○ `).
+-   `keyBindings?: KeyBinding[]`: Key combinations (e.g. `CTRL-R`) that resolve the prompt with the binding's `value`, exactly as if the matching choice had been selected. Replaces the global `keyBindings` for this prompt. See [Key Bindings (Global)](#key-bindings-global).
 -   `activeFormatter?`, `inactiveFormatter?`, `disabledFormatter?`: Custom formatters for choices.
 
 **Behavior**:
@@ -247,6 +250,7 @@ const { color } = await ask.select({
 -   **SHIFT-UP/SHIFT-DOWN**: Navigate while propagating the current item's selection state to the destination item.
 -   **SHIFT-LEFT/SHIFT-RIGHT**: Navigate while propagating the current item's selection state to the destination item (for multi-column layouts).
 -   **Numbers (`1-9`)**: Select/deselect a choice by its displayed number (if `useNumbers` is `true`).
+-   **Key Bindings**: Pressing a configured key binding resolves the prompt with the binding's value. See [Key Bindings (Global)](#key-bindings-global).
 -   **Enter**: Confirms all selected choices.
 
 **Example**:
@@ -322,7 +326,7 @@ const { bio } = await ask.editor({
 
 ## Global Preferences and Special Key Behaviors
 
-The `Ask` instance can be configured with global preferences that affect all prompts. These include visual settings like `prefix`, `suffix`, `indent`, and `preNewLine`, as well as handlers for special key presses.
+The `Ask` instance can be configured with global preferences that affect all prompts. These include visual settings like `prefix`, `suffix`, `indent`, and `preNewLine`, as well as key bindings and the `returnToMainMenu` feature.
 
 ### `Key Bindings` (Global)
 
