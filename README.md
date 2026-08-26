@@ -2,7 +2,7 @@
 
 Interactive command-line prompts for Deno.
 
-This module is not maintained for others to use. It is a fork of [@sallai/ask](https://github.com/jozsefsallai/ask) and I suggest you use that repo. See [Changelog](./CHANGELOG.md) for differences.
+This module is not maintained for others to use. It is a fork of [@sallai/ask](https://github.com/jozsefsallai/ask). I do think this module has signficant advantages, so feel free to use it, but I am not committing to long term maintenance.
 
 ![Demo](.github/assets/demo.gif)
 
