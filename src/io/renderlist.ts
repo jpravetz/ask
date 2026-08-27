@@ -40,9 +40,10 @@ function matchKeyBinding(
         return kb;
       }
     } else {
-      // ctrl
-      const code = kb.key.toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0) + 1;
-      if (code >= 1 && code <= 26 && str === String.fromCharCode(code)) {
+      // ctrl: control characters follow the C0 bitmask (char & 0x1f), which
+      // covers letters (Ctrl-R = 0x12) and punctuation (Ctrl-, = 0x0c).
+      const code = kb.key.toLowerCase().charCodeAt(0) & 0x1f;
+      if (str === String.fromCharCode(code)) {
         return kb;
       }
     }
@@ -81,7 +82,8 @@ export async function renderList({
   const columnWidth = longestItem + 4; // 4 spaces for padding
 
   const rows = Math.ceil(items.length / columns);
-  const totalRows = rows + (footer ? 1 : 0);
+  const footerLines = footer ? footer.split('\n').length : 0;
+  const totalRows = rows + footerLines;
 
   for (let i = 0; i < rows; i++) {
     let rowStr = '';

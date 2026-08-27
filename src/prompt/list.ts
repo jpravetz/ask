@@ -18,6 +18,7 @@ export class ListPrompt extends Prompt<unknown> {
   private selectedPrefix: string;
   private unselectedPrefix: string;
   private keyBindings: KeyBinding[];
+  private footer?: string;
 
   private _active: number = 0;
   private _items: List.Item[];
@@ -37,6 +38,7 @@ export class ListPrompt extends Prompt<unknown> {
     this.selectedPrefix = opts.selectedPrefix ?? '';
     this.unselectedPrefix = opts.unselectedPrefix ?? '';
     this.keyBindings = opts.keyBindings ?? [];
+    this.footer = opts.footer;
     this._originalMessage = this.message;
 
     if (this.default) {
@@ -285,9 +287,11 @@ export class ListPrompt extends Prompt<unknown> {
     await this.output.write(this.getPrompt());
     await this.output.newLine(2);
 
-    const footer = this.returnToMainMenu === 'visible'
-      ? colors.gray(`0. ${this.returnToMainMenuLabel}`)
-      : undefined;
+    const footers = [
+      this.returnToMainMenu === 'visible' ? colors.gray(`0. ${this.returnToMainMenuLabel}`) : undefined,
+      this.footer,
+    ].filter((s): s is string => !!s);
+    const footer = footers.length > 0 ? footers.join('   ') : undefined;
 
     // Hide cursor
     await this.output.hideCursor();
@@ -335,7 +339,8 @@ export class ListPrompt extends Prompt<unknown> {
         return undefined;
       }
       if (err instanceof ReturnToMainMenuError) {
-        const rows = Math.ceil(this._items.length / this.columns) + (footer ? 1 : 0);
+        const rows = Math.ceil(this._items.length / this.columns) +
+          (footer ? footer.split('\n').length : 0);
         await this.cleanup(rows + 1);
         throw err;
       }

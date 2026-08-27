@@ -484,6 +484,87 @@ try {
 
 -   **Multi-line Input Display**: The `input` prompt is designed for single-line text input. If the prompt message combined with the user's input exceeds the terminal width, the display may become garbled or show repeating prompt messages due to the terminal's line-wrapping behavior and the current rendering mechanism. For multi-line text input, please use the `editor` prompt.
 
+## Menu Framework
+
+In addition to individual prompts, `ask` ships with a small declarative framework
+for building menu-driven interactive applications. You describe your menus as a
+**tree** of nodes, and a single driver (`Menu.runMenu`) handles rendering,
+navigation, and the back/forward history. This removes the need to hand-wire
+"what should happen next" after every selection.
+
+-   A **node** is a menu: a prompt message plus a list of choices.
+-   A **choice** either opens a submenu (`node: 'id'`) or runs an **action**
+    (`action: 'name'` or an inline function).
+-   Navigation is structural: picking a submenu pushes the current menu onto a
+    history stack; `ESC` / `←` pops back (a no-op at the root); `→` moves
+    forward again. Running an action re-renders the current menu unless the
+    action returns a signal (`BACK`, `FORWARD`, `EXIT`) or a `NodeRef`
+    (`{ node: 'id' }`) to jump to another branch (e.g. after a search shows a
+    result table and should land on a "messages" menu).
+-   Choices and messages can be **functions of a context** object, so menus can
+    be assembled dynamically (conditional choices, computed labels, etc.).
+-   **Universal key bindings** act like hidden menu items available from every
+    menu. Values may be a signal, a `NodeRef`, or a registered action name.
+    Optional `hint` strings render them in a footer below the choices (separated
+    by a blank line). The footer can be turned off with `showKeyBindings: false`
+    or toggled dynamically by passing a function of the context.
+
+```ts
+import { Ask, Menu } from '@jpravetz/ask';
+
+const ask = new Ask.Main({ returnToMainMenu: 'hidden' });
+
+const actions = Menu.createActions({
+  fetch: async (shell) => { console.log('Fetching…'); },
+  exit: () => Menu.EXIT,
+});
+
+const tree: Menu.MenuTree<{}> = {
+  root: {
+    message: 'Main Menu',
+    choices: [
+      { message: 'Fetch New Messages', action: actions.Action.fetch },
+      { message: 'Search ▶', node: 'search' },
+      { message: 'Exit', action: actions.Action.exit },
+    ],
+  },
+  search: {
+    message: 'Search Local Database',
+    choices: [
+      { message: 'By Date', action: () => console.log('date search') },
+      { message: '◀ Back', node: 'root' },
+    ],
+  },
+};
+
+await Menu.runMenu(tree, {
+  ctx: {},
+  ask,
+  actions,
+  keyBindings: [
+    { key: 's', modifier: 'ctrl', value: { node: 'search' }, hint: 'Search' },
+  ],
+});
+```
+
+### Menu Reference
+
+-   `Menu.MenuTree<C>` / `Menu.MenuNode<C>` / `Menu.MenuChoice<C>` — the tree
+    shape. `message`, `choices`, and `disabled` may be functions of the context
+    `C`.
+-   `Menu.MenuAction<C>` — `(ctx) => MenuResult<C> | Promise<MenuResult<C>>`,
+    where `MenuResult<C>` is a signal, a `NodeRef`, or `void` (re-render).
+-   `Menu.createActions<C>(defs)` — builds a type-safe action registry. The
+    returned `Action` constant mirrors the handler names.
+-   `Menu.runMenu(tree, opts)` — runs the session. `opts` take the context
+    `ctx`, the `ask` instance, `actions`, the root node id, universal
+    `keyBindings`, and `showKeyBindings` (a boolean or a function of the
+    context; the hint footer defaults to on when hints exist). `BACK` at the
+    root is a no-op (exit via an explicit `EXIT` action).
+-   `Menu.NAV_KEYS` — the default `←`/`→` → `BACK`/`FORWARD` bindings.
+-   `Menu.BACK` / `Menu.FORWARD` / `Menu.EXIT` / `Menu.REDISPLAY` — navigation
+    signals (`REDISPLAY` is a no-op; the default after an action is to stay).
+
 ## Documentation and API
 
 Please visit the [JSR documentation page][docs] for more information on how to

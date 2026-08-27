@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- **NEW**: Declarative `Menu` framework. Describe a menu-driven TUI as a tree of
+  menu nodes (`MenuTree`, `MenuNode`, `MenuChoice`) and drive it with
+  `Menu.runMenu()`. Navigation (submenus, back, forward, exit) is structural
+  rather than orchestrated by hand: `node` choices descend into submenus, ESC /
+  `←` returns to the parent, `→` moves forward again, and running an action
+  re-renders the current menu unless the action returns a signal (`BACK`,
+  `FORWARD`, `EXIT`) or a `NodeRef` (`{ node: 'id' }`) to jump. `BACK` at the
+  root is a no-op (exit via an explicit `EXIT` action). `createActions()` builds
+  a type-safe action registry (`Action` names derived from the handlers).
+  `NAV_KEYS` binds `←`/`→` to `BACK`/`FORWARD`. Universal key bindings passed to
+  `runMenu()` act like hidden menu items available from every menu; optional
+  `hint` strings render them in a footer below the choices (separated by a blank
+  line), and `showKeyBindings` (a boolean or a function of the context) makes
+  the footer optional or toggleable.
+- Added an optional `footer` line to `select` and `checkbox` prompts.
+- `keyBindings` with a `ctrl` modifier now also accept punctuation keys (e.g.
+  `{ key: ',', modifier: 'ctrl' }`, which matches the C0 control byte for the
+  key), in addition to letters.
 - **BREAKING**: Removed the global `onCtrlR` callback. Use the new `keyBindings`
   global option instead, which maps a key combination to a value that resolves
   `select` and `checkbox` prompts exactly as if the matching choice had been

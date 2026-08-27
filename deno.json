@@ -1,6 +1,6 @@
 {
   "name": "@jpravetz/ask",
-  "version": "3.0.2",
+  "version": "3.1.1",
   "exports": {
     ".": "./src/mod.ts"
   },
@@ -41,6 +41,7 @@
     "$fmt": "./src/format.ts",
     "$types": "./src/types.ts",
     "$list": "./src/list/mod.ts",
+    "$menu": "./src/menu/mod.ts",
     "$opts": "./src/opts/mod.ts",
     "$io": "./src/io/mod.ts",
     "$prompt": "./src/prompt/mod.ts",

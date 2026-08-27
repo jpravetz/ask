@@ -49,4 +49,10 @@ export type SelectOpts = PromptOpts<unknown> & {
    * The number of columns to display.
    */
   columns?: number;
+
+  /**
+   * An optional footer line rendered below the list of choices (for example, a
+   * hint about available key bindings).
+   */
+  footer?: string;
 };

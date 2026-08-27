@@ -1717,6 +1717,1970 @@
           ]
         },
         {
+          "name": "createActions",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/actions.ts",
+                "line": 43,
+                "col": 0,
+                "byteIndex": 1188
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "Creates a type-safe action registry for a menu context type.\n",
+                "tags": [
+                  {
+                    "kind": "example",
+                    "doc": "```ts\nconst actions = createActions<Shell>({\n  reload: async (shell) => { await shell.reloadSettings(); },\n  exit: () => EXIT,\n});\n// actions.Action.reload === 'reload'\n```"
+                  }
+                ]
+              },
+              "kind": "function",
+              "def": {
+                "params": [
+                  {
+                    "kind": "identifier",
+                    "name": "defs",
+                    "optional": false,
+                    "tsType": {
+                      "repr": "ActionDef",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeParams": [
+                          {
+                            "repr": "C",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "C",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "createActions",
+                                "declaringKind": "function"
+                              }
+                            }
+                          }
+                        ],
+                        "typeName": "ActionDef",
+                        "resolution": {
+                          "kind": "local"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "returnType": {
+                  "repr": "Actions",
+                  "kind": "typeRef",
+                  "value": {
+                    "typeParams": [
+                      {
+                        "repr": "C",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeName": "C",
+                          "resolution": {
+                            "kind": "typeParam",
+                            "declaringName": "createActions",
+                            "declaringKind": "function"
+                          }
+                        }
+                      }
+                    ],
+                    "typeName": "Actions",
+                    "resolution": {
+                      "kind": "local"
+                    }
+                  }
+                },
+                "hasBody": true,
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ActionDef",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/actions.ts",
+                "line": 5,
+                "col": 0,
+                "byteIndex": 111
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A map of action names to their handlers."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "repr": "Record",
+                  "kind": "typeRef",
+                  "value": {
+                    "typeParams": [
+                      {
+                        "repr": "string",
+                        "kind": "keyword",
+                        "value": "string"
+                      },
+                      {
+                        "repr": "MenuAction",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "repr": "C",
+                              "kind": "typeRef",
+                              "value": {
+                                "typeName": "C",
+                                "resolution": {
+                                  "kind": "typeParam",
+                                  "declaringName": "ActionDef",
+                                  "declaringKind": "typeAlias"
+                                }
+                              }
+                            }
+                          ],
+                          "typeName": "MenuAction",
+                          "resolution": {
+                            "kind": "import",
+                            "specifier": "./types.ts",
+                            "name": "MenuAction"
+                          }
+                        }
+                      }
+                    ],
+                    "typeName": "Record"
+                  }
+                },
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Actions",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/actions.ts",
+                "line": 10,
+                "col": 0,
+                "byteIndex": 229
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "The runtime object returned by `createActions`."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "typeLiteral",
+                  "value": {
+                    "methods": [
+                      {
+                        "name": "isActionName",
+                        "jsDoc": {
+                          "doc": "Type guard that checks whether a value names one of the registered actions."
+                        },
+                        "kind": "method",
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/actions.ts",
+                          "line": 24,
+                          "col": 2,
+                          "byteIndex": 705
+                        },
+                        "params": [
+                          {
+                            "kind": "identifier",
+                            "name": "val",
+                            "optional": false,
+                            "tsType": {
+                              "repr": "unknown",
+                              "kind": "keyword",
+                              "value": "unknown"
+                            }
+                          }
+                        ],
+                        "returnType": {
+                          "repr": "val is ",
+                          "kind": "typePredicate",
+                          "value": {
+                            "param": {
+                              "type": "identifier",
+                              "name": "val"
+                            },
+                            "type": {
+                              "kind": "intersection",
+                              "value": [
+                                {
+                                  "kind": "typeOperator",
+                                  "value": {
+                                    "operator": "keyof",
+                                    "tsType": {
+                                      "repr": "ActionDef",
+                                      "kind": "typeRef",
+                                      "value": {
+                                        "typeParams": [
+                                          {
+                                            "repr": "C",
+                                            "kind": "typeRef",
+                                            "value": {
+                                              "typeName": "C",
+                                              "resolution": {
+                                                "kind": "typeParam",
+                                                "declaringName": "Actions",
+                                                "declaringKind": "typeAlias"
+                                              }
+                                            }
+                                          }
+                                        ],
+                                        "typeName": "ActionDef",
+                                        "resolution": {
+                                          "kind": "local"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "repr": "string",
+                                  "kind": "keyword",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "name": "run",
+                        "jsDoc": {
+                          "doc": "Runs a registered action by name and returns its result."
+                        },
+                        "kind": "method",
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/actions.ts",
+                          "line": 28,
+                          "col": 2,
+                          "byteIndex": 845
+                        },
+                        "params": [
+                          {
+                            "kind": "identifier",
+                            "name": "ctx",
+                            "optional": false,
+                            "tsType": {
+                              "repr": "C",
+                              "kind": "typeRef",
+                              "value": {
+                                "typeName": "C",
+                                "resolution": {
+                                  "kind": "typeParam",
+                                  "declaringName": "Actions",
+                                  "declaringKind": "typeAlias"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "kind": "identifier",
+                            "name": "name",
+                            "optional": false,
+                            "tsType": {
+                              "repr": "string",
+                              "kind": "keyword",
+                              "value": "string"
+                            }
+                          }
+                        ],
+                        "returnType": {
+                          "repr": "Promise",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeParams": [
+                              {
+                                "kind": "union",
+                                "value": [
+                                  {
+                                    "repr": "MenuResult",
+                                    "kind": "typeRef",
+                                    "value": {
+                                      "typeParams": [
+                                        {
+                                          "repr": "C",
+                                          "kind": "typeRef",
+                                          "value": {
+                                            "typeName": "C",
+                                            "resolution": {
+                                              "kind": "typeParam",
+                                              "declaringName": "Actions",
+                                              "declaringKind": "typeAlias"
+                                            }
+                                          }
+                                        }
+                                      ],
+                                      "typeName": "MenuResult",
+                                      "resolution": {
+                                        "kind": "import",
+                                        "specifier": "./types.ts",
+                                        "name": "MenuResult"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "repr": "void",
+                                    "kind": "keyword",
+                                    "value": "void"
+                                  }
+                                ]
+                              }
+                            ],
+                            "typeName": "Promise"
+                          }
+                        }
+                      }
+                    ],
+                    "properties": [
+                      {
+                        "name": "Action",
+                        "jsDoc": {
+                          "doc": "A type-safe constant mirroring the keys of the action definitions. Used to\nreference actions by name (e.g. a choice's `action` or a key binding's\nvalue) with compile-time checking and no string duplication."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/actions.ts",
+                          "line": 16,
+                          "col": 2,
+                          "byteIndex": 492
+                        },
+                        "tsType": {
+                          "kind": "mapped",
+                          "value": {
+                            "typeParam": {
+                              "name": "K",
+                              "constraint": {
+                                "kind": "intersection",
+                                "value": [
+                                  {
+                                    "kind": "typeOperator",
+                                    "value": {
+                                      "operator": "keyof",
+                                      "tsType": {
+                                        "repr": "ActionDef",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeParams": [
+                                            {
+                                              "repr": "C",
+                                              "kind": "typeRef",
+                                              "value": {
+                                                "typeName": "C",
+                                                "resolution": {
+                                                  "kind": "typeParam",
+                                                  "declaringName": "Actions",
+                                                  "declaringKind": "typeAlias"
+                                                }
+                                              }
+                                            }
+                                          ],
+                                          "typeName": "ActionDef",
+                                          "resolution": {
+                                            "kind": "local"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "repr": "string",
+                                    "kind": "keyword",
+                                    "value": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "tsType": {
+                              "repr": "K",
+                              "kind": "typeRef",
+                              "value": {
+                                "typeName": "K",
+                                "resolution": {
+                                  "kind": "typeParam"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "name": "defs",
+                        "jsDoc": {
+                          "doc": "The raw action definitions."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/actions.ts",
+                          "line": 20,
+                          "col": 2,
+                          "byteIndex": 590
+                        },
+                        "tsType": {
+                          "repr": "ActionDef",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeParams": [
+                              {
+                                "repr": "C",
+                                "kind": "typeRef",
+                                "value": {
+                                  "typeName": "C",
+                                  "resolution": {
+                                    "kind": "typeParam",
+                                    "declaringName": "Actions",
+                                    "declaringKind": "typeAlias"
+                                  }
+                                }
+                              }
+                            ],
+                            "typeName": "ActionDef",
+                            "resolution": {
+                              "kind": "local"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "runMenu",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                "line": 154,
+                "col": 0,
+                "byteIndex": 4790
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "Runs an interactive menu session driven by a `MenuTree`.\n\nNavigation is structural: choosing a choice with a `node` reference descends\ninto a submenu (pushing the current menu onto the history stack), `BACK` /\n`ESC` / `←` returns to the parent, and `→` moves forward again. `BACK` at the\nroot is a no-op. Running an action re-renders the current menu by default\nunless the action returns a navigation signal or a `NodeRef`. Pressing `0`\nwhen `returnToMainMenu` is enabled throws `ReturnToMainMenuError`, which\nresets the session to the root."
+              },
+              "kind": "function",
+              "def": {
+                "params": [
+                  {
+                    "kind": "identifier",
+                    "name": "tree",
+                    "optional": false,
+                    "tsType": {
+                      "repr": "MenuTree",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeParams": [
+                          {
+                            "repr": "C",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "C",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "runMenu",
+                                "declaringKind": "function"
+                              }
+                            }
+                          }
+                        ],
+                        "typeName": "MenuTree",
+                        "resolution": {
+                          "kind": "import",
+                          "specifier": "./types.ts",
+                          "name": "MenuTree"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "identifier",
+                    "name": "opts",
+                    "optional": false,
+                    "tsType": {
+                      "repr": "RunMenuOpts",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeParams": [
+                          {
+                            "repr": "C",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "C",
+                              "resolution": {
+                                "kind": "typeParam",
+                                "declaringName": "runMenu",
+                                "declaringKind": "function"
+                              }
+                            }
+                          }
+                        ],
+                        "typeName": "RunMenuOpts",
+                        "resolution": {
+                          "kind": "local"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "returnType": {
+                  "repr": "Promise",
+                  "kind": "typeRef",
+                  "value": {
+                    "typeParams": [
+                      {
+                        "repr": "void",
+                        "kind": "keyword",
+                        "value": "void"
+                      }
+                    ],
+                    "typeName": "Promise"
+                  }
+                },
+                "hasBody": true,
+                "isAsync": true,
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "KeyBindingHint",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                "line": 22,
+                "col": 0,
+                "byteIndex": 730
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A key binding that may optionally carry a human-readable hint. Hints are\nrendered in a footer below the menu choices so that \"hidden\" universal key\nbindings remain discoverable."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "intersection",
+                  "value": [
+                    {
+                      "repr": "KeyBinding",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeName": "KeyBinding",
+                        "resolution": {
+                          "kind": "import",
+                          "specifier": "$types",
+                          "name": "KeyBinding"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "typeLiteral",
+                      "value": {
+                        "properties": [
+                          {
+                            "name": "hint",
+                            "location": {
+                              "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                              "line": 22,
+                              "col": 44,
+                              "byteIndex": 774
+                            },
+                            "optional": true,
+                            "tsType": {
+                              "repr": "string",
+                              "kind": "keyword",
+                              "value": "string"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "RunMenuOpts",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                "line": 27,
+                "col": 0,
+                "byteIndex": 826
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "Options for `runMenu`."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "typeLiteral",
+                  "value": {
+                    "properties": [
+                      {
+                        "name": "ctx",
+                        "jsDoc": {
+                          "doc": "The shared context passed to every menu node and action (typically an\napplication \"shell\" that holds state and helper methods)."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                          "line": 32,
+                          "col": 2,
+                          "byteIndex": 1009
+                        },
+                        "tsType": {
+                          "repr": "C",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeName": "C",
+                            "resolution": {
+                              "kind": "typeParam",
+                              "declaringName": "RunMenuOpts",
+                              "declaringKind": "typeAlias"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "name": "ask",
+                        "jsDoc": {
+                          "doc": "The `Ask` instance used to render the menus."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                          "line": 36,
+                          "col": 2,
+                          "byteIndex": 1081
+                        },
+                        "tsType": {
+                          "repr": "Ask",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeName": "Ask",
+                            "resolution": {
+                              "kind": "import",
+                              "specifier": "../ask.ts",
+                              "name": "Ask"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "name": "actions",
+                        "jsDoc": {
+                          "doc": "The action registry used to resolve named actions (both `action` strings in\nchoices and key binding values)."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                          "line": 41,
+                          "col": 2,
+                          "byteIndex": 1224
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "Actions",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeParams": [
+                              {
+                                "repr": "C",
+                                "kind": "typeRef",
+                                "value": {
+                                  "typeName": "C",
+                                  "resolution": {
+                                    "kind": "typeParam",
+                                    "declaringName": "RunMenuOpts",
+                                    "declaringKind": "typeAlias"
+                                  }
+                                }
+                              }
+                            ],
+                            "typeName": "Actions",
+                            "resolution": {
+                              "kind": "import",
+                              "specifier": "./actions.ts",
+                              "name": "Actions"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "name": "root",
+                        "jsDoc": {
+                          "doc": "The id of the root node. Defaults to `'root'`."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                          "line": 45,
+                          "col": 2,
+                          "byteIndex": 1312
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      },
+                      {
+                        "name": "useNumbers",
+                        "jsDoc": {
+                          "doc": "Whether numbers `1-9` are displayed and accepted for menu choices. Defaults\nto `true`."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                          "line": 50,
+                          "col": 2,
+                          "byteIndex": 1438
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "boolean",
+                          "kind": "keyword",
+                          "value": "boolean"
+                        }
+                      },
+                      {
+                        "name": "keyBindings",
+                        "jsDoc": {
+                          "doc": "Universal key bindings that are active in every menu, regardless of the\ncurrent node. They are merged before `NAV_KEYS` and any per-node bindings.\nA binding value may be a navigation signal, a `NodeRef`, or the name of a\nregistered action."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                          "line": 57,
+                          "col": 2,
+                          "byteIndex": 1734
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "kind": "array",
+                          "value": {
+                            "repr": "KeyBindingHint",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "KeyBindingHint",
+                              "resolution": {
+                                "kind": "local"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "name": "showKeyBindings",
+                        "jsDoc": {
+                          "doc": "Whether to render the key-binding hint footer below the menu choices. May\nbe a function of the context so it can be toggled dynamically (e.g. by a\nmenu action). Defaults to `true` when key bindings provide hints."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/driver.ts",
+                          "line": 63,
+                          "col": 2,
+                          "byteIndex": 2008
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "kind": "union",
+                          "value": [
+                            {
+                              "repr": "boolean",
+                              "kind": "keyword",
+                              "value": "boolean"
+                            },
+                            {
+                              "kind": "parenthesized",
+                              "value": {
+                                "kind": "fnOrConstructor",
+                                "value": {
+                                  "constructor": false,
+                                  "tsType": {
+                                    "repr": "boolean",
+                                    "kind": "keyword",
+                                    "value": "boolean"
+                                  },
+                                  "params": [
+                                    {
+                                      "kind": "identifier",
+                                      "name": "ctx",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "C",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "C",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "RunMenuOpts",
+                                            "declaringKind": "typeAlias"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "NAV_KEYS",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/navkeys.ts",
+                "line": 8,
+                "col": 13,
+                "byteIndex": 329
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A preset of key bindings that map the left and right arrow keys to the\n`BACK` and `FORWARD` navigation signals. Used by the menu driver by default\nso that `←` and `→` navigate between menus out of the box."
+              },
+              "kind": "variable",
+              "def": {
+                "tsType": {
+                  "kind": "array",
+                  "value": {
+                    "repr": "KeyBinding",
+                    "kind": "typeRef",
+                    "value": {
+                      "typeName": "KeyBinding",
+                      "resolution": {
+                        "kind": "import",
+                        "specifier": "$types",
+                        "name": "KeyBinding"
+                      }
+                    }
+                  }
+                },
+                "kind": "const"
+              }
+            }
+          ]
+        },
+        {
+          "name": "BACK",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/signals.ts",
+                "line": 9,
+                "col": 13,
+                "byteIndex": 265
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "Signals that the user (or an action) wants to navigate back to the previous\nmenu in the history stack."
+              },
+              "kind": "variable",
+              "def": {
+                "tsType": {
+                  "repr": "symbol",
+                  "kind": "keyword",
+                  "value": "symbol"
+                },
+                "kind": "const"
+              }
+            }
+          ]
+        },
+        {
+          "name": "EXIT",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/signals.ts",
+                "line": 20,
+                "col": 13,
+                "byteIndex": 563
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "Signals that the interactive menu session should end."
+              },
+              "kind": "variable",
+              "def": {
+                "tsType": {
+                  "repr": "symbol",
+                  "kind": "keyword",
+                  "value": "symbol"
+                },
+                "kind": "const"
+              }
+            }
+          ]
+        },
+        {
+          "name": "FORWARD",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/signals.ts",
+                "line": 15,
+                "col": 13,
+                "byteIndex": 447
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "Signals that the user (or an action) wants to re-enter a menu that was\npreviously left via `BACK` (browser-style forward)."
+              },
+              "kind": "variable",
+              "def": {
+                "tsType": {
+                  "repr": "symbol",
+                  "kind": "keyword",
+                  "value": "symbol"
+                },
+                "kind": "const"
+              }
+            }
+          ]
+        },
+        {
+          "name": "isNavigationSignal",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/signals.ts",
+                "line": 39,
+                "col": 0,
+                "byteIndex": 1100
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "Type guard that checks whether a value is a navigation signal."
+              },
+              "kind": "function",
+              "def": {
+                "params": [
+                  {
+                    "kind": "identifier",
+                    "name": "val",
+                    "optional": false,
+                    "tsType": {
+                      "repr": "unknown",
+                      "kind": "keyword",
+                      "value": "unknown"
+                    }
+                  }
+                ],
+                "returnType": {
+                  "repr": "val is NavigationSignal",
+                  "kind": "typePredicate",
+                  "value": {
+                    "param": {
+                      "type": "identifier",
+                      "name": "val"
+                    },
+                    "type": {
+                      "repr": "NavigationSignal",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeName": "NavigationSignal",
+                        "resolution": {
+                          "kind": "local"
+                        }
+                      }
+                    }
+                  }
+                },
+                "hasBody": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "REDISPLAY",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/signals.ts",
+                "line": 29,
+                "col": 13,
+                "byteIndex": 896
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "Signals that the current menu should be displayed again.\n\nRetained for compatibility with code that returns an explicit \"re-display\"\nsignal. The menu driver treats it as a no-op: the default behavior after\nrunning an action is already to re-render the current menu."
+              },
+              "kind": "variable",
+              "def": {
+                "tsType": {
+                  "repr": "symbol",
+                  "kind": "keyword",
+                  "value": "symbol"
+                },
+                "kind": "const"
+              }
+            }
+          ]
+        },
+        {
+          "name": "NavigationSignal",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/signals.ts",
+                "line": 34,
+                "col": 0,
+                "byteIndex": 986
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "The union of all navigation signals."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "repr": "symbol",
+                  "kind": "keyword",
+                  "value": "symbol"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "isNodeRef",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                "line": 14,
+                "col": 0,
+                "byteIndex": 304
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "Type guard that checks whether a value is a `NodeRef`."
+              },
+              "kind": "function",
+              "def": {
+                "params": [
+                  {
+                    "kind": "identifier",
+                    "name": "val",
+                    "optional": false,
+                    "tsType": {
+                      "repr": "unknown",
+                      "kind": "keyword",
+                      "value": "unknown"
+                    }
+                  }
+                ],
+                "returnType": {
+                  "repr": "val is NodeRef",
+                  "kind": "typePredicate",
+                  "value": {
+                    "param": {
+                      "type": "identifier",
+                      "name": "val"
+                    },
+                    "type": {
+                      "repr": "NodeRef",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeName": "NodeRef",
+                        "resolution": {
+                          "kind": "local"
+                        }
+                      }
+                    }
+                  }
+                },
+                "hasBody": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "MenuAction",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                "line": 31,
+                "col": 0,
+                "byteIndex": 944
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A function that implements a menu action. It receives the shared menu\ncontext `C` (typically an application \"shell\") and returns a `MenuResult`.\nMay be synchronous or asynchronous."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "fnOrConstructor",
+                  "value": {
+                    "constructor": false,
+                    "tsType": {
+                      "kind": "union",
+                      "value": [
+                        {
+                          "repr": "MenuResult",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeParams": [
+                              {
+                                "repr": "C",
+                                "kind": "typeRef",
+                                "value": {
+                                  "typeName": "C",
+                                  "resolution": {
+                                    "kind": "typeParam",
+                                    "declaringName": "MenuAction",
+                                    "declaringKind": "typeAlias"
+                                  }
+                                }
+                              }
+                            ],
+                            "typeName": "MenuResult",
+                            "resolution": {
+                              "kind": "local"
+                            }
+                          }
+                        },
+                        {
+                          "repr": "void",
+                          "kind": "keyword",
+                          "value": "void"
+                        },
+                        {
+                          "repr": "Promise",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeParams": [
+                              {
+                                "kind": "union",
+                                "value": [
+                                  {
+                                    "repr": "MenuResult",
+                                    "kind": "typeRef",
+                                    "value": {
+                                      "typeParams": [
+                                        {
+                                          "repr": "C",
+                                          "kind": "typeRef",
+                                          "value": {
+                                            "typeName": "C",
+                                            "resolution": {
+                                              "kind": "typeParam",
+                                              "declaringName": "MenuAction",
+                                              "declaringKind": "typeAlias"
+                                            }
+                                          }
+                                        }
+                                      ],
+                                      "typeName": "MenuResult",
+                                      "resolution": {
+                                        "kind": "local"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "repr": "void",
+                                    "kind": "keyword",
+                                    "value": "void"
+                                  }
+                                ]
+                              }
+                            ],
+                            "typeName": "Promise"
+                          }
+                        }
+                      ]
+                    },
+                    "params": [
+                      {
+                        "kind": "identifier",
+                        "name": "ctx",
+                        "optional": false,
+                        "tsType": {
+                          "repr": "C",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeName": "C",
+                            "resolution": {
+                              "kind": "typeParam",
+                              "declaringName": "MenuAction",
+                              "declaringKind": "typeAlias"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "MenuChoice",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                "line": 41,
+                "col": 0,
+                "byteIndex": 1358
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A single choice in a menu.\n\nEach choice either navigates to a submenu (`node`) or runs an action\n(`action`, either a named action from an `Actions` registry or an inline\nfunction). `message` and `disabled` may be functions of the context so that\nmenus can be built dynamically on every render."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "typeLiteral",
+                  "value": {
+                    "properties": [
+                      {
+                        "name": "message",
+                        "jsDoc": {
+                          "doc": "The choice label. May be a function of the context."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 45,
+                          "col": 2,
+                          "byteIndex": 1459
+                        },
+                        "tsType": {
+                          "kind": "union",
+                          "value": [
+                            {
+                              "repr": "string",
+                              "kind": "keyword",
+                              "value": "string"
+                            },
+                            {
+                              "kind": "parenthesized",
+                              "value": {
+                                "kind": "fnOrConstructor",
+                                "value": {
+                                  "constructor": false,
+                                  "tsType": {
+                                    "repr": "string",
+                                    "kind": "keyword",
+                                    "value": "string"
+                                  },
+                                  "params": [
+                                    {
+                                      "kind": "identifier",
+                                      "name": "ctx",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "C",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "C",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "MenuChoice",
+                                            "declaringKind": "typeAlias"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "disabled",
+                        "jsDoc": {
+                          "doc": "Whether the choice is disabled. May be a function of the context."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 49,
+                          "col": 2,
+                          "byteIndex": 1584
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "kind": "union",
+                          "value": [
+                            {
+                              "repr": "boolean",
+                              "kind": "keyword",
+                              "value": "boolean"
+                            },
+                            {
+                              "kind": "parenthesized",
+                              "value": {
+                                "kind": "fnOrConstructor",
+                                "value": {
+                                  "constructor": false,
+                                  "tsType": {
+                                    "repr": "boolean",
+                                    "kind": "keyword",
+                                    "value": "boolean"
+                                  },
+                                  "params": [
+                                    {
+                                      "kind": "identifier",
+                                      "name": "ctx",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "C",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "C",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "MenuChoice",
+                                            "declaringKind": "typeAlias"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "default",
+                        "jsDoc": {
+                          "doc": "Whether this choice should be the initially active (highlighted) choice\nwhen the menu is rendered."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 54,
+                          "col": 2,
+                          "byteIndex": 1751
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "boolean",
+                          "kind": "keyword",
+                          "value": "boolean"
+                        }
+                      },
+                      {
+                        "name": "node",
+                        "jsDoc": {
+                          "doc": "The id of a menu node in the tree to navigate to when this choice is\nselected. Selecting it pushes the current menu onto the history stack."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 59,
+                          "col": 2,
+                          "byteIndex": 1934
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      },
+                      {
+                        "name": "action",
+                        "jsDoc": {
+                          "doc": "The action to run when this choice is selected. Either the name of an\naction registered with the `Actions` registry passed to the driver, or an\ninline function. After the action resolves, the current menu is re-rendered\nunless the action returned a navigation result."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 66,
+                          "col": 2,
+                          "byteIndex": 2251
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "kind": "union",
+                          "value": [
+                            {
+                              "repr": "string",
+                              "kind": "keyword",
+                              "value": "string"
+                            },
+                            {
+                              "repr": "MenuAction",
+                              "kind": "typeRef",
+                              "value": {
+                                "typeParams": [
+                                  {
+                                    "repr": "C",
+                                    "kind": "typeRef",
+                                    "value": {
+                                      "typeName": "C",
+                                      "resolution": {
+                                        "kind": "typeParam",
+                                        "declaringName": "MenuChoice",
+                                        "declaringKind": "typeAlias"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "typeName": "MenuAction",
+                                "resolution": {
+                                  "kind": "local"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "MenuNode",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                "line": 76,
+                "col": 0,
+                "byteIndex": 2531
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A menu node. Renders a list of choices via `ask.select`.\n\n`message` and `choices` may be functions of the context so that the menu can\nbe assembled dynamically (e.g. conditional choices, computed labels) on every\nrender."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "typeLiteral",
+                  "value": {
+                    "properties": [
+                      {
+                        "name": "message",
+                        "jsDoc": {
+                          "doc": "The prompt message shown above the choices. May be a function of the\ncontext. Defaults to the node id."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 81,
+                          "col": 2,
+                          "byteIndex": 2686
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "kind": "union",
+                          "value": [
+                            {
+                              "repr": "string",
+                              "kind": "keyword",
+                              "value": "string"
+                            },
+                            {
+                              "kind": "parenthesized",
+                              "value": {
+                                "kind": "fnOrConstructor",
+                                "value": {
+                                  "constructor": false,
+                                  "tsType": {
+                                    "kind": "union",
+                                    "value": [
+                                      {
+                                        "repr": "string",
+                                        "kind": "keyword",
+                                        "value": "string"
+                                      },
+                                      {
+                                        "repr": "Promise",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeParams": [
+                                            {
+                                              "repr": "string",
+                                              "kind": "keyword",
+                                              "value": "string"
+                                            }
+                                          ],
+                                          "typeName": "Promise"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "params": [
+                                    {
+                                      "kind": "identifier",
+                                      "name": "ctx",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "C",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "C",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "MenuNode",
+                                            "declaringKind": "typeAlias"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "choices",
+                        "jsDoc": {
+                          "doc": "The choices to display. May be a function of the context."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 85,
+                          "col": 2,
+                          "byteIndex": 2822
+                        },
+                        "tsType": {
+                          "kind": "union",
+                          "value": [
+                            {
+                              "kind": "array",
+                              "value": {
+                                "repr": "MenuChoice",
+                                "kind": "typeRef",
+                                "value": {
+                                  "typeParams": [
+                                    {
+                                      "repr": "C",
+                                      "kind": "typeRef",
+                                      "value": {
+                                        "typeName": "C",
+                                        "resolution": {
+                                          "kind": "typeParam",
+                                          "declaringName": "MenuNode",
+                                          "declaringKind": "typeAlias"
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "typeName": "MenuChoice",
+                                  "resolution": {
+                                    "kind": "local"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "kind": "parenthesized",
+                              "value": {
+                                "kind": "fnOrConstructor",
+                                "value": {
+                                  "constructor": false,
+                                  "tsType": {
+                                    "kind": "union",
+                                    "value": [
+                                      {
+                                        "kind": "array",
+                                        "value": {
+                                          "repr": "MenuChoice",
+                                          "kind": "typeRef",
+                                          "value": {
+                                            "typeParams": [
+                                              {
+                                                "repr": "C",
+                                                "kind": "typeRef",
+                                                "value": {
+                                                  "typeName": "C",
+                                                  "resolution": {
+                                                    "kind": "typeParam",
+                                                    "declaringName": "MenuNode",
+                                                    "declaringKind": "typeAlias"
+                                                  }
+                                                }
+                                              }
+                                            ],
+                                            "typeName": "MenuChoice",
+                                            "resolution": {
+                                              "kind": "local"
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "repr": "Promise",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeParams": [
+                                            {
+                                              "kind": "array",
+                                              "value": {
+                                                "repr": "MenuChoice",
+                                                "kind": "typeRef",
+                                                "value": {
+                                                  "typeParams": [
+                                                    {
+                                                      "repr": "C",
+                                                      "kind": "typeRef",
+                                                      "value": {
+                                                        "typeName": "C",
+                                                        "resolution": {
+                                                          "kind": "typeParam",
+                                                          "declaringName": "MenuNode",
+                                                          "declaringKind": "typeAlias"
+                                                        }
+                                                      }
+                                                    }
+                                                  ],
+                                                  "typeName": "MenuChoice",
+                                                  "resolution": {
+                                                    "kind": "local"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          ],
+                                          "typeName": "Promise"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "params": [
+                                    {
+                                      "kind": "identifier",
+                                      "name": "ctx",
+                                      "optional": false,
+                                      "tsType": {
+                                        "repr": "C",
+                                        "kind": "typeRef",
+                                        "value": {
+                                          "typeName": "C",
+                                          "resolution": {
+                                            "kind": "typeParam",
+                                            "declaringName": "MenuNode",
+                                            "declaringKind": "typeAlias"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "useNumbers",
+                        "jsDoc": {
+                          "doc": "Whether numbers `1-9` are displayed and accepted for the choices. Defaults\nto the driver's `useNumbers` option (itself defaulting to `true`)."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 90,
+                          "col": 2,
+                          "byteIndex": 3073
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "boolean",
+                          "kind": "keyword",
+                          "value": "boolean"
+                        }
+                      },
+                      {
+                        "name": "keyBindings",
+                        "jsDoc": {
+                          "doc": "Extra key bindings specific to this menu, merged after the driver's\nuniversal key bindings."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 95,
+                          "col": 2,
+                          "byteIndex": 3211
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "kind": "array",
+                          "value": {
+                            "repr": "KeyBinding",
+                            "kind": "typeRef",
+                            "value": {
+                              "typeName": "KeyBinding",
+                              "resolution": {
+                                "kind": "import",
+                                "specifier": "$types",
+                                "name": "KeyBinding"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "name": "selectOpts",
+                        "jsDoc": {
+                          "doc": "Additional `ask.select` options passed through unchanged (formatters,\n`columns`, `default`, and so on)."
+                        },
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 100,
+                          "col": 2,
+                          "byteIndex": 3367
+                        },
+                        "optional": true,
+                        "tsType": {
+                          "repr": "Partial",
+                          "kind": "typeRef",
+                          "value": {
+                            "typeParams": [
+                              {
+                                "repr": "Opts.Select",
+                                "kind": "typeRef",
+                                "value": {
+                                  "typeName": "Opts.Select",
+                                  "resolution": {
+                                    "kind": "import",
+                                    "specifier": "$opts"
+                                  }
+                                }
+                              }
+                            ],
+                            "typeName": "Partial"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "MenuResult",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                "line": 24,
+                "col": 0,
+                "byteIndex": 682
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "The result of running a menu action.\n- a `NavigationSignal` (`BACK`, `FORWARD`, `EXIT`, `REDISPLAY`)\n- a `NodeRef` to navigate to another named node\n- `void` / `undefined` to re-render the current menu"
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "union",
+                  "value": [
+                    {
+                      "repr": "NavigationSignal",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeName": "NavigationSignal",
+                        "resolution": {
+                          "kind": "import",
+                          "specifier": "./signals.ts",
+                          "name": "NavigationSignal"
+                        }
+                      }
+                    },
+                    {
+                      "repr": "NodeRef",
+                      "kind": "typeRef",
+                      "value": {
+                        "typeName": "NodeRef",
+                        "resolution": {
+                          "kind": "local"
+                        }
+                      }
+                    },
+                    {
+                      "repr": "void",
+                      "kind": "keyword",
+                      "value": "void"
+                    }
+                  ]
+                },
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "MenuTree",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                "line": 106,
+                "col": 0,
+                "byteIndex": 3451
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A collection of named menu nodes."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "repr": "Record",
+                  "kind": "typeRef",
+                  "value": {
+                    "typeParams": [
+                      {
+                        "repr": "string",
+                        "kind": "keyword",
+                        "value": "string"
+                      },
+                      {
+                        "repr": "MenuNode",
+                        "kind": "typeRef",
+                        "value": {
+                          "typeParams": [
+                            {
+                              "repr": "C",
+                              "kind": "typeRef",
+                              "value": {
+                                "typeName": "C",
+                                "resolution": {
+                                  "kind": "typeParam",
+                                  "declaringName": "MenuTree",
+                                  "declaringKind": "typeAlias"
+                                }
+                              }
+                            }
+                          ],
+                          "typeName": "MenuNode",
+                          "resolution": {
+                            "kind": "local"
+                          }
+                        }
+                      }
+                    ],
+                    "typeName": "Record"
+                  }
+                },
+                "typeParams": [
+                  {
+                    "name": "C"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "NodeRef",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                "line": 7,
+                "col": 0,
+                "byteIndex": 194
+              },
+              "declarationKind": "export",
+              "jsDoc": {
+                "doc": "A reference to a named menu node in a `MenuTree`."
+              },
+              "kind": "typeAlias",
+              "def": {
+                "tsType": {
+                  "kind": "typeLiteral",
+                  "value": {
+                    "properties": [
+                      {
+                        "name": "node",
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/types.ts",
+                          "line": 8,
+                          "col": 2,
+                          "byteIndex": 220
+                        },
+                        "tsType": {
+                          "repr": "string",
+                          "kind": "keyword",
+                          "value": "string"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
           "name": "Choice",
           "declarations": [
             {
@@ -1860,13 +3824,13 @@
                       {
                         "name": "key",
                         "jsDoc": {
-                          "doc": "The single character of the binding. For `ctrl` this should be a lowercase\nletter (e.g. `'r'` for Ctrl-R). For `alt` it should be a single character."
+                          "doc": "The key of the binding. For `ctrl` this should be a lowercase letter\n(e.g. `'r'` for Ctrl-R). For `alt` it should be a single character.\nMay also be a named arrow key: `'up'`, `'down'`, `'left'`, or `'right'`.\nNamed arrow keys do not use a modifier."
                         },
                         "location": {
                           "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
-                          "line": 38,
+                          "line": 40,
                           "col": 2,
-                          "byteIndex": 1005
+                          "byteIndex": 1115
                         },
                         "tsType": {
                           "repr": "string",
@@ -1881,9 +3845,9 @@
                         },
                         "location": {
                           "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
-                          "line": 43,
+                          "line": 45,
                           "col": 2,
-                          "byteIndex": 1078
+                          "byteIndex": 1188
                         },
                         "optional": true,
                         "tsType": {
@@ -1915,9 +3879,9 @@
                         },
                         "location": {
                           "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
-                          "line": 48,
+                          "line": 50,
                           "col": 2,
-                          "byteIndex": 1189
+                          "byteIndex": 1299
                         },
                         "optional": true,
                         "tsType": {
@@ -1939,9 +3903,9 @@
             {
               "location": {
                 "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/types.ts",
-                "line": 54,
+                "line": 56,
                 "col": 0,
-                "byteIndex": 1245
+                "byteIndex": 1355
               },
               "declarationKind": "export",
               "jsDoc": {
@@ -2037,9 +4001,9 @@
             {
               "location": {
                 "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
-                "line": 8,
+                "line": 9,
                 "col": 7,
-                "byteIndex": 242
+                "byteIndex": 265
               },
               "declarationKind": "export",
               "kind": "namespace",
@@ -2944,9 +4908,9 @@
             {
               "location": {
                 "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
-                "line": 9,
+                "line": 10,
                 "col": 7,
-                "byteIndex": 269
+                "byteIndex": 292
               },
               "declarationKind": "export",
               "kind": "namespace",
@@ -3213,14 +5177,493 @@
           ]
         },
         {
+          "name": "Menu",
+          "declarations": [
+            {
+              "location": {
+                "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                "line": 11,
+                "col": 7,
+                "byteIndex": 323
+              },
+              "declarationKind": "export",
+              "kind": "namespace",
+              "def": {
+                "elements": [
+                  {
+                    "name": "createActions",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 8,
+                            "col": 9,
+                            "byteIndex": 286
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "ActionDef",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 9,
+                            "col": 14,
+                            "byteIndex": 337
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Actions",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 9,
+                            "col": 25,
+                            "byteIndex": 348
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "runMenu",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 10,
+                            "col": 9,
+                            "byteIndex": 388
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "KeyBindingHint",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 11,
+                            "col": 14,
+                            "byteIndex": 432
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RunMenuOpts",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 11,
+                            "col": 30,
+                            "byteIndex": 448
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "NAV_KEYS",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 12,
+                            "col": 9,
+                            "byteIndex": 491
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BACK",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 13,
+                            "col": 9,
+                            "byteIndex": 532
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "EXIT",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 13,
+                            "col": 15,
+                            "byteIndex": 538
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "FORWARD",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 13,
+                            "col": 21,
+                            "byteIndex": 544
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "isNavigationSignal",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 13,
+                            "col": 30,
+                            "byteIndex": 553
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "REDISPLAY",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 13,
+                            "col": 50,
+                            "byteIndex": 573
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "NavigationSignal",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 14,
+                            "col": 14,
+                            "byteIndex": 620
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "isNodeRef",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 15,
+                            "col": 9,
+                            "byteIndex": 669
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MenuAction",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 16,
+                            "col": 14,
+                            "byteIndex": 714
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MenuChoice",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 16,
+                            "col": 26,
+                            "byteIndex": 726
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MenuNode",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 16,
+                            "col": 38,
+                            "byteIndex": 738
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MenuResult",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 16,
+                            "col": 48,
+                            "byteIndex": 748
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "MenuTree",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 16,
+                            "col": 60,
+                            "byteIndex": 760
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "NodeRef",
+                    "declarations": [
+                      {
+                        "location": {
+                          "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
+                          "line": 11,
+                          "col": 7,
+                          "byteIndex": 323
+                        },
+                        "declarationKind": "export",
+                        "kind": "reference",
+                        "def": {
+                          "target": {
+                            "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/menu/mod.ts",
+                            "line": 16,
+                            "col": 70,
+                            "byteIndex": 770
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Opts",
           "declarations": [
             {
               "location": {
                 "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
-                "line": 10,
+                "line": 12,
                 "col": 7,
-                "byteIndex": 300
+                "byteIndex": 354
               },
               "declarationKind": "export",
               "kind": "namespace",
@@ -3335,9 +5778,9 @@
             {
               "location": {
                 "filename": "file:///Users/jpravetz/dev/@jpravetz/ask/src/mod.ts",
-                "line": 11,
+                "line": 13,
                 "col": 7,
-                "byteIndex": 331
+                "byteIndex": 385
               },
               "declarationKind": "export",
               "kind": "namespace",

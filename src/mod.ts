@@ -6,8 +6,10 @@
  */
 
 export * from '$errors';
+export * from '$menu';
 export * as Io from '$io';
 export * as List from '$list';
+export * as Menu from '$menu';
 export * as Opts from '$opts';
 export * as Prompt from '$prompt';
 export type * from '$types';
