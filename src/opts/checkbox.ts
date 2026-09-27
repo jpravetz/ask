@@ -18,6 +18,12 @@ export type CheckboxOpts = PromptOpts<unknown[]> & {
 
   columns?: number;
 
+  /**
+   * If set, only this many choices are rendered at once. Arrow navigation
+   * scrolls the visible window.
+   */
+  pageSize?: number;
+
   selectedPrefix?: string;
 
   unselectedPrefix?: string;

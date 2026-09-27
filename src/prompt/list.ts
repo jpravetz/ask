@@ -4,7 +4,6 @@ import { renderList } from '$io';
 import * as List from '$list';
 import type * as Opts from '$opts';
 import type { Choice, KeyBinding } from '$types';
-import * as colors from '@std/fmt/colors';
 import { Prompt } from './base.ts';
 
 export class ListPrompt extends Prompt<unknown> {
@@ -25,6 +24,11 @@ export class ListPrompt extends Prompt<unknown> {
   private _running: boolean = true;
   private _originalMessage: string;
   private _keyBindingValue: unknown = undefined;
+
+  private pageSize: number;
+  private _windowStart: number = 0;
+  private _windowEnd: number = 0;
+  private _lastRenderedRows: number = 0;
 
   constructor(opts: Opts.List) {
     super(opts);
@@ -75,6 +79,9 @@ export class ListPrompt extends Prompt<unknown> {
         disabledFormatter: this.disabledFormatter ?? Fmt.disabled,
       });
     });
+
+    this.pageSize = Math.max(1, opts.pageSize ?? this._items.length);
+    this.#updateWindow();
   }
 
   protected override async cleanup(rows: number): Promise<void> {
@@ -89,6 +96,52 @@ export class ListPrompt extends Prompt<unknown> {
 
   protected override getPrompt(final = false): string {
     return super.getPrompt(final);
+  }
+
+  /**
+   * Keeps the visible window aligned so that `_active` is always rendered.
+   * When pagination is disabled (pageSize >= total items) the window covers
+   * the whole list.
+   */
+  #updateWindow(): void {
+    if (this._items.length <= this.pageSize) {
+      this._windowStart = 0;
+      this._windowEnd = this._items.length;
+      return;
+    }
+
+    if (this._active < this._windowStart) {
+      this._windowStart = this._active;
+    } else if (this._active >= this._windowEnd) {
+      this._windowStart = this._active - this.pageSize + 1;
+    }
+
+    const maxStart = this._items.length - this.pageSize;
+    if (this._windowStart > maxStart) {
+      this._windowStart = maxStart;
+    }
+    if (this._windowStart < 0) {
+      this._windowStart = 0;
+    }
+
+    this._windowEnd = Math.min(this._windowStart + this.pageSize, this._items.length);
+  }
+
+  /**
+   * Builds the footer line for the list, including the current page when
+   * the list is paginated.
+   */
+  #renderFooter(): string | undefined {
+    const parts: string[] = [];
+    if (this._items.length > this.pageSize) {
+      const currentPage = Math.floor(this._windowStart / this.pageSize) + 1;
+      const totalPages = Math.ceil(this._items.length / this.pageSize);
+      parts.push(`Page ${currentPage}/${totalPages} (← → to navigate)`);
+    }
+    if (this.footer) {
+      parts.push(this.footer);
+    }
+    return parts.length > 0 ? parts.join(' | ') : undefined;
   }
 
   private up(startIndex: number) {
@@ -117,12 +170,16 @@ export class ListPrompt extends Prompt<unknown> {
     this._items[this._active].active = true;
 
     if (this._active === startIndex) {
+      this.#updateWindow();
       return;
     }
 
     if (this._items[this._active].disabled) {
       this.up(startIndex);
+      return;
     }
+
+    this.#updateWindow();
   }
 
   private down(startIndex: number) {
@@ -146,26 +203,57 @@ export class ListPrompt extends Prompt<unknown> {
     this._items[this._active].active = true;
 
     if (this._active === startIndex) {
+      this.#updateWindow();
       return;
     }
 
     if (this._items[this._active].disabled) {
       this.down(startIndex);
+      return;
     }
+
+    this.#updateWindow();
   }
 
   private left() {
-    if (this.columns === 1) return;
-    this._items[this._active].active = false;
-    this._active = Math.max(0, this._active - 1);
-    this._items[this._active].active = true;
+    // In multi-column lists, left moves to the previous column. When already
+    // at the first column we treat it as "previous page" so pagination can be
+    // driven with the left/right arrow keys.
+    if (this.columns > 1 && this._active % this.columns !== 0) {
+      this._items[this._active].active = false;
+      this._active--;
+      this._items[this._active].active = true;
+      this.#updateWindow();
+      return;
+    }
+
+    if (this._windowStart > 0) {
+      this._items[this._active].active = false;
+      this._active = Math.max(0, this._windowStart - this.pageSize);
+      this._items[this._active].active = true;
+      this.#updateWindow();
+    }
   }
 
   private right() {
-    if (this.columns === 1) return;
-    this._items[this._active].active = false;
-    this._active = Math.min(this.choices.length - 1, this._active + 1);
-    this._items[this._active].active = true;
+    // In multi-column lists, right moves to the next column. When already at
+    // the last column (or the last visible item) we treat it as "next page".
+    const isLastColumn = this._active % this.columns === this.columns - 1;
+    const canMoveRightInRow = this.columns > 1 && !isLastColumn && this._active < this._windowEnd - 1;
+    if (canMoveRightInRow) {
+      this._items[this._active].active = false;
+      this._active++;
+      this._items[this._active].active = true;
+      this.#updateWindow();
+      return;
+    }
+
+    if (this._windowEnd < this._items.length) {
+      this._items[this._active].active = false;
+      this._active = Math.min(this._items.length - 1, this._windowEnd);
+      this._items[this._active].active = true;
+      this.#updateWindow();
+    }
   }
 
   private number(n: number) {
@@ -176,8 +264,11 @@ export class ListPrompt extends Prompt<unknown> {
     if (n > 0 && n <= this.choices.length) {
       const item = this._items[n - 1];
       if (item && !item.disabled) {
+        this._items[this._active].active = false;
         this._active = n - 1;
+        this._items[this._active].active = true;
         this._items[this._active].selected = true;
+        this.#updateWindow();
         this.finish();
       }
     }
@@ -287,11 +378,7 @@ export class ListPrompt extends Prompt<unknown> {
     await this.output.write(this.getPrompt());
     await this.output.newLine(2);
 
-    const footers = [
-      this.returnToMainMenu === 'visible' ? colors.gray(`0. ${this.returnToMainMenuLabel}`) : undefined,
-      this.footer,
-    ].filter((s): s is string => !!s);
-    const footer = footers.length > 0 ? footers.join('   ') : undefined;
+    const footer = this.#renderFooter();
 
     // Hide cursor
     await this.output.hideCursor();
@@ -303,10 +390,12 @@ export class ListPrompt extends Prompt<unknown> {
     try {
       let _rows = 0;
       while (this._running) {
+        this.#updateWindow();
+        const visibleItems = this._items.slice(this._windowStart, this._windowEnd);
         _rows = await renderList({
           input: this.input,
           output: this.output,
-          items: this._items,
+          items: visibleItems,
           columns: this.columns,
           indent: this.indent,
           useNumbers: this.useNumbers,
@@ -332,6 +421,7 @@ export class ListPrompt extends Prompt<unknown> {
           keyBindings: this.keyBindings,
           onKeyBinding: this.keyBinding.bind(this),
         });
+        this._lastRenderedRows = _rows;
       }
       await this.cleanup(_rows + 1);
     } catch (err) {
@@ -339,8 +429,9 @@ export class ListPrompt extends Prompt<unknown> {
         return undefined;
       }
       if (err instanceof ReturnToMainMenuError) {
-        const rows = Math.ceil(this._items.length / this.columns) +
-          (footer ? footer.split('\n').length : 0);
+        const rows = this._lastRenderedRows ||
+          (Math.ceil(this._items.length / this.columns) +
+            (footer ? footer.split('\n').length : 0));
         await this.cleanup(rows + 1);
         throw err;
       }

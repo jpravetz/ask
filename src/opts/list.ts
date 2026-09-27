@@ -14,6 +14,12 @@ export type ListOpts = PromptOpts<unknown> & {
   defaultValues?: string[];
 
   /**
+   * If set, only this many choices are rendered at once. Arrow navigation
+   * scrolls the visible window.
+   */
+  pageSize?: number;
+
+  /**
    * An optional footer line rendered below the list of choices (for example, a
    * hint about available key bindings).
    */
